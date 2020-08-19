@@ -1,4 +1,5 @@
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -41,11 +42,15 @@ public class Calculator {
         frame.setVisible(true);
         frame.setLayout(null);
 
+
         //Text screen
         textScreen.setSize(420, 100);
         textScreen.setLocation(6, 5);
         textScreen.setEditable(false);
+        Font font = new Font("Calibri(body)", Font.BOLD, 20);
+        textScreen.setFont(font);
 
+        
         //Add objects to screen
         frame.add(textScreen);
         frame.add(button0);
