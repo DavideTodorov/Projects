@@ -1,1 +1,1 @@
-This is my first project. It is a simple phonebook.
+This is my first project. It is a simple phonebook. It will be developed further.
