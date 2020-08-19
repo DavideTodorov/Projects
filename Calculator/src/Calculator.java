@@ -25,6 +25,7 @@ public class Calculator {
     private JButton multiplyButton = new JButton("*");
     private JButton subtractButton = new JButton("-");
     private JButton addButton = new JButton("+");
+    private JButton equalsButton = new JButton("=");
 
     //Variables
     String firstNum = "";
@@ -50,7 +51,7 @@ public class Calculator {
         Font font = new Font("Calibri(body)", Font.BOLD, 20);
         textScreen.setFont(font);
 
-        
+
         //Add objects to screen
         frame.add(textScreen);
         frame.add(button0);
@@ -68,9 +69,10 @@ public class Calculator {
         frame.add(multiplyButton);
         frame.add(subtractButton);
         frame.add(addButton);
+        frame.add(equalsButton);
 
         //button0
-        button0.setSize(100,50);
+        button0.setSize(100, 50);
         button0.setLocation(115, 305);
         button0.addActionListener(new ActionListener() {
             @Override
@@ -208,9 +210,82 @@ public class Calculator {
                 textScreen.append("+");
             }
         });
+
+        //buttonEquals and code logic
+        equalsButton.setSize(100, 50);
+        equalsButton.setLocation(220, 305);
+        equalsButton.setBackground(Color.CYAN);
+        equalsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String text = textScreen.getText();
+                String action = "";
+
+                if (text.contains("/")) {
+                    action = "/";
+                    calculate(text, action);
+                } else if (text.contains("*")) {
+                    action = "*";
+                    calculate(text, action);
+                } else if (text.contains("-")) {
+                    action = "-";
+                    calculate(text, action);
+                } else if (text.contains("+")) {
+                    action = "+";
+                    calculate(text, action);
+                }
+            }
+        });
     }
+
 
     public static void main(String[] args) {
         new Calculator();
+    }
+
+
+    private void calculate(String text, String action) {
+        int currResult = 0;
+
+        switch (action) {
+            case "/":
+                statement = text.split("\\/");
+                firstNum = statement[0];
+                secondNum = statement[1];
+                numOne = Integer.parseInt(firstNum);
+                numTwo = Integer.parseInt(secondNum);
+                currResult = numOne / numTwo;
+                break;
+
+            case "*":
+                statement = text.split("\\*");
+                firstNum = statement[0];
+                secondNum = statement[1];
+                numOne = Integer.parseInt(firstNum);
+                numTwo = Integer.parseInt(secondNum);
+                currResult = numOne * numTwo;
+                break;
+
+            case "-":
+                statement = text.split("\\-");
+                firstNum = statement[0];
+                secondNum = statement[1];
+                numOne = Integer.parseInt(firstNum);
+                numTwo = Integer.parseInt(secondNum);
+                currResult = numOne - numTwo;
+                break;
+
+            case "+":
+                statement = text.split("\\+");
+                firstNum = statement[0];
+                secondNum = statement[1];
+                numOne = Integer.parseInt(firstNum);
+                numTwo = Integer.parseInt(secondNum);
+                currResult = numOne + numTwo;
+                break;
+        }
+
+        result = String.valueOf(currResult);
+        textScreen.setText(result);
     }
 }
