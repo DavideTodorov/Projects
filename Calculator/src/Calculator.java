@@ -20,10 +20,10 @@ public class Calculator {
     private JButton button8 = new JButton("8");
     private JButton button9 = new JButton("9");
 
-    private JButton DivideButton = new JButton("/");
-    private JButton MultiplyButton = new JButton("*");
-    private JButton SubtractButton = new JButton("-");
-    private JButton AddButton = new JButton("+");
+    private JButton divideButton = new JButton("/");
+    private JButton multiplyButton = new JButton("*");
+    private JButton subtractButton = new JButton("-");
+    private JButton addButton = new JButton("+");
 
     //Variables
     String firstNum = "";
@@ -59,10 +59,10 @@ public class Calculator {
         frame.add(button8);
         frame.add(button9);
 
-        frame.add(DivideButton);
-        frame.add(MultiplyButton);
-        frame.add(SubtractButton);
-        frame.add(AddButton);
+        frame.add(divideButton);
+        frame.add(multiplyButton);
+        frame.add(subtractButton);
+        frame.add(addButton);
 
         //button0
         button0.setSize(100,50);
@@ -161,6 +161,46 @@ public class Calculator {
             @Override
             public void actionPerformed(ActionEvent e) {
                 textScreen.append("9");
+            }
+        });
+
+        //buttonDivide
+        divideButton.setSize(100, 50);
+        divideButton.setLocation(325, 130);
+        divideButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                textScreen.append("/");
+            }
+        });
+
+        //buttonMultiply
+        multiplyButton.setSize(100, 50);
+        multiplyButton.setLocation(325, 190);
+        multiplyButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                textScreen.append("*");
+            }
+        });
+
+        //buttonSubtract
+        subtractButton.setSize(100, 50);
+        subtractButton.setLocation(325, 250);
+        subtractButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                textScreen.append("-");
+            }
+        });
+
+        //buttonAdd
+        addButton.setSize(100, 50);
+        addButton.setLocation(325, 305);
+        addButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                textScreen.append("+");
             }
         });
     }
