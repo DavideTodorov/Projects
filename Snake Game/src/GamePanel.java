@@ -24,43 +24,57 @@ public class GamePanel extends JPanel implements ActionListener {
     Timer timer;
     Random random;
 
-    
-    GamePanel(){
 
+    GamePanel() {
+        random = new Random();
+        this.setPreferredSize(new Dimension(screenWidth, screenHeight));
+        this.setBackground(Color.BLACK);
+        this.setFocusable(true);
+        this.addKeyListener(new MyKey());
+        StartGame();
     }
 
     //method to start the game
-    public void StartGame(){
-
+    public void StartGame() {
+        addApple();
+        isRunning = true;
+        timer = new Timer(delay, this);
+        timer.start();
     }
 
     //method to paint the components
-    public void paintComponent(Graphics g){
-
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        draw(g);
     }
 
     //method to draw components
-    public void draw(Graphics g){
+    public void draw(Graphics g) {
+        
+    }
+
+    //method to add apple
+    public void addApple() {
 
     }
 
     //method to move the components
-    public void move(){
+    public void move() {
 
     }
 
     //method to check for eaten apple
-    public void checkApple(){
+    public void checkApple() {
 
     }
 
     //method to check for collision
-    public void checkCollision(){
+    public void checkCollision() {
 
     }
 
     //method to end the game
-    public void GameOver(){
+    public void GameOver() {
 
     }
 
@@ -70,9 +84,9 @@ public class GamePanel extends JPanel implements ActionListener {
     }
 
     //method for pressed keys
-    public class MyKey extends KeyAdapter{
+    public class MyKey extends KeyAdapter {
         @Override
-        public void keyPressed(KeyEvent e){
+        public void keyPressed(KeyEvent e) {
 
         }
     }
