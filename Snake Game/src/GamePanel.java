@@ -4,7 +4,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.util.IllegalFormatCodePointException;
 import java.util.Random;
 
 public class GamePanel extends JPanel implements ActionListener {
@@ -54,12 +53,14 @@ public class GamePanel extends JPanel implements ActionListener {
 
         if (isRunning) {
             //draw grid
+            /*
             for (int i = unitSize; i < 600; i += unitSize) {
                 g.drawLine(i, 0, i, 600);
             }
             for (int i = unitSize; i < 600; i += unitSize) {
                 g.drawLine(0, i, 600, i);
             }
+           */
 
             //draw apple
             g.setColor(Color.red);
@@ -75,6 +76,12 @@ public class GamePanel extends JPanel implements ActionListener {
                     g.fillRect(x[i], y[i], unitSize, unitSize);
                 }
             }
+            g.setColor(Color.red);
+            g.setFont(new Font("Ink Free", Font.BOLD, 40));
+            FontMetrics metrics = getFontMetrics(g.getFont());
+            g.drawString("Score: " + applesEaten, (screenWidth - metrics.stringWidth("Score: " + applesEaten)) / 2,
+                    screenHeight - 560);
+
         } else {
             gameOver(g);
         }
@@ -151,11 +158,18 @@ public class GamePanel extends JPanel implements ActionListener {
 
     //method to end the game
     public void gameOver(Graphics g) {
+        //Game Over text
         g.setColor(Color.red);
         g.setFont(new Font("Ink Free", Font.BOLD, 75));
         FontMetrics metrics = getFontMetrics(g.getFont());
-        g.drawString("Game Over", (screenWidth - metrics.stringWidth("Game Over"))/2,
+        g.drawString("Game Over", (screenWidth - metrics.stringWidth("Game Over")) / 2,
                 screenHeight / 2);
+
+        //Score text
+        g.setFont(new Font("Ink Free", Font.BOLD, 40));
+        FontMetrics metrics2 = getFontMetrics(g.getFont());
+        g.drawString("Score: " + applesEaten, (screenWidth - metrics2.stringWidth("Score: " + applesEaten)) / 2,
+                screenHeight - 560);
     }
 
     @Override
