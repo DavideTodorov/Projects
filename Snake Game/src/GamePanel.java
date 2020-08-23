@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.IllegalFormatCodePointException;
 import java.util.Random;
 
 public class GamePanel extends JPanel implements ActionListener {
@@ -12,7 +13,7 @@ public class GamePanel extends JPanel implements ActionListener {
     static final int screenHeight = 600;
     static final int unitSize = 25;
     static final int gameUnits = (screenWidth * screenHeight) / unitSize;
-    static final int delay = 100;
+    static final int delay = 120;
     final int x[] = new int[gameUnits];
     final int y[] = new int[gameUnits];
     int bodyParts = 6;
@@ -50,30 +51,33 @@ public class GamePanel extends JPanel implements ActionListener {
 
     //method to draw components
     public void draw(Graphics g) {
-        //draw grid
-        for (int i = unitSize; i < 600; i += unitSize) {
-            g.drawLine(i, 0, i, 600);
-        }
-        for (int i = unitSize; i < 600; i += unitSize) {
-            g.drawLine(0, i, 600, i);
-        }
 
-        //draw apple
-        g.setColor(Color.red);
-        g.fillOval(appleXCoordinates, appleYCoordinates, unitSize, unitSize);
-
-        //draw snake
-        for (int i = 0; i < bodyParts; i++) {
-            if (i == 0) {
-                g.setColor(new Color(0, 255, 0));
-                g.fillRect(x[i], y[i], unitSize, unitSize);
-            } else {
-                g.setColor(new Color(130,255,185));
-                g.fillRect(x[i], y[i], unitSize, unitSize);
+        if (isRunning) {
+            //draw grid
+            for (int i = unitSize; i < 600; i += unitSize) {
+                g.drawLine(i, 0, i, 600);
             }
+            for (int i = unitSize; i < 600; i += unitSize) {
+                g.drawLine(0, i, 600, i);
+            }
+
+            //draw apple
+            g.setColor(Color.red);
+            g.fillOval(appleXCoordinates, appleYCoordinates, unitSize, unitSize);
+
+            //draw snake
+            for (int i = 0; i < bodyParts; i++) {
+                if (i == 0) {
+                    g.setColor(new Color(0, 255, 0));
+                    g.fillRect(x[i], y[i], unitSize, unitSize);
+                } else {
+                    g.setColor(new Color(130, 255, 185));
+                    g.fillRect(x[i], y[i], unitSize, unitSize);
+                }
+            }
+        } else {
+            gameOver(g);
         }
-
-
     }
 
     //method to add apple
@@ -108,46 +112,56 @@ public class GamePanel extends JPanel implements ActionListener {
 
     //method to check for eaten apple
     public void checkApple() {
+        if ((x[0] == appleXCoordinates) && (y[0] == appleYCoordinates)) {
+            applesEaten++;
+            bodyParts++;
+            addApple();
+        }
 
     }
 
     //method to check for collision
     public void checkCollision() {
+
         //collision with the body -> gameOver
         for (int i = bodyParts; i > 0; i--) {
-            if ((x[0] == x[i]) && (y[0] == y[i])){
+            if ((x[0] == x[i]) && (y[0] == y[i])) {
                 isRunning = false;
             }
         }
 
         //collision with border -> gameOver
-        if (x[0] > screenWidth){
+        if (x[0] > screenWidth) {
             isRunning = false;
         }
-        if (x[0] < 0){
+        if (x[0] < 0) {
             isRunning = false;
         }
-        if (y[0] > screenHeight){
+        if (y[0] > screenHeight) {
             isRunning = false;
         }
-        if (y[0] < 0){
+        if (y[0] < 0) {
             isRunning = false;
         }
 
-        if (!isRunning){
+        if (!isRunning) {
             timer.stop();
         }
     }
 
     //method to end the game
-    public void GameOver() {
-
+    public void gameOver(Graphics g) {
+        g.setColor(Color.red);
+        g.setFont(new Font("Ink Free", Font.BOLD, 75));
+        FontMetrics metrics = getFontMetrics(g.getFont());
+        g.drawString("Game Over", (screenWidth - metrics.stringWidth("Game Over"))/2,
+                screenHeight / 2);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
 
-        if (isRunning){
+        if (isRunning) {
             move();
             checkApple();
             checkCollision();
@@ -159,7 +173,28 @@ public class GamePanel extends JPanel implements ActionListener {
     public class MyKey extends KeyAdapter {
         @Override
         public void keyPressed(KeyEvent e) {
-
+            switch (e.getKeyCode()) {
+                case KeyEvent.VK_LEFT:
+                    if (!direction.equals("Right")) {
+                        direction = "Left";
+                    }
+                    break;
+                case KeyEvent.VK_RIGHT:
+                    if (!direction.equals("Left")) {
+                        direction = "Right";
+                    }
+                    break;
+                case KeyEvent.VK_UP:
+                    if (!direction.equals("Down")) {
+                        direction = "Up";
+                    }
+                    break;
+                case KeyEvent.VK_DOWN:
+                    if (!direction.equals("Up")) {
+                        direction = "Down";
+                    }
+                    break;
+            }
         }
     }
 }
