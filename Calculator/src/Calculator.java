@@ -26,6 +26,7 @@ public class Calculator {
     private JButton subtractButton = new JButton("-");
     private JButton addButton = new JButton("+");
     private JButton equalsButton = new JButton("=");
+    private JButton clearButton = new JButton("Clear");
 
     //Variables
     String firstNum = "";
@@ -42,10 +43,11 @@ public class Calculator {
         frame.setResizable(false);
         frame.setVisible(true);
         frame.setLayout(null);
+        frame.setLocationRelativeTo(null);
 
 
         //Text screen
-        textScreen.setSize(420, 100);
+        textScreen.setSize(420, 70);
         textScreen.setLocation(6, 5);
         textScreen.setEditable(false);
         Font font = new Font("Calibri(body)", Font.BOLD, 20);
@@ -70,6 +72,7 @@ public class Calculator {
         frame.add(subtractButton);
         frame.add(addButton);
         frame.add(equalsButton);
+        frame.add(clearButton);
 
         //button0
         button0.setSize(100, 50);
@@ -208,6 +211,17 @@ public class Calculator {
             @Override
             public void actionPerformed(ActionEvent e) {
                 textScreen.append("+");
+            }
+        });
+
+        //clearButton
+        clearButton.setSize(100, 40);
+        clearButton.setLocation(10,80);
+        clearButton.setFont(new Font("Roboto", Font.BOLD, 15));
+        clearButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                textScreen.setText("");
             }
         });
 

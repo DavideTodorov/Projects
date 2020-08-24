@@ -1,4 +1,8 @@
+Features:
 1. Add pass through wall method.
 2. Make the snake faster when eating apples
 3. Add Start button
 4. Add New Game button
+
+Bugs:
+1. Apple spawns on snake
