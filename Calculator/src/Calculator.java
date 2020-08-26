@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.DecimalFormat;
 
 public class Calculator {
 
@@ -312,7 +313,8 @@ public class Calculator {
                 break;
         }
 
-        result = String.valueOf(currResult);
-        textScreen.setText(result);
+        DecimalFormat decimalFormat = new DecimalFormat("##.################");
+        String formatted = decimalFormat.format(currResult);
+        textScreen.setText(formatted);
     }
 }
