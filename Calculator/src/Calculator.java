@@ -26,6 +26,7 @@ public class Calculator {
     private JButton subtractButton = new JButton("-");
     private JButton addButton = new JButton("+");
     private JButton equalsButton = new JButton("=");
+    private JButton floatingPointButton = new JButton(".");
     private JButton clearButton = new JButton("Clear");
 
     //Variables
@@ -72,6 +73,7 @@ public class Calculator {
         frame.add(subtractButton);
         frame.add(addButton);
         frame.add(equalsButton);
+        frame.add(floatingPointButton);
         frame.add(clearButton);
 
         //button0
@@ -211,6 +213,17 @@ public class Calculator {
             @Override
             public void actionPerformed(ActionEvent e) {
                 textScreen.append("+");
+            }
+        });
+
+        //floatingPoint button
+        floatingPointButton.setSize(100,50);
+        floatingPointButton.setLocation(10, 305);
+        floatingPointButton.setFont(new Font("Roboto", Font.BOLD, 15));
+        floatingPointButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                textScreen.append(".");
             }
         });
 
