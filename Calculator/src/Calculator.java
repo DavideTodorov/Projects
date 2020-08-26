@@ -33,8 +33,8 @@ public class Calculator {
     String firstNum = "";
     String secondNum = "";
     String[] statement;
-    int numOne = 0;
-    int numTwo = 0;
+    double numOne = 0;
+    double numTwo = 0;
     String result;
 
     public Calculator() {
@@ -272,15 +272,15 @@ public class Calculator {
 
 
     private void calculate(String text, String action) {
-        int currResult = 0;
+        double currResult = 0;
 
         switch (action) {
             case "/":
                 statement = text.split("\\/");
                 firstNum = statement[0];
                 secondNum = statement[1];
-                numOne = Integer.parseInt(firstNum);
-                numTwo = Integer.parseInt(secondNum);
+                numOne = Double.parseDouble(firstNum);
+                numTwo = Double.parseDouble(secondNum);
                 currResult = numOne / numTwo;
                 break;
 
@@ -288,8 +288,8 @@ public class Calculator {
                 statement = text.split("\\*");
                 firstNum = statement[0];
                 secondNum = statement[1];
-                numOne = Integer.parseInt(firstNum);
-                numTwo = Integer.parseInt(secondNum);
+                numOne = Double.parseDouble(firstNum);
+                numTwo = Double.parseDouble(secondNum);
                 currResult = numOne * numTwo;
                 break;
 
@@ -297,8 +297,8 @@ public class Calculator {
                 statement = text.split("\\-");
                 firstNum = statement[0];
                 secondNum = statement[1];
-                numOne = Integer.parseInt(firstNum);
-                numTwo = Integer.parseInt(secondNum);
+                numOne = Double.parseDouble(firstNum);
+                numTwo = Double.parseDouble(secondNum);
                 currResult = numOne - numTwo;
                 break;
 
@@ -306,8 +306,8 @@ public class Calculator {
                 statement = text.split("\\+");
                 firstNum = statement[0];
                 secondNum = statement[1];
-                numOne = Integer.parseInt(firstNum);
-                numTwo = Integer.parseInt(secondNum);
+                numOne = Double.parseDouble(firstNum);
+                numTwo = Double.parseDouble(secondNum);
                 currResult = numOne + numTwo;
                 break;
         }
