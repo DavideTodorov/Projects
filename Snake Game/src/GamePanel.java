@@ -24,7 +24,8 @@ public class GamePanel extends JPanel implements ActionListener {
     Timer timer;
     Random random;
 
-
+    static JButton startButton = new JButton("Start Game");
+    
     GamePanel() {
         random = new Random();
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
