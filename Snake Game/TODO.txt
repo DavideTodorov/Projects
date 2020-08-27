@@ -6,3 +6,4 @@ Features:
 
 Bugs:
 1. Apple spawns on snake.
+2. Sometimes game is not over when you crash in the wall
