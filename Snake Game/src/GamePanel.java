@@ -24,7 +24,7 @@ public class GamePanel extends JPanel implements ActionListener {
     Timer timer;
     Random random;
 
-    
+
     GamePanel() {
         random = new Random();
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -63,8 +63,13 @@ public class GamePanel extends JPanel implements ActionListener {
            */
 
             //draw apple
-            g.setColor(Color.red);
-            g.fillOval(appleXCoordinates, appleYCoordinates, unitSize, unitSize);
+            if (applesEaten % 7 == 0 && applesEaten != 0) {
+                g.setColor(Color.yellow);
+                g.fillOval(appleXCoordinates, appleYCoordinates, unitSize, unitSize);
+            } else {
+                g.setColor(Color.red);
+                g.fillOval(appleXCoordinates, appleYCoordinates, unitSize, unitSize);
+            }
 
             //draw snake
             for (int i = 0; i < bodyParts; i++) {
@@ -120,11 +125,16 @@ public class GamePanel extends JPanel implements ActionListener {
     //method to check for eaten apple
     public void checkApple() {
         if ((x[0] == appleXCoordinates) && (y[0] == appleYCoordinates)) {
-            applesEaten++;
-            bodyParts++;
-            addApple();
+            if (applesEaten % 7 != 0) {
+                applesEaten++;
+                bodyParts++;
+                addApple();
+            } else {
+                applesEaten += 2;
+                bodyParts++;
+                addApple();
+            }
         }
-
     }
 
     //method to check for collision
