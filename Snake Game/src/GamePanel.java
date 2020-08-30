@@ -25,7 +25,7 @@ public class GamePanel extends JPanel implements ActionListener {
     Timer timer;
     Random random;
 
-    
+
     GamePanel() {
         random = new Random();
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -82,6 +82,8 @@ public class GamePanel extends JPanel implements ActionListener {
                     g.fillRect(x[i], y[i], unitSize, unitSize);
                 }
             }
+
+            //show score during game
             g.setColor(Color.red);
             g.setFont(new Font("Ink Free", Font.BOLD, 40));
             FontMetrics metrics = getFontMetrics(g.getFont());
