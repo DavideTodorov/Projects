@@ -12,7 +12,7 @@ public class GamePanel extends JPanel implements ActionListener {
     static final int screenHeight = 600;
     static final int unitSize = 25;
     static final int gameUnits = (screenWidth * screenHeight) / unitSize;
-    static final int delay = 120;
+    static int delay = 120;
     final int x[] = new int[gameUnits];
     final int y[] = new int[gameUnits];
     int bodyParts = 6;
@@ -125,14 +125,18 @@ public class GamePanel extends JPanel implements ActionListener {
     //method to check for eaten apple
     public void checkApple() {
         if ((x[0] == appleXCoordinates) && (y[0] == appleYCoordinates)) {
-            if (applesEaten % 7 != 0) {
-                applesEaten++;
-                bodyParts++;
-                addApple();
-            } else {
+            if (applesEaten % 7 == 0 && applesEaten != 0) {
                 applesEaten += 2;
                 bodyParts++;
                 addApple();
+            } else {
+                applesEaten++;
+                bodyParts++;
+                addApple();
+            }
+
+            if (applesEaten % 10 == 0 && applesEaten != 0){
+                delay -= 5;
             }
         }
     }
