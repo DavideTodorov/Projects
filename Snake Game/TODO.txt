@@ -1,6 +1,6 @@
 Features:
 1. Add pass through wall method.
-2. Make the snake faster when eating apples.
+2. Make the snake faster when eating apples. - DONE
 3. Add bonus apple on every 7 apples eaten. - DONE
 
 Bugs:
