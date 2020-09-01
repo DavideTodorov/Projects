@@ -4,5 +4,5 @@ Features:
 3. Add bonus apple on every 7 apples eaten. - DONE
 
 Bugs:
-1. Apple spawns on snake.
+1. Apple spawns on snake. - FIXED
 2. Sometimes game is not over when you crash in the wall
