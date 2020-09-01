@@ -97,8 +97,37 @@ public class GamePanel extends JPanel implements ActionListener {
 
     //method to add apple
     public void addApple() {
-        appleXCoordinates = random.nextInt((int) (screenWidth / unitSize)) * unitSize;
-        appleYCoordinates = random.nextInt((int) (screenHeight / unitSize)) * unitSize;
+        boolean wrongCoordinates = false;
+        do {
+            //creates random X and Y coordinates
+            appleXCoordinates = random.nextInt((int) (screenWidth / unitSize)) * unitSize;
+            appleYCoordinates = random.nextInt((int) (screenHeight / unitSize)) * unitSize;
+
+            //validates X coordinates
+            for (int i = 0; i < x.length; i++) {
+                int currX = x[i];
+
+                if (currX == appleXCoordinates){
+                    wrongCoordinates = true;
+                    break;
+                }else {
+                    wrongCoordinates = false;
+                }
+            }
+
+            //validates Y coordinates
+            for (int i = 0; i < y.length; i++) {
+                int currY = y[i];
+
+                if (currY == appleYCoordinates){
+                    wrongCoordinates = true;
+                    break;
+                }else {
+                    wrongCoordinates = false;
+                }
+            }
+            
+        }while (wrongCoordinates);
     }
 
     //method to move the components
