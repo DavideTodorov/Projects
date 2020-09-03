@@ -147,6 +147,69 @@ public class TicTacToe implements ActionListener {
 
 
         //check if O wins
+        if (
+                buttons[0].getText().equals("O") &&
+                        buttons[1].getText().equals("O") &&
+                        buttons[2].getText().equals("O")
+        ) {
+            oWins(0, 1, 2);
+        }
+
+        if (
+                buttons[3].getText().equals("O") &&
+                        buttons[4].getText().equals("O") &&
+                        buttons[5].getText().equals("O")
+        ) {
+            oWins(3, 4, 5);
+        }
+
+        if (
+                buttons[6].getText().equals("O") &&
+                        buttons[7].getText().equals("O") &&
+                        buttons[8].getText().equals("O")
+        ) {
+            oWins(6, 7, 8);
+        }
+
+        if (
+                buttons[0].getText().equals("O") &&
+                        buttons[3].getText().equals("O") &&
+                        buttons[6].getText().equals("O")
+        ) {
+            oWins(0, 3, 6);
+        }
+
+        if (
+                buttons[1].getText().equals("O") &&
+                        buttons[4].getText().equals("O") &&
+                        buttons[7].getText().equals("O")
+        ) {
+            oWins(1, 4, 7);
+        }
+
+        if (
+                buttons[2].getText().equals("O") &&
+                        buttons[5].getText().equals("O") &&
+                        buttons[8].getText().equals("O")
+        ) {
+            oWins(2, 5, 8);
+        }
+
+        if (
+                buttons[0].getText().equals("O") &&
+                        buttons[4].getText().equals("O") &&
+                        buttons[8].getText().equals("O")
+        ) {
+            oWins(0, 4, 8);
+        }
+
+        if (
+                buttons[2].getText().equals("O") &&
+                        buttons[4].getText().equals("O") &&
+                        buttons[6].getText().equals("O")
+        ) {
+            oWins(2, 4, 6);
+        }
     }
 
 
