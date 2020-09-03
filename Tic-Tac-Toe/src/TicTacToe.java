@@ -42,12 +42,13 @@ public class TicTacToe implements ActionListener {
 
         //ButtonPanel details
         buttonPanel.setLayout(new GridLayout(3, 3));
-        buttonPanel.setBackground(Color.RED);
+//        buttonPanel.setBackground(Color.RED);
 
         //Buttons creation
         for (int i = 0; i < 9; i++) {
             buttons[i] = new JButton();
             buttons[i].setFont(new Font("Ink Free", Font.BOLD, 120));
+            buttons[i].setBackground(new Color(40, 40, 40));
             buttons[i].setFocusable(false);
             buttons[i].addActionListener(this);
             buttonPanel.add(buttons[i]);
@@ -98,5 +99,24 @@ public class TicTacToe implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
 
+        for (int i = 0; i < 9; i++) {
+            if (e.getSource() == buttons[i]) {
+                if (firstPlayerTurn) {
+                    if (buttons[i].getText().equals("")) {
+                        buttons[i].setForeground(Color.red);
+                        buttons[i].setText("X");
+                        textField.setText("O turn");
+                        firstPlayerTurn = false;
+                    }
+                } else {
+                    if (buttons[i].getText().equals("")) {
+                        buttons[i].setForeground(Color.cyan);
+                        buttons[i].setText("O");
+                        textField.setText("X turn");
+                        firstPlayerTurn = true;
+                    }
+                }
+            }
+        }
     }
 }
