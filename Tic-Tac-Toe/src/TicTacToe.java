@@ -80,7 +80,73 @@ public class TicTacToe implements ActionListener {
 
     //checks if there are win conditions
     public void checkForWin() {
+        //check if X wins
+        if (
+                buttons[0].getText().equals("X") &&
+                        buttons[1].getText().equals("X") &&
+                        buttons[2].getText().equals("X")
+        ) {
+            xWins(0, 1, 2);
+        }
 
+        if (
+                buttons[3].getText().equals("X") &&
+                        buttons[4].getText().equals("X") &&
+                        buttons[5].getText().equals("X")
+        ) {
+            xWins(3, 4, 5);
+        }
+
+        if (
+                buttons[6].getText().equals("X") &&
+                        buttons[7].getText().equals("X") &&
+                        buttons[8].getText().equals("X")
+        ) {
+            xWins(6, 7, 8);
+        }
+
+        if (
+                buttons[0].getText().equals("X") &&
+                        buttons[3].getText().equals("X") &&
+                        buttons[6].getText().equals("X")
+        ) {
+            xWins(0, 3, 6);
+        }
+
+        if (
+                buttons[1].getText().equals("X") &&
+                        buttons[4].getText().equals("X") &&
+                        buttons[7].getText().equals("X")
+        ) {
+            xWins(1, 4, 7);
+        }
+
+        if (
+                buttons[2].getText().equals("X") &&
+                        buttons[5].getText().equals("X") &&
+                        buttons[8].getText().equals("X")
+        ) {
+            xWins(2, 5, 8);
+        }
+
+        if (
+                buttons[0].getText().equals("X") &&
+                        buttons[4].getText().equals("X") &&
+                        buttons[8].getText().equals("X")
+        ) {
+            xWins(0, 4, 8);
+        }
+
+        if (
+                buttons[2].getText().equals("X") &&
+                        buttons[4].getText().equals("X") &&
+                        buttons[6].getText().equals("X")
+        ) {
+            xWins(2, 4, 6);
+        }
+
+
+        //check if O wins
     }
 
 
@@ -107,6 +173,7 @@ public class TicTacToe implements ActionListener {
                         buttons[i].setText("X");
                         textField.setText("O turn");
                         firstPlayerTurn = false;
+                        checkForWin();
                     }
                 } else {
                     if (buttons[i].getText().equals("")) {
@@ -114,6 +181,7 @@ public class TicTacToe implements ActionListener {
                         buttons[i].setText("O");
                         textField.setText("X turn");
                         firstPlayerTurn = true;
+                        checkForWin();
                     }
                 }
             }
