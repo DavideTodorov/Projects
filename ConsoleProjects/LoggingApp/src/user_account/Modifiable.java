@@ -4,9 +4,9 @@ import java.util.Scanner;
 
 public interface Modifiable {
 
-    String changeUsername(Scanner scanner);
+    void changeUsername(Scanner scanner);
 
-    String changeEmail(Scanner scanner);
+    void changeEmail(Scanner scanner);
 
-    String changePassword(Scanner scanner);
+    void changePassword(Scanner scanner);
 }

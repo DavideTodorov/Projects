@@ -12,7 +12,7 @@ public class UserAccount {
         this.setPassword(password);
     }
 
-    private void setPassword(String password) {
+    protected void setPassword(String password) {
         if (password.length() <= 4) {
             throw new IllegalArgumentException(
                     "Password should be at least 5 characters");
@@ -21,7 +21,7 @@ public class UserAccount {
         this.password = password;
     }
 
-    private void setEmail(String email) {
+    protected void setEmail(String email) {
         if (!email.contains("@")) {
             throw new IllegalArgumentException(
                     "Email should contain '@'");
@@ -30,7 +30,7 @@ public class UserAccount {
         this.email = email;
     }
 
-    private void setUsername(String userName) {
+    protected void setUsername(String userName) {
         if (userName.length() <= 4 || userName.length() > 15) {
             throw new IllegalArgumentException(
                     "UserName should be between 4 and 15 characters");
