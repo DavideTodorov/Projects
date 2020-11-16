@@ -39,11 +39,9 @@ public class UserAccountSettings implements Modifiable {
 
     @Override
     public void changeEmail(Scanner scanner) {
-        return null;
     }
 
     @Override
     public void changePassword(Scanner scanner) {
-        return null;
     }
 }
