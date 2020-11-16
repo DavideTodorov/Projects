@@ -1,8 +1,8 @@
 import java.util.Scanner;
 
-public class userAccountRegistrant {
+public class UserAccountRegistrant {
 
-    public String register(Scanner scanner) {
+    public static String register(Scanner scanner) {
         System.out.println("Register user:");
 
         while (true) {
