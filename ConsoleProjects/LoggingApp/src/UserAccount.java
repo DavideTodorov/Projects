@@ -37,6 +37,18 @@ public class UserAccount {
         this.userName = userName;
     }
 
+    public String getUserName() {
+        return userName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
     @Override
     public String toString() {
         return String.format("Username: %s%n" +
