@@ -1,3 +1,5 @@
+import user_account.UserAccountRegistrant;
+
 import java.util.Scanner;
 
 public class Main {
@@ -18,9 +20,8 @@ public class Main {
         NOTE: When you choose a command the program will lead you how to use it!
          */
 
-
         UserAccountRegistrant.register(scanner);
 
-
+        System.out.println();
     }
 }

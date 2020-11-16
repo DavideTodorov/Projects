@@ -1,8 +1,11 @@
+package user_account;
+
 import java.util.HashMap;
 import java.util.Map;
 
 public class UserAccountsRepository {
     protected static Map<String, UserAccount> repository = new HashMap<>();
+
 
     protected static void addUserAccount(UserAccount account) {
         if (repository.containsKey(account.getUserName())) {

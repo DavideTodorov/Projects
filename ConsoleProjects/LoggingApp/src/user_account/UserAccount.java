@@ -1,3 +1,5 @@
+package user_account;
+
 public class UserAccount {
 
     private String userName;

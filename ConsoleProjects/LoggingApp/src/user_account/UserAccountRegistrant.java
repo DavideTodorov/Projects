@@ -1,6 +1,8 @@
+package user_account;
+
 import java.util.Scanner;
 
-public class UserAccountRegistrant {
+public class UserAccountRegistrant extends UserAccountsRepository {
 
     public static String register(Scanner scanner) {
         System.out.println("Register user:");
@@ -20,7 +22,7 @@ public class UserAccountRegistrant {
                         (name, email, password);
 
                 try {
-                    UserAccountsRepository.addUserAccount(userAccount);
+                    UserAccountRegistrant.addUserAccount(userAccount);
 
                     return String.format("User %s created successfully!%n", name);
                 } catch (IllegalStateException ex) {

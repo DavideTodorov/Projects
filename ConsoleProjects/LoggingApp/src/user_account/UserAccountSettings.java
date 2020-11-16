@@ -1,3 +1,5 @@
+package user_account;
+
 import java.util.Scanner;
 
 public class UserAccountSettings implements Modifiable {
