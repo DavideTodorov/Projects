@@ -1,5 +1,3 @@
-import interfaces.Modifiable;
-
 import java.util.Scanner;
 
 public class UserAccountSettings implements Modifiable {
