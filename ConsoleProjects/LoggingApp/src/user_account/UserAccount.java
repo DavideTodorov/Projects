@@ -12,6 +12,7 @@ public class UserAccount {
         this.setPassword(password);
     }
 
+    //Validate password
     protected void setPassword(String password) {
         if (password.length() <= 4) {
             throw new IllegalArgumentException(
@@ -21,6 +22,7 @@ public class UserAccount {
         this.password = password;
     }
 
+    //Validate email
     protected void setEmail(String email) {
         if (!email.contains("@")) {
             throw new IllegalArgumentException(
@@ -30,6 +32,8 @@ public class UserAccount {
         this.email = email;
     }
 
+
+    //Validate username
     protected void setUsername(String userName) {
         if (userName.length() <= 4 || userName.length() > 15) {
             throw new IllegalArgumentException(
