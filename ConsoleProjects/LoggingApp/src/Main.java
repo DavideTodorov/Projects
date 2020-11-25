@@ -1,6 +1,7 @@
 import user_account.UserAccountRegistrant;
 import user_account.UserAccountSettings;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Scanner;
 
@@ -32,8 +33,10 @@ public class Main {
 
             try {
                 Method method = clazz.getDeclaredMethod(input, Scanner.class);
-//                method.invoke(Use)
-            } catch (NoSuchMethodException e) {
+                method.invoke(null, new Scanner(System.in));
+            } catch (NoSuchMethodException
+                    | IllegalAccessException
+                    | InvocationTargetException e) {
                 e.printStackTrace();
             }
 

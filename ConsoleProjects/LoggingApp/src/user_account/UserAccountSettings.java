@@ -2,11 +2,10 @@ package user_account;
 
 import java.util.Scanner;
 
-public class UserAccountSettings implements Modifiable {
+public class UserAccountSettings  {
 
     //Method for changing UserName in UserAccount
-    @Override
-    public void changeUsername(Scanner scanner) {
+    public static void changeUsername(Scanner scanner) {
         //Input
         System.out.println("Enter old username:");
         String oldUsername = scanner.nextLine();
@@ -37,8 +36,7 @@ public class UserAccountSettings implements Modifiable {
 
 
     //Method for changing emails in UserAccount
-    @Override
-    public void changeEmail(Scanner scanner) {
+    public static void changeEmail(Scanner scanner) {
         System.out.println("Enter username:");
         String username = scanner.nextLine();
 
@@ -62,8 +60,7 @@ public class UserAccountSettings implements Modifiable {
 
 
     //Method for changing password in UseAccount
-    @Override
-    public void changePassword(Scanner scanner) {
+    public static void changePassword(Scanner scanner) {
         System.out.println("Enter username:");
         String username = scanner.nextLine();
 
@@ -87,7 +84,7 @@ public class UserAccountSettings implements Modifiable {
 
 
     //Get UserAccount from repository
-    private UserAccount getUserAccount(String username) {
+    private static UserAccount getUserAccount(String username) {
         UserAccount userAccount = null;
         try {
             userAccount = UserAccountsRepository.getUserAccount(username);
@@ -98,7 +95,7 @@ public class UserAccountSettings implements Modifiable {
     }
 
     //Method for validating the input password
-    private void getCorrectPassword(Scanner scanner, String password, UserAccount userAccount) {
+    private static void getCorrectPassword(Scanner scanner, String password, UserAccount userAccount) {
         while (!userAccount.getPassword().equals(password)) {
             System.out.println("Wrong password! Try again!");
             System.out.println("Enter password:");
