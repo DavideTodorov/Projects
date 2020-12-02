@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 public class UserAccountRegistrant extends UserAccountsRepository {
 
-    public static String register(Scanner scanner) {
+    public static void register(Scanner scanner) {
         System.out.println("Register user:");
 
         while (true) {
@@ -21,15 +21,12 @@ public class UserAccountRegistrant extends UserAccountsRepository {
                 UserAccount userAccount = new UserAccount
                         (name, email, password);
 
-                try {
-                    UserAccountRegistrant.addUserAccount(userAccount);
 
-                    return String.format("User %s created successfully!%n", name);
-                } catch (IllegalStateException ex) {
-                    System.out.println(ex.getMessage());
-                    System.out.println("Try again!");
-                }
-            } catch (IllegalArgumentException e) {
+                UserAccountRegistrant.addUserAccount(userAccount);
+
+                System.out.printf("User \"%s\" created successfully!%n", name);
+                return;
+            } catch (IllegalArgumentException | IllegalStateException e) {
                 System.out.println(e.getMessage());
                 System.out.println("Try again!");
             }

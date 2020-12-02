@@ -29,6 +29,14 @@ public class Main {
         System.out.println("Enter command:");
         String input = scanner.nextLine();
         while (!"End".equalsIgnoreCase(input)) {
+            
+            if (input.equals("registerAccount")){
+                UserAccountRegistrant.register(scanner);
+                input = scanner.nextLine();
+                continue;
+            }
+
+
             Class<UserAccountSettings> clazz = UserAccountSettings.class;
 
             try {
