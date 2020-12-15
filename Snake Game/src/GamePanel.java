@@ -9,21 +9,21 @@ import java.util.Random;
 public class GamePanel extends JPanel implements ActionListener {
 
     //variables
-    static final int SCREEN_WIDTH = 600;
-    static final int SCREEN_HEIGHT = 600;
-    static final int UNIT_SIZE = 25;
-    static final int GAME_UNITS = (SCREEN_WIDTH * SCREEN_HEIGHT) / UNIT_SIZE;
-    static int delay = 130;
-    final int x[] = new int[GAME_UNITS];
-    final int y[] = new int[GAME_UNITS];
-    int bodyParts = 6;
-    int applesEaten;
-    int appleXCoordinates;
-    int appleYCoordinates;
-    String direction = "Right";
-    boolean isRunning = false;
-    Timer timer;
-    Random random;
+    private static final int SCREEN_WIDTH = 600;
+    private static final int SCREEN_HEIGHT = 600;
+    private static final int UNIT_SIZE = 25;
+    private static final int GAME_UNITS = (SCREEN_WIDTH * SCREEN_HEIGHT) / UNIT_SIZE;
+    private static int delay = 130;
+    private final int x[] = new int[GAME_UNITS];
+    private final int y[] = new int[GAME_UNITS];
+    private int bodyParts = 6;
+    private int applesEaten;
+    private int appleXCoordinates;
+    private int appleYCoordinates;
+    private String direction = "Right";
+    private boolean isRunning = false;
+    private Timer timer;
+    private Random random;
 
 
     GamePanel() {
@@ -107,10 +107,10 @@ public class GamePanel extends JPanel implements ActionListener {
             for (int i = 0; i < x.length; i++) {
                 int currX = x[i];
 
-                if (currX == appleXCoordinates){
+                if (currX == appleXCoordinates) {
                     wrongCoordinates = true;
                     break;
-                }else {
+                } else {
                     wrongCoordinates = false;
                 }
             }
@@ -119,15 +119,15 @@ public class GamePanel extends JPanel implements ActionListener {
             for (int i = 0; i < y.length; i++) {
                 int currY = y[i];
 
-                if (currY == appleYCoordinates){
+                if (currY == appleYCoordinates) {
                     wrongCoordinates = true;
                     break;
-                }else {
+                } else {
                     wrongCoordinates = false;
                 }
             }
-            
-        }while (wrongCoordinates);
+
+        } while (wrongCoordinates);
     }
 
     //method to move the components
@@ -167,7 +167,7 @@ public class GamePanel extends JPanel implements ActionListener {
                 addApple();
             }
 
-            if (applesEaten % 10 == 0 && applesEaten != 0){
+            if (applesEaten % 10 == 0 && applesEaten != 0) {
                 delay -= 5;
             }
         }
