@@ -31,7 +31,7 @@ const account4 = {
 
 const accounts = [account1, account2, account3, account4];
 
-// Elements
+//Elements
 const labelWelcome = document.querySelector(".welcome");
 const labelDate = document.querySelector(".date");
 const labelBalance = document.querySelector(".balance__value");
@@ -59,10 +59,10 @@ const inputClosePin = document.querySelector(".form__input--pin");
 
 //Method to display movements of an account
 const displayMovements = function (movements) {
-  //clear the movements conatiner
+  //Clear the movements conatiner
   containerMovements.innerHTML = "";
 
-  //Add movement rows to movements container 
+  //Add movement rows to movements container
   movements.forEach(function (movement, i) {
     const movementType = movement > 0 ? "deposit" : "withdrawal";
 
@@ -80,3 +80,19 @@ const displayMovements = function (movements) {
 };
 
 displayMovements(account1.movements);
+
+//Method to create username from name
+const createUsername = function (name) {
+  const username = name
+    .toLowerCase()
+    .split(/\s+/)
+    .map((name) => name[0])
+    .join("");
+
+  return username;
+};
+
+//Create usernames for all accounts
+accounts.forEach(function (acc) {
+  acc.username = createUsername(acc.owner);
+});
