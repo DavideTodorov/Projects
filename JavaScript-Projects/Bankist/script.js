@@ -81,6 +81,18 @@ const displayMovements = function (movements) {
 
 displayMovements(account1.movements);
 
+//Calculate and display balance
+const calcAndDisplayBalance = function (movements) {
+  
+  const sum = movements.reduce(function (acc, movement) {
+    return acc + movement;
+  }, 0);
+
+  labelBalance.textContent = `${sum} \u20ac`;
+};
+
+calcAndDisplayBalance(account1.movements);
+
 //Method to create username from name
 const createUsername = function (name) {
   const username = name
