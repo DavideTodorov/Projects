@@ -83,15 +83,43 @@ displayMovements(account1.movements);
 
 //Calculate and display balance
 const calcAndDisplayBalance = function (movements) {
-  
   const sum = movements.reduce(function (acc, movement) {
     return acc + movement;
   }, 0);
 
-  labelBalance.textContent = `${sum} \u20ac`;
+  labelBalance.textContent = `${sum}\u20ac`;
 };
 
 calcAndDisplayBalance(account1.movements);
+
+//Calculate and display summary of movements
+const calcAndDisplaySummary = function (movements) {
+  //Calculate and display deposits only
+  const depositSum = movements
+    .filter((mov) => mov > 0)
+    .reduce((acc, mov) => acc + mov);
+
+  labelSumIn.textContent = `${depositSum}\u20ac`;
+
+  //Calculate and display withdrawals only
+  const withdrawalsSum = movements
+    .filter((mov) => mov < 0)
+    .reduce((acc, mov) => acc + mov);
+
+  labelSumOut.textContent = `${Math.abs(withdrawalsSum)}\u20ac`;
+
+  //Calculate and display interests gained on deposits
+  const interestRateInPercents = 1.2;
+  const totalInterestReceived = movements
+    .filter((mov) => mov > 0)
+    .map((mov) => mov * (interestRateInPercents / 100))
+    .filter(interest => interest >= 1)
+    .reduce((sum, interest) => sum + interest);
+
+  labelSumInterest.textContent = `${totalInterestReceived}\u20ac`;
+};
+
+calcAndDisplaySummary(account1.movements);
 
 //Method to create username from name
 const createUsername = function (name) {
