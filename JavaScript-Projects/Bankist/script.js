@@ -31,6 +31,7 @@ const account4 = {
 
 const accounts = [account1, account2, account3, account4];
 
+//
 //Elements
 const labelWelcome = document.querySelector(".welcome");
 const labelDate = document.querySelector(".date");
@@ -57,6 +58,7 @@ const inputLoanAmount = document.querySelector(".form__input--loan-amount");
 const inputCloseUsername = document.querySelector(".form__input--user");
 const inputClosePin = document.querySelector(".form__input--pin");
 
+//
 //Method to display movements of an account
 const displayMovements = function (movements) {
   //Clear the movements conatiner
@@ -79,8 +81,7 @@ const displayMovements = function (movements) {
   });
 };
 
-displayMovements(account1.movements);
-
+//
 //Calculate and display balance
 const calcAndDisplayBalance = function (movements) {
   const sum = movements.reduce(function (acc, movement) {
@@ -90,37 +91,41 @@ const calcAndDisplayBalance = function (movements) {
   labelBalance.textContent = `${sum}\u20ac`;
 };
 
-calcAndDisplayBalance(account1.movements);
-
+//
 //Calculate and display summary of movements
-const calcAndDisplaySummary = function (movements) {
+const calcAndDisplaySummary = function (currAcc) {
   //Calculate and display deposits only
-  const depositSum = movements
-    .filter((mov) => mov > 0)
-    .reduce((acc, mov) => acc + mov);
+  let depositSum = 0;
+  try {
+    depositSum = currAcc.movements
+      .filter((mov) => mov > 0)
+      .reduce((acc, mov) => acc + mov);
+  } catch (e) {}
 
   labelSumIn.textContent = `${depositSum}\u20ac`;
 
   //Calculate and display withdrawals only
-  const withdrawalsSum = movements
-    .filter((mov) => mov < 0)
-    .reduce((acc, mov) => acc + mov);
+  let withdrawalsSum = 0;
+  try {
+    withdrawalsSum = currAcc.movements
+      .filter((mov) => mov < 0)
+      .reduce((acc, mov) => acc + mov);
+  } catch (e) {}
 
   labelSumOut.textContent = `${Math.abs(withdrawalsSum)}\u20ac`;
 
   //Calculate and display interests gained on deposits
-  const interestRateInPercents = 1.2;
-  const totalInterestReceived = movements
+  const interestRateInPercents = currAcc.interestRate;
+  const totalInterestReceived = currAcc.movements
     .filter((mov) => mov > 0)
     .map((mov) => mov * (interestRateInPercents / 100))
-    .filter(interest => interest >= 1)
+    .filter((interest) => interest >= 1)
     .reduce((sum, interest) => sum + interest);
 
   labelSumInterest.textContent = `${totalInterestReceived}\u20ac`;
 };
 
-calcAndDisplaySummary(account1.movements);
-
+//
 //Method to create username from name
 const createUsername = function (name) {
   const username = name
@@ -135,4 +140,42 @@ const createUsername = function (name) {
 //Create usernames for all accounts
 accounts.forEach(function (acc) {
   acc.username = createUsername(acc.owner);
+});
+
+//
+//Login logic
+//Event handler for the "login" button
+let currAccount;
+
+btnLogin.addEventListener("click", function (e) {
+  e.preventDefault();
+  const inputUser = inputLoginUsername.value;
+  const inputPin = Number(inputLoginPin.value);
+
+  currAccount = accounts.find((acc) => acc.username === inputUser);
+
+  //Check if password is correct. If correct then log in
+  if (currAccount?.pin === inputPin) {
+    //Show message
+    labelWelcome.textContent = `Welcome back, ${
+      currAccount.owner.split(/\s+/)[0]
+    }`;
+
+    //Clear input fields
+    inputLoginUsername.value = "";
+    inputLoginPin.value = "";
+    inputLoginPin.blur();
+
+    //Display UI
+    containerApp.style.opacity = 100;
+
+    //Display movements
+    displayMovements(currAccount.movements);
+
+    //Calculate and display balance
+    calcAndDisplayBalance(currAccount.movements);
+
+    //Display summary
+    calcAndDisplaySummary(currAccount);
+  }
 });
