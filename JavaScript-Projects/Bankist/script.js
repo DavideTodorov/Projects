@@ -267,6 +267,28 @@ btnLoan.addEventListener("click", function (e) {
     //Update UI
     updateUI(currAccount);
   }
-  
+
   inputLoanAmount.value = "";
+});
+
+//====================
+//Sort movemets logic
+let isSorted = false;
+
+btnSort.addEventListener("click", function (e) {
+  e.preventDefault();
+
+  if (!isSorted) {
+    //Sorted arr in ascending order
+    const sortedMovements = currAccount.movements.slice().sort((a, b) => a - b);
+    isSorted = true;
+
+    //Display movements in sorted way
+    displayMovements(sortedMovements);
+  } else {
+    isSorted = false;
+
+    //Display movements in original way
+    displayMovements(currAccount.movements);
+  }
 });
