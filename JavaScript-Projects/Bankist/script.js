@@ -196,7 +196,6 @@ btnLogin.addEventListener("click", function (e) {
 
 //=====================
 //Transfer money logic
-
 //Transfer button event listener
 btnTransfer.addEventListener("click", function (e) {
   e.preventDefault();
@@ -246,5 +245,28 @@ btnClose.addEventListener("click", function (e) {
     ).style.visibility = "hidden";
 
     inputCloseUsername.value = inputClosePin.value = "";
+
+    labelWelcome.textContent = "Log in to get started";
   }
+});
+
+//===================
+//Request loan logic
+btnLoan.addEventListener("click", function (e) {
+  e.preventDefault();
+
+  const loanAmount = Number(inputLoanAmount.value);
+
+  if (
+    loanAmount > 0 &&
+    currAccount.movements.some((mov) => mov >= 0.1 * loanAmount)
+  ) {
+    //Add the loan to the movements array
+    currAccount.movements.push(loanAmount);
+
+    //Update UI
+    updateUI(currAccount);
+  }
+  
+  inputLoanAmount.value = "";
 });
