@@ -277,7 +277,7 @@ h2 {
   font-size: 1.8rem;
   background-color: #fff;
   cursor: pointer;
-  transition: all 0.3s;
+  transition: all 0.8s;
 }
 
 .form__btn:focus {
@@ -300,6 +300,5 @@ h2 {
   padding-top: 1cm;
   font-size: 0.8cm;
   text-align: center;
-  opacity: 100;
   display: block;
 }

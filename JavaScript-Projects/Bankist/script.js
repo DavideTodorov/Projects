@@ -58,7 +58,7 @@ const inputLoanAmount = document.querySelector(".form__input--loan-amount");
 const inputCloseUsername = document.querySelector(".form__input--user");
 const inputClosePin = document.querySelector(".form__input--pin");
 
-//
+//==========================================
 //Method to display movements of an account
 const displayMovements = function (movements) {
   //Clear the movements conatiner
@@ -81,17 +81,18 @@ const displayMovements = function (movements) {
   });
 };
 
-//
+//==============================
 //Calculate and display balance
-const calcAndDisplayBalance = function (movements) {
-  const sum = movements.reduce(function (acc, movement) {
+const calcAndDisplayBalance = function (currAccount) {
+  const sum = currAccount.movements.reduce(function (acc, movement) {
     return acc + movement;
   }, 0);
 
   labelBalance.textContent = `${sum}\u20ac`;
+  currAccount.balance = sum;
 };
 
-//
+//===========================================
 //Calculate and display summary of movements
 const calcAndDisplaySummary = function (currAcc) {
   //Calculate and display deposits only
@@ -125,7 +126,20 @@ const calcAndDisplaySummary = function (currAcc) {
   labelSumInterest.textContent = `${totalInterestReceived}\u20ac`;
 };
 
-//
+//==============================
+//Method to update the whole UI
+const updateUI = function (currAcc) {
+  //Display movements
+  displayMovements(currAcc.movements);
+
+  //Calculate and display balance
+  calcAndDisplayBalance(currAcc);
+
+  //Display summary
+  calcAndDisplaySummary(currAcc);
+};
+
+//====================================
 //Method to create username from name
 const createUsername = function (name) {
   const username = name
@@ -142,11 +156,11 @@ accounts.forEach(function (acc) {
   acc.username = createUsername(acc.owner);
 });
 
-//
+//============
 //Login logic
-//Event handler for the "login" button
 let currAccount;
 
+//Event handler for the "login" button
 btnLogin.addEventListener("click", function (e) {
   e.preventDefault();
 
@@ -157,6 +171,7 @@ btnLogin.addEventListener("click", function (e) {
   const inputUser = inputLoginUsername.value;
   const inputPin = Number(inputLoginPin.value);
 
+  //Get account based on user inputs
   currAccount = accounts.find((acc) => acc.username === inputUser);
 
   //Check if password is correct. If correct then log in
@@ -166,21 +181,44 @@ btnLogin.addEventListener("click", function (e) {
       currAccount.owner.split(/\s+/)[0]
     }`;
 
-    //Clear input fields
-    inputLoginUsername.value = "";
-    inputLoginPin.value = "";
-    inputLoginPin.blur();
-
     //Display UI
     containerApp.style.opacity = 100;
 
-    //Display movements
-    displayMovements(currAccount.movements);
+    //Update UI
+    updateUI(currAccount);
+  }
 
-    //Calculate and display balance
-    calcAndDisplayBalance(currAccount.movements);
+  //Clear input fields
+  inputLoginUsername.value = "";
+  inputLoginPin.value = "";
+  inputLoginPin.blur();
+});
 
-    //Display summary
-    calcAndDisplaySummary(currAccount);
+//=====================
+//Transfer money logic
+
+//Transfer button event listener
+btnTransfer.addEventListener("click", function (e) {
+  e.preventDefault();
+
+  const accountTransferTo = accounts.find(
+    (acc) => acc.username === inputTransferTo.value
+  );
+  const transferAmount = Number(inputTransferAmount.value);
+
+  inputTransferTo.value = inputTransferAmount.value = "";
+
+  if (
+    transferAmount > 0 &&
+    transferAmount <= currAccount.balance &&
+    accountTransferTo &&
+    accountTransferTo.username !== currAccount.username
+  ) {
+    //The transfer logic
+    currAccount.movements.push(-transferAmount);
+    accountTransferTo.movements.push(transferAmount);
+
+    //Update UI
+    updateUI(currAccount);
   }
 });
