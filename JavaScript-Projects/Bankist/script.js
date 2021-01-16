@@ -149,6 +149,11 @@ let currAccount;
 
 btnLogin.addEventListener("click", function (e) {
   e.preventDefault();
+
+  //Remove user accounts information from starting screen
+  document.querySelector(".userAccountsData").style.display = "none";
+
+  //Get user inputs
   const inputUser = inputLoginUsername.value;
   const inputPin = Number(inputLoginPin.value);
 
