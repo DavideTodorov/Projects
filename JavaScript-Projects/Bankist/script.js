@@ -164,9 +164,6 @@ let currAccount;
 btnLogin.addEventListener("click", function (e) {
   e.preventDefault();
 
-  //Remove user accounts information from starting screen
-  document.querySelector(".userAccountsData").style.display = "none";
-
   //Get user inputs
   const inputUser = inputLoginUsername.value;
   const inputPin = Number(inputLoginPin.value);
@@ -180,6 +177,9 @@ btnLogin.addEventListener("click", function (e) {
     labelWelcome.textContent = `Welcome back, ${
       currAccount.owner.split(/\s+/)[0]
     }`;
+
+    //Remove user accounts information from starting screen
+    document.querySelector(".userAccountsData").style.display = "none";
 
     //Display UI
     containerApp.style.opacity = 100;
@@ -220,5 +220,31 @@ btnTransfer.addEventListener("click", function (e) {
 
     //Update UI
     updateUI(currAccount);
+  }
+});
+
+//====================
+//Close account logic
+btnClose.addEventListener("click", function (e) {
+  e.preventDefault();
+
+  const closeUsername = inputCloseUsername.value;
+  const closePin = Number(inputClosePin.value);
+
+  if (closeUsername === currAccount.username && closePin === currAccount.pin) {
+    //Find index of account to be closed
+    const index = accounts.findIndex((acc) => acc.username === closeUsername);
+    console.log(index);
+    //Remove account from the array
+    accounts.splice(index, 1);
+
+    //Update UI
+    containerApp.style.opacity = 0;
+    document.querySelector(".userAccountsData").style.display = "block";
+    document.getElementById(
+      `userAccountsData.${closeUsername}`
+    ).style.visibility = "hidden";
+
+    inputCloseUsername.value = inputClosePin.value = "";
   }
 });

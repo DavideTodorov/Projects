@@ -302,3 +302,11 @@ h2 {
   text-align: center;
   display: block;
 }
+
+.hidden {
+  display: none;
+}
+
+#userAccountsData-description{
+  font-size: 1.1cm;
+}
