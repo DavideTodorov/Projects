@@ -83,7 +83,7 @@ const displayMovements = function (movements) {
         <div class="movements__type movements__type--${movementType}">${
       i + 1
     } ${movementType}</div>
-        <div class="movements__value">${movement}</div>
+        <div class="movements__value">${movement.toFixed(2)}\u20ac</div>
     </div>
     `;
 
@@ -98,7 +98,7 @@ const calcAndDisplayBalance = function (currAccount) {
     return acc + movement;
   }, 0);
 
-  labelBalance.textContent = `${sum}\u20ac`;
+  labelBalance.textContent = `${sum.toFixed(2)}\u20ac`;
   currAccount.balance = sum;
 };
 
@@ -113,7 +113,7 @@ const calcAndDisplaySummary = function (currAcc) {
       .reduce((acc, mov) => acc + mov);
   } catch (e) {}
 
-  labelSumIn.textContent = `${depositSum}\u20ac`;
+  labelSumIn.textContent = `${depositSum.toFixed(2)}\u20ac`;
 
   //Calculate and display withdrawals only
   let withdrawalsSum = 0;
@@ -123,7 +123,7 @@ const calcAndDisplaySummary = function (currAcc) {
       .reduce((acc, mov) => acc + mov);
   } catch (e) {}
 
-  labelSumOut.textContent = `${Math.abs(withdrawalsSum)}\u20ac`;
+  labelSumOut.textContent = `${Math.abs(withdrawalsSum).toFixed(2)}\u20ac`;
 
   //Calculate and display interests gained on deposits
   const interestRateInPercents = currAcc.interestRate;
@@ -133,7 +133,7 @@ const calcAndDisplaySummary = function (currAcc) {
     .filter((interest) => interest >= 1)
     .reduce((sum, interest) => sum + interest);
 
-  labelSumInterest.textContent = `${totalInterestReceived}\u20ac`;
+  labelSumInterest.textContent = `${totalInterestReceived.toFixed(2)}\u20ac`;
 };
 
 //==============================
@@ -265,7 +265,7 @@ btnClose.addEventListener("click", function (e) {
 btnLoan.addEventListener("click", function (e) {
   e.preventDefault();
 
-  const loanAmount = Number(inputLoanAmount.value);
+  const loanAmount = Math.floor(inputLoanAmount.value);
 
   if (
     loanAmount > 0 &&
