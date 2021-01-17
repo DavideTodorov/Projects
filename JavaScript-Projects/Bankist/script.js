@@ -68,7 +68,7 @@ const inputLoanAmount = document.querySelector(".form__input--loan-amount");
 const inputCloseUsername = document.querySelector(".form__input--user");
 const inputClosePin = document.querySelector(".form__input--pin");
 
-//==============================
+//==============================================
 //Calc how mnany days have passed since movement
 const calcDaysPassed = function (paramDate) {
   const date = new Date(paramDate);
@@ -109,6 +109,7 @@ const displayMovements = function (account) {
   account.movements.forEach(function (movement, i) {
     const movementType = movement > 0 ? "deposit" : "withdrawal";
 
+    //Get the date for the current movement
     let currMovementDate;
     for (const [key, val] of [...account.movementsDates.entries()]) {
       if (val.id === movement) {
@@ -116,11 +117,9 @@ const displayMovements = function (account) {
         break;
       }
     }
-
     const dateString = formatCurrDate(currMovementDate);
 
-    console.log(dateString);
-
+    //Create the current movement element
     const rowHTML = `
     <div class="movements__row">
         <div class="movements__type movements__type--${movementType}">${
@@ -246,7 +245,6 @@ btnLogin.addEventListener("click", function (e) {
     const hours = `${currDate.getHours()}`.padStart(2, 0);
     const minutes = `${currDate.getMinutes()}`.padStart(2, 0);
     const dateFormatted = `${day}/${month}/${year}, ${hours}:${minutes}`;
-
     labelDate.textContent = dateFormatted;
 
     //Update UI
@@ -281,6 +279,7 @@ btnTransfer.addEventListener("click", function (e) {
     //The transfer logic
     //Make payment
     currAccount.movements.push(-transferAmount);
+    //Add the movement date to the movements array
     currAccount.movementsDates.push({
       id: -transferAmount,
       date: new Date().toString(),
@@ -288,6 +287,7 @@ btnTransfer.addEventListener("click", function (e) {
 
     //Receive payment
     accountTransferTo.movements.push(transferAmount);
+    //Add the movement date to the movements array
     accountTransferTo.movementsDates.push({
       id: transferAmount,
       date: new Date().toString(),
@@ -310,6 +310,7 @@ btnClose.addEventListener("click", function (e) {
     //Find index of account to be closed
     const index = accounts.findIndex((acc) => acc.username === closeUsername);
     console.log(index);
+
     //Remove account from the array
     accounts.splice(index, 1);
 
@@ -319,9 +320,7 @@ btnClose.addEventListener("click", function (e) {
     document.getElementById(
       `userAccountsData.${closeUsername}`
     ).style.visibility = "hidden";
-
     inputCloseUsername.value = inputClosePin.value = "";
-
     labelWelcome.textContent = "Log in to get started";
   }
 });
@@ -339,6 +338,7 @@ btnLoan.addEventListener("click", function (e) {
   ) {
     //Add the loan to the movements array
     currAccount.movements.push(loanAmount);
+    //Add the movement date to the movements array
     currAccount.movementsDates.push({
       id: loanAmount,
       date: new Date().toString(),
@@ -354,7 +354,6 @@ btnLoan.addEventListener("click", function (e) {
 //====================
 //Sort movemets logic
 let isSorted = false;
-
 btnSort.addEventListener("click", function (e) {
   e.preventDefault();
 
