@@ -7,14 +7,14 @@ const account1 = {
   interestRate: 1.2,
   pin: 1111,
   movementsDates: [
-    "2019-11-18T21:31:17.178",
-    "2019-12-23T07:42:02.383",
-    "2020-01-28T09:15:04.904",
-    "2020-04-01T10:17:24.185",
-    "2020-05-08T14:11:59.604",
-    "2020-05-27T17:01:17.194",
-    "2020-07-11T23:36:17.929",
-    "2020-07-12T10:51:36.790",
+    { id: 200, date: "2019-11-18T21:31:17.178" },
+    { id: 450, date: "2019-12-23T07:42:02.383" },
+    { id: -400, date: "2020-01-28T09:15:04.904" },
+    { id: 3000, date: "2020-04-01T10:17:24.185" },
+    { id: -650, date: "2020-05-08T14:11:59.604" },
+    { id: -130, date: "2020-05-27T17:01:17.194" },
+    { id: 70, date: "2021-01-10T23:36:17.929" },
+    { id: 1300, date: "2021-01-17T10:51:36.790" },
   ],
   currency: "EUR",
   locale: "pt-PT",
@@ -26,14 +26,14 @@ const account2 = {
   interestRate: 1.5,
   pin: 2222,
   movementsDates: [
-    "2019-11-01T13:15:33.035",
-    "2019-11-30T09:48:16.867",
-    "2019-12-25T06:04:23.907",
-    "2020-01-25T14:18:46.235",
-    "2020-02-05T16:33:06.386",
-    "2020-04-10T14:43:26.374",
-    "2020-06-25T18:49:59.371",
-    "2020-07-26T12:01:20.894",
+    { id: 5000, date: "2019-11-01T13:15:33.035" },
+    { id: 3400, date: "2019-11-30T09:48:16.867" },
+    { id: -150, date: "2019-12-25T06:04:23.907" },
+    { id: -790, date: "2020-01-25T14:18:46.235" },
+    { id: -3210, date: "2020-02-05T16:33:06.386" },
+    { id: -1000, date: "2021-01-11T14:43:26.374" },
+    { id: 8500, date: "2021-01-13T18:49:59.371" },
+    { id: -30, date: "2021-01-16T12:01:20.894" },
   ],
   currency: "USD",
   locale: "en-US",
@@ -69,9 +69,26 @@ const inputCloseUsername = document.querySelector(".form__input--user");
 const inputClosePin = document.querySelector(".form__input--pin");
 
 //==============================
+//Calc how mnany days have passed since movement
+const calcDaysPassed = function (paramDate) {
+  const date = new Date(paramDate);
+  const currDate = new Date();
+  return Math.round((currDate - date) / (1000 * 60 * 60 * 24));
+};
+
 //Format and return date method
 const formatCurrDate = function (paramDate) {
   const date = new Date(paramDate);
+
+  const daysPassed = calcDaysPassed(date);
+
+  if (daysPassed === 0) {
+    return "Today";
+  } else if (daysPassed === 1) {
+    return "Yesterday";
+  } else if (daysPassed > 1 && daysPassed <= 7) {
+    return `${daysPassed} days ago`;
+  }
 
   const day = `${date.getDate()}`.padStart(2, 0);
   const month = `${date.getMonth() + 1}`.padStart(2, 0);
@@ -91,7 +108,18 @@ const displayMovements = function (account) {
   //Add movement rows to movements container
   account.movements.forEach(function (movement, i) {
     const movementType = movement > 0 ? "deposit" : "withdrawal";
-    const dateString = formatCurrDate(account.movementsDates[i]);
+
+    let currMovementDate;
+    for (const [key, val] of [...account.movementsDates.entries()]) {
+      if (val.id === movement) {
+        currMovementDate = val.date;
+        break;
+      }
+    }
+
+    const dateString = formatCurrDate(currMovementDate);
+
+    console.log(dateString);
 
     const rowHTML = `
     <div class="movements__row">
@@ -212,7 +240,13 @@ btnLogin.addEventListener("click", function (e) {
 
     //Display date under "Current balance"
     const currDate = new Date();
-    const dateFormatted = formatCurrDate(currDate);
+    const day = `${currDate.getDate()}`.padStart(2, 0);
+    const month = `${currDate.getMonth() + 1}`.padStart(2, 0);
+    const year = currDate.getFullYear();
+    const hours = `${currDate.getHours()}`.padStart(2, 0);
+    const minutes = `${currDate.getMinutes()}`.padStart(2, 0);
+    const dateFormatted = `${day}/${month}/${year}, ${hours}:${minutes}`;
+
     labelDate.textContent = dateFormatted;
 
     //Update UI
@@ -247,11 +281,17 @@ btnTransfer.addEventListener("click", function (e) {
     //The transfer logic
     //Make payment
     currAccount.movements.push(-transferAmount);
-    currAccount.movementsDates.push(new Date().toString());
+    currAccount.movementsDates.push({
+      id: -transferAmount,
+      date: new Date().toString(),
+    });
 
     //Receive payment
     accountTransferTo.movements.push(transferAmount);
-    accountTransferTo.movementsDates.push(new Date().toString());
+    accountTransferTo.movementsDates.push({
+      id: transferAmount,
+      date: new Date().toString(),
+    });
 
     //Update UI
     updateUI(currAccount);
@@ -299,7 +339,10 @@ btnLoan.addEventListener("click", function (e) {
   ) {
     //Add the loan to the movements array
     currAccount.movements.push(loanAmount);
-    currAccount.movementsDates.push(new Date().toString());
+    currAccount.movementsDates.push({
+      id: loanAmount,
+      date: new Date().toString(),
+    });
 
     //Update UI
     updateUI(currAccount);
