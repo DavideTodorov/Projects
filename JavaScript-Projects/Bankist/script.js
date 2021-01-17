@@ -68,6 +68,8 @@ const inputLoanAmount = document.querySelector(".form__input--loan-amount");
 const inputCloseUsername = document.querySelector(".form__input--user");
 const inputClosePin = document.querySelector(".form__input--pin");
 
+const locale = navigator.language;
+
 //==============================================
 //Calc how mnany days have passed since movement
 const calcDaysPassed = function (paramDate) {
@@ -79,7 +81,6 @@ const calcDaysPassed = function (paramDate) {
 //Format and return date method
 const formatCurrDate = function (paramDate) {
   const date = new Date(paramDate);
-
   const daysPassed = calcDaysPassed(date);
 
   if (daysPassed === 0) {
@@ -90,13 +91,15 @@ const formatCurrDate = function (paramDate) {
     return `${daysPassed} days ago`;
   }
 
-  const day = `${date.getDate()}`.padStart(2, 0);
-  const month = `${date.getMonth() + 1}`.padStart(2, 0);
-  const year = date.getFullYear();
-  const hours = `${date.getHours()}`.padStart(2, 0);
-  const minutes = `${date.getMinutes()}`.padStart(2, 0);
+  const options = {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  };
 
-  return `${day}/${month}/${year}, ${hours}:${minutes}`;
+  const formattedDate = new Intl.DateTimeFormat(locale, options).format(date);
+
+  return formattedDate;
 };
 
 //==========================================
@@ -239,13 +242,18 @@ btnLogin.addEventListener("click", function (e) {
 
     //Display date under "Current balance"
     const currDate = new Date();
-    const day = `${currDate.getDate()}`.padStart(2, 0);
-    const month = `${currDate.getMonth() + 1}`.padStart(2, 0);
-    const year = currDate.getFullYear();
-    const hours = `${currDate.getHours()}`.padStart(2, 0);
-    const minutes = `${currDate.getMinutes()}`.padStart(2, 0);
-    const dateFormatted = `${day}/${month}/${year}, ${hours}:${minutes}`;
-    labelDate.textContent = dateFormatted;
+
+    const options = {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+      hour: "numeric",
+      minute: "numeric",
+    };
+
+    labelDate.textContent = new Intl.DateTimeFormat(locale, options).format(
+      currDate
+    );
 
     //Update UI
     updateUI(currAccount);
