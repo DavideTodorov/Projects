@@ -7,14 +7,14 @@ const account1 = {
   interestRate: 1.2,
   pin: 1111,
   movementsDates: [
-    "2019-11-18T21:31:17.178Z",
-    "2019-12-23T07:42:02.383Z",
-    "2020-01-28T09:15:04.904Z",
-    "2020-04-01T10:17:24.185Z",
-    "2020-05-08T14:11:59.604Z",
-    "2020-05-27T17:01:17.194Z",
-    "2020-07-11T23:36:17.929Z",
-    "2020-07-12T10:51:36.790Z",
+    "2019-11-18T21:31:17.178",
+    "2019-12-23T07:42:02.383",
+    "2020-01-28T09:15:04.904",
+    "2020-04-01T10:17:24.185",
+    "2020-05-08T14:11:59.604",
+    "2020-05-27T17:01:17.194",
+    "2020-07-11T23:36:17.929",
+    "2020-07-12T10:51:36.790",
   ],
   currency: "EUR",
   locale: "pt-PT",
@@ -26,14 +26,14 @@ const account2 = {
   interestRate: 1.5,
   pin: 2222,
   movementsDates: [
-    "2019-11-01T13:15:33.035Z",
-    "2019-11-30T09:48:16.867Z",
-    "2019-12-25T06:04:23.907Z",
-    "2020-01-25T14:18:46.235Z",
-    "2020-02-05T16:33:06.386Z",
-    "2020-04-10T14:43:26.374Z",
-    "2020-06-25T18:49:59.371Z",
-    "2020-07-26T12:01:20.894Z",
+    "2019-11-01T13:15:33.035",
+    "2019-11-30T09:48:16.867",
+    "2019-12-25T06:04:23.907",
+    "2020-01-25T14:18:46.235",
+    "2020-02-05T16:33:06.386",
+    "2020-04-10T14:43:26.374",
+    "2020-06-25T18:49:59.371",
+    "2020-07-26T12:01:20.894",
   ],
   currency: "USD",
   locale: "en-US",
@@ -68,21 +68,37 @@ const inputLoanAmount = document.querySelector(".form__input--loan-amount");
 const inputCloseUsername = document.querySelector(".form__input--user");
 const inputClosePin = document.querySelector(".form__input--pin");
 
+//==============================
+//Format and return date method
+const formatCurrDate = function (paramDate) {
+  const date = new Date(paramDate);
+
+  const day = `${date.getDate()}`.padStart(2, 0);
+  const month = `${date.getMonth() + 1}`.padStart(2, 0);
+  const year = date.getFullYear();
+  const hours = `${date.getHours()}`.padStart(2, 0);
+  const minutes = `${date.getMinutes()}`.padStart(2, 0);
+
+  return `${day}/${month}/${year}, ${hours}:${minutes}`;
+};
+
 //==========================================
 //Method to display movements of an account
-const displayMovements = function (movements) {
+const displayMovements = function (account) {
   //Clear the movements conatiner
   containerMovements.innerHTML = "";
 
   //Add movement rows to movements container
-  movements.forEach(function (movement, i) {
+  account.movements.forEach(function (movement, i) {
     const movementType = movement > 0 ? "deposit" : "withdrawal";
+    const dateString = formatCurrDate(account.movementsDates[i]);
 
     const rowHTML = `
     <div class="movements__row">
         <div class="movements__type movements__type--${movementType}">${
       i + 1
     } ${movementType}</div>
+    <div class="movements__date">${dateString}</div>
         <div class="movements__value">${movement.toFixed(2)}\u20ac</div>
     </div>
     `;
@@ -140,7 +156,7 @@ const calcAndDisplaySummary = function (currAcc) {
 //Method to update the whole UI
 const updateUI = function (currAcc) {
   //Display movements
-  displayMovements(currAcc.movements);
+  displayMovements(currAcc);
 
   //Calculate and display balance
   calcAndDisplayBalance(currAcc);
@@ -194,6 +210,11 @@ btnLogin.addEventListener("click", function (e) {
     //Display UI
     containerApp.style.opacity = 100;
 
+    //Display date under "Current balance"
+    const currDate = new Date();
+    const dateFormatted = formatCurrDate(currDate);
+    labelDate.textContent = dateFormatted;
+
     //Update UI
     updateUI(currAccount);
   }
@@ -224,8 +245,13 @@ btnTransfer.addEventListener("click", function (e) {
     accountTransferTo.username !== currAccount.username
   ) {
     //The transfer logic
+    //Make payment
     currAccount.movements.push(-transferAmount);
+    currAccount.movementsDates.push(new Date().toString());
+
+    //Receive payment
     accountTransferTo.movements.push(transferAmount);
+    accountTransferTo.movementsDates.push(new Date().toString());
 
     //Update UI
     updateUI(currAccount);
@@ -273,6 +299,7 @@ btnLoan.addEventListener("click", function (e) {
   ) {
     //Add the loan to the movements array
     currAccount.movements.push(loanAmount);
+    currAccount.movementsDates.push(new Date().toString());
 
     //Update UI
     updateUI(currAccount);
@@ -290,15 +317,16 @@ btnSort.addEventListener("click", function (e) {
 
   if (!isSorted) {
     //Sort arr in ascending order
-    const sortedMovements = currAccount.movements.slice().sort((a, b) => a - b);
+    const accCopy = JSON.parse(JSON.stringify(currAccount));
+    accCopy.movements.sort((a, b) => a - b);
     isSorted = true;
 
     //Display movements in sorted way
-    displayMovements(sortedMovements);
+    displayMovements(accCopy);
   } else {
     isSorted = false;
 
     //Display movements in original way
-    displayMovements(currAccount.movements);
+    displayMovements(currAccount);
   }
 });
