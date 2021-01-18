@@ -101,6 +101,11 @@ const formatCurrDate = function (paramDate) {
 
   return formattedDate;
 };
+//============================================
+//Method to format currencies to locale style
+const formatCurrency = function (amount) {
+  return `${new Intl.NumberFormat(locale, {style: "currency", currency: "EUR"}).format(amount)}`;
+};
 
 //==========================================
 //Method to display movements of an account
@@ -121,6 +126,7 @@ const displayMovements = function (account) {
       }
     }
     const dateString = formatCurrDate(currMovementDate);
+    const formattedMovement = formatCurrency(movement);
 
     //Create the current movement element
     const rowHTML = `
@@ -129,7 +135,7 @@ const displayMovements = function (account) {
       i + 1
     } ${movementType}</div>
     <div class="movements__date">${dateString}</div>
-        <div class="movements__value">${movement.toFixed(2)}\u20ac</div>
+        <div class="movements__value">${formattedMovement}</div>
     </div>
     `;
 
@@ -144,7 +150,7 @@ const calcAndDisplayBalance = function (currAccount) {
     return acc + movement;
   }, 0);
 
-  labelBalance.textContent = `${sum.toFixed(2)}\u20ac`;
+  labelBalance.textContent = formatCurrency(sum);
   currAccount.balance = sum;
 };
 
@@ -159,7 +165,7 @@ const calcAndDisplaySummary = function (currAcc) {
       .reduce((acc, mov) => acc + mov);
   } catch (e) {}
 
-  labelSumIn.textContent = `${depositSum.toFixed(2)}\u20ac`;
+  labelSumIn.textContent = formatCurrency(depositSum);
 
   //Calculate and display withdrawals only
   let withdrawalsSum = 0;
@@ -169,7 +175,7 @@ const calcAndDisplaySummary = function (currAcc) {
       .reduce((acc, mov) => acc + mov);
   } catch (e) {}
 
-  labelSumOut.textContent = `${Math.abs(withdrawalsSum).toFixed(2)}\u20ac`;
+  labelSumOut.textContent = formatCurrency(Math.abs(withdrawalsSum));
 
   //Calculate and display interests gained on deposits
   const interestRateInPercents = currAcc.interestRate;
@@ -179,7 +185,7 @@ const calcAndDisplaySummary = function (currAcc) {
     .filter((interest) => interest >= 1)
     .reduce((sum, interest) => sum + interest);
 
-  labelSumInterest.textContent = `${totalInterestReceived.toFixed(2)}\u20ac`;
+  labelSumInterest.textContent = formatCurrency(totalInterestReceived);
 };
 
 //==============================
