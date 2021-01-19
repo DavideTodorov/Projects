@@ -104,7 +104,10 @@ const formatCurrDate = function (paramDate) {
 //============================================
 //Method to format currencies to locale style
 const formatCurrency = function (amount) {
-  return `${new Intl.NumberFormat(locale, {style: "currency", currency: "EUR"}).format(amount)}`;
+  return `${new Intl.NumberFormat(locale, {
+    style: "currency",
+    currency: "EUR",
+  }).format(amount)}`;
 };
 
 //==========================================
@@ -220,8 +223,40 @@ accounts.forEach(function (acc) {
 
 //============
 //Login logic
-let currAccount;
+//Logout method to update the UI
+const logOut = function () {
+  containerApp.style.opacity = 0;
+  inputCloseUsername.value = inputClosePin.value = "";
+  labelWelcome.textContent = "Log in to get started";
+};
 
+//LogOut timer functionality
+const startLogOutTimer = function () {
+  let timeInSeconds = 120;
+
+  const tick = function () {
+    const min = String(Math.trunc(timeInSeconds / 60)).padStart(2, 0);
+    const sec = String(timeInSeconds % 60).padStart(2, 0);
+
+    labelTimer.textContent = `${min}:${sec}`;
+
+    //If timeInSeconds reaches 0, then logOut
+    if (timeInSeconds === 0) {
+      clearInterval(timer);
+      logOut();
+    }
+
+    timeInSeconds--;
+  };
+
+  //Display the time remaining on the UI every second
+  tick();
+  const timer = setInterval(tick, 1000);
+
+  return timer;
+};
+
+let currAccount, timer;
 //Event handler for the "login" button
 btnLogin.addEventListener("click", function (e) {
   e.preventDefault();
@@ -269,6 +304,10 @@ btnLogin.addEventListener("click", function (e) {
   inputLoginUsername.value = "";
   inputLoginPin.value = "";
   inputLoginPin.blur();
+
+  //Start logOut timer
+  if (timer) clearInterval(timer);
+  timer = startLogOutTimer();
 });
 
 //=====================
@@ -309,11 +348,16 @@ btnTransfer.addEventListener("click", function (e) {
 
     //Update UI
     updateUI(currAccount);
+
+    //Reset timer
+    clearInterval(timer);
+    timer = startLogOutTimer();
   }
 });
 
 //====================
 //Close account logic
+//Close button event handler
 btnClose.addEventListener("click", function (e) {
   e.preventDefault();
 
@@ -329,13 +373,14 @@ btnClose.addEventListener("click", function (e) {
     accounts.splice(index, 1);
 
     //Update UI
-    containerApp.style.opacity = 0;
     document.querySelector(".userAccountsData").style.display = "block";
     document.getElementById(
       `userAccountsData.${closeUsername}`
     ).style.visibility = "hidden";
-    inputCloseUsername.value = inputClosePin.value = "";
-    labelWelcome.textContent = "Log in to get started";
+    logOut();
+
+    //Clear timer
+    clearInterval(timer);
   }
 });
 
@@ -350,16 +395,23 @@ btnLoan.addEventListener("click", function (e) {
     loanAmount > 0 &&
     currAccount.movements.some((mov) => mov >= 0.1 * loanAmount)
   ) {
-    //Add the loan to the movements array
-    currAccount.movements.push(loanAmount);
-    //Add the movement date to the movements array
-    currAccount.movementsDates.push({
-      id: loanAmount,
-      date: new Date().toString(),
-    });
+    //It will take 2 seconds to approve the loan
+    setTimeout(function () {
+      //Add the loan to the movements array
+      currAccount.movements.push(loanAmount);
+      //Add the movement date to the movements array
+      currAccount.movementsDates.push({
+        id: loanAmount,
+        date: new Date().toString(),
+      });
 
-    //Update UI
-    updateUI(currAccount);
+      //Update UI
+      updateUI(currAccount);
+
+      //Reset timer
+      clearInterval(timer);
+      timer = startLogOutTimer();
+    }, 2000);
   }
 
   inputLoanAmount.value = "";
