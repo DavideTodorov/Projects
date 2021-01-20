@@ -7,8 +7,10 @@ const btnCloseModal = document.querySelector(".btn--close-modal");
 const btnsOpenModal = document.querySelectorAll(".btn--show-modal");
 const btnLearnMore = document.querySelector(".btn--scroll-to");
 const section1 = document.getElementById("section--1");
+const tabsContainer = document.querySelector(".operations__tab-container");
+const tabsContents = document.querySelectorAll(".operations__content");
 
-///////////////////////////////////////
+//////////////////////////////////////////////////////////
 // Modal window
 
 //Functionality
@@ -35,7 +37,7 @@ document.addEventListener("keydown", function (e) {
   }
 });
 
-/////////////////////////////////////////////////
+//////////////////////////////////////////////////////////
 //Scroll smoothly when press "Learn more" button
 btnLearnMore.addEventListener("click", function (e) {
   section1.scrollIntoView({ behavior: "smooth" });
@@ -52,4 +54,33 @@ document.querySelector(".nav__links").addEventListener("click", function (e) {
     const id = target.getAttribute("href");
     document.querySelector(id).scrollIntoView({ behavior: "smooth" });
   }
+});
+
+//////////////////////////////////////////////////////////
+//Switch components when press a given tab
+tabsContainer.addEventListener("click", function (e) {
+  //Clicked tab
+  const target = e.target.closest(".operations__tab");
+
+  //Guard clause
+  if (!target) return;
+
+  //Remove active status from all tabs
+  document
+    .querySelectorAll(".operations__tab")
+    .forEach((t) => t.classList.remove("operations__tab--active"));
+
+  //Add active status to the pressed tab
+  target.classList.add("operations__tab--active");
+
+  //Remove active status from all tabs contents
+  tabsContents.forEach((c) =>
+    c.classList.remove("operations__content--active")
+  );
+
+  //Add active status to the content related to the pressed tab
+  const data = target.dataset.tab;
+  document
+    .querySelector(`.operations__content--${data}`)
+    .classList.add("operations__content--active");
 });
