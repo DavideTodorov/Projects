@@ -103,3 +103,15 @@ const hoverHandler = function (e) {
 
 navigation.addEventListener("mouseover", hoverHandler.bind(0.5));
 navigation.addEventListener("mouseout", hoverHandler.bind(1));
+
+//////////////////////////////////////////////////////////
+//Make the navigation "sticky"
+const initialCords = section1.getBoundingClientRect();
+
+window.addEventListener("scroll", function () {
+  if (window.scrollY >= initialCords.top) {
+    navigation.classList.add("sticky");
+  } else {
+    navigation.classList.remove("sticky");
+  }
+});
