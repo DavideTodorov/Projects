@@ -9,6 +9,8 @@ const btnLearnMore = document.querySelector(".btn--scroll-to");
 const section1 = document.getElementById("section--1");
 const tabsContainer = document.querySelector(".operations__tab-container");
 const tabsContents = document.querySelectorAll(".operations__content");
+const navigation = document.querySelector(".nav");
+const logo = document.querySelector(".nav__logo");
 
 //////////////////////////////////////////////////////////
 // Modal window
@@ -84,3 +86,20 @@ tabsContainer.addEventListener("click", function (e) {
     .querySelector(`.operations__content--${data}`)
     .classList.add("operations__content--active");
 });
+
+//////////////////////////////////////////////////////////
+//Menu fade animation when a tab is hovered
+const hoverHandler = function (e) {
+  const target = e.target;
+
+  if (target.classList.contains("nav__link")) {
+    document.querySelectorAll(".nav__link").forEach((el) => {
+      if (el !== target) el.style.opacity = this;
+    });
+    logo.style.opacity = this;
+    console.log("Hover");
+  }
+};
+
+navigation.addEventListener("mouseover", hoverHandler.bind(0.5));
+navigation.addEventListener("mouseout", hoverHandler.bind(1));
