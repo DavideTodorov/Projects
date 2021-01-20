@@ -101,6 +101,7 @@ const formatCurrDate = function (paramDate) {
 
   return formattedDate;
 };
+
 //============================================
 //Method to format currencies to locale style
 const formatCurrency = function (amount) {
