@@ -7,6 +7,7 @@ const btnCloseModal = document.querySelector(".btn--close-modal");
 const btnsOpenModal = document.querySelectorAll(".btn--show-modal");
 const btnLearnMore = document.querySelector(".btn--scroll-to");
 const section1 = document.getElementById("section--1");
+const allSections = document.querySelectorAll(".section");
 const tabsContainer = document.querySelector(".operations__tab-container");
 const tabsContents = document.querySelectorAll(".operations__content");
 const navigation = document.querySelector(".nav");
@@ -127,3 +128,24 @@ const stickyNavObserver = new IntersectionObserver(stickyNavCallback, {
   rootMargin: `-${navigationHeight}px`,
 });
 stickyNavObserver.observe(header);
+
+//////////////////////////////////////////////////////////
+//Reveal sections when you scroll to them
+const sectionsObserverCallback = function (entries, observer) {
+  const [entry] = entries;
+
+  if (entry.isIntersecting) {
+    entry.target.classList.remove("section--hidden");
+    sectionsObserver.unobserve(entry.target);
+  }
+};
+
+const sectionsObserver = new IntersectionObserver(sectionsObserverCallback, {
+  root: null,
+  threshold: 0.15,
+});
+
+allSections.forEach((s) => {
+  s.classList.add("section--hidden");
+  sectionsObserver.observe(s);
+});
