@@ -14,6 +14,10 @@ const navigation = document.querySelector(".nav");
 const logo = document.querySelector(".nav__logo");
 const header = document.querySelector(".header");
 const imgTargets = document.querySelectorAll("img[data-src]");
+const allSlides = document.querySelectorAll(".slide");
+const slider = document.querySelector(".slider");
+const sliderBtnLeft = document.querySelector(".slider__btn--left");
+const sliderBtnRight = document.querySelector(".slider__btn--right");
 
 //////////////////////////////////////////////////////////
 // Modal window
@@ -175,3 +179,39 @@ const imgObserver = new IntersectionObserver(loadImg, {
 });
 
 imgTargets.forEach((i) => imgObserver.observe(i));
+
+//////////////////////////////////////////////////////////
+//Slider component
+slider.style.overflow = "hiden";
+let currSlide = 0;
+const maxSlide = allSlides.length;
+
+//Method to slide slides
+const goToSlide = function (currSlide) {
+  allSlides.forEach(
+    (s, i) => (s.style.transform = `translateX(${100 * (i - currSlide)}%)`)
+  );
+};
+goToSlide(0);
+
+//Slide to the right
+sliderBtnRight.addEventListener("click", function () {
+  if (currSlide === maxSlide - 1) {
+    currSlide = 0;
+  } else {
+    currSlide++;
+  }
+
+  goToSlide(currSlide);
+});
+
+//Slide to the left
+sliderBtnLeft.addEventListener("click", function () {
+  if (currSlide === 0) {
+    currSlide = maxSlide - 1;
+  } else {
+    currSlide--;
+  }
+
+  goToSlide(currSlide);
+});
