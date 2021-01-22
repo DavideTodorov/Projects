@@ -187,15 +187,39 @@ slider.style.overflow = "hiden";
 let currSlide = 0;
 const maxSlide = allSlides.length;
 
+//Create dots and add them to slide container
+allSlides.forEach((s, i) =>
+  dotsContainer.insertAdjacentHTML(
+    "beforeend",
+    `<button class="dots__dot" data-slide="${i}"></button`
+  )
+);
+
+//Method to activate dot
+const activateDot = function (currSlide) {
+  document
+    .querySelectorAll(".dots__dot")
+    .forEach((d) => d.classList.remove("dots__dot--active"));
+
+  document
+    .querySelector(`.dots__dot[data-slide="${currSlide}"]`)
+    .classList.add("dots__dot--active");
+};
+
 //Method to slide slides
 const goToSlide = function (currSlide) {
   allSlides.forEach(
     (s, i) => (s.style.transform = `translateX(${100 * (i - currSlide)}%)`)
   );
+
+  //Activate curr slide's dot
+  activateDot(currSlide);
 };
+
+//Go to the first slide when loading the page
 goToSlide(0);
 
-//Slide to the right
+//Slide to the next slide
 const nextSlide = function () {
   if (currSlide === maxSlide - 1) {
     currSlide = 0;
@@ -205,10 +229,9 @@ const nextSlide = function () {
 
   goToSlide(currSlide);
 };
-
 sliderBtnRight.addEventListener("click", nextSlide);
 
-//Slide to the left
+//Slide to the previous slide
 const prevSlide = function () {
   if (currSlide === 0) {
     currSlide = maxSlide - 1;
@@ -218,7 +241,6 @@ const prevSlide = function () {
 
   goToSlide(currSlide);
 };
-
 sliderBtnLeft.addEventListener("click", prevSlide);
 
 //Slide with "Left" and "Right" arrow keys
