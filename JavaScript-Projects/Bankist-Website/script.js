@@ -62,7 +62,13 @@ document.querySelector(".nav__links").addEventListener("click", function (e) {
   //Matching strategy
   if (target.classList.contains("nav__link")) {
     const id = target.getAttribute("href");
-    document.querySelector(id).scrollIntoView({ behavior: "smooth" });
+
+    const scrollToPosition =
+      document.querySelector(id).getBoundingClientRect().top -
+      document.body.getBoundingClientRect().top -
+      20;
+
+    window.scrollTo({ top: scrollToPosition, behavior: "smooth" });
   }
 });
 
