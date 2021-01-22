@@ -111,12 +111,17 @@ const hoverHandler = function (e) {
       if (el !== target) el.style.opacity = this;
     });
     logo.style.opacity = this;
-    console.log("Hover");
   }
 };
-
 navigation.addEventListener("mouseover", hoverHandler.bind(0.5));
 navigation.addEventListener("mouseout", hoverHandler.bind(1));
+
+//////////////////////////////////////////////////////////
+//Go to the top when you press the logo on the navigation
+logo.addEventListener("click", function (e) {
+  e.preventDefault();
+  header.scrollIntoView({ behavior: "smooth" });
+});
 
 //////////////////////////////////////////////////////////
 //Make the navigation "sticky"
