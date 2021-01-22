@@ -18,6 +18,7 @@ const allSlides = document.querySelectorAll(".slide");
 const slider = document.querySelector(".slider");
 const sliderBtnLeft = document.querySelector(".slider__btn--left");
 const sliderBtnRight = document.querySelector(".slider__btn--right");
+const dotsContainer = document.querySelector(".dots");
 
 //////////////////////////////////////////////////////////
 // Modal window
@@ -195,7 +196,7 @@ const goToSlide = function (currSlide) {
 goToSlide(0);
 
 //Slide to the right
-sliderBtnRight.addEventListener("click", function () {
+const nextSlide = function () {
   if (currSlide === maxSlide - 1) {
     currSlide = 0;
   } else {
@@ -203,10 +204,12 @@ sliderBtnRight.addEventListener("click", function () {
   }
 
   goToSlide(currSlide);
-});
+};
+
+sliderBtnRight.addEventListener("click", nextSlide);
 
 //Slide to the left
-sliderBtnLeft.addEventListener("click", function () {
+const prevSlide = function () {
   if (currSlide === 0) {
     currSlide = maxSlide - 1;
   } else {
@@ -214,4 +217,15 @@ sliderBtnLeft.addEventListener("click", function () {
   }
 
   goToSlide(currSlide);
+};
+
+sliderBtnLeft.addEventListener("click", prevSlide);
+
+//Slide with "Left" and "Right" arrow keys
+document.addEventListener("keydown", function (e) {
+  if (e.key === "ArrowLeft") {
+    prevSlide();
+  } else if (e.key === "ArrowRight") {
+    nextSlide();
+  }
 });
