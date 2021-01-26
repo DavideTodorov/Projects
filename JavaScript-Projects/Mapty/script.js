@@ -13,86 +13,90 @@ const inputCadence = document.querySelector(".form__input--cadence");
 const inputElevation = document.querySelector(".form__input--elevation");
 let map, mapEvent;
 
-//======================================================
-//Display the map using Leaflet library and Geolocation
-if (navigator.geolocation) {
-  navigator.geolocation.getCurrentPosition(
-    //Success function
-    function (position) {
-      //Coordinates
-      const latitude = position.coords.latitude;
-      const longitude = position.coords.longitude;
-      const coordinates = [latitude, longitude];
-      map = L.map("map").setView(coordinates, 16);
+class App {
+  #map;
+  #mapEvent;
 
-      //The map
-      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-        attribution:
-          '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-      }).addTo(map);
+  constructor() {
+    this._getPosition();
+    form.addEventListener("submit", this._newWorkout.bind(this));
+    inputType.addEventListener("change", this._toggleElevationField);
+  }
 
-      //Initial marker on the map with your current location
-      L.marker(coordinates)
-        .addTo(map)
-        .bindPopup(
-          L.popup({
-            maxWidth: 250,
-            minWidth: 100,
-            autoClose: false,
-            closeOnClick: false,
-            className: "leaflet-popup",
-          })
-        )
-        .setPopupContent("You are here")
-        .openPopup();
-
-      //Event listener for click on the map
-      map.on("click", function (mapE) {
-        mapEvent = mapE;
-        //Display workout form
-        form.classList.remove("hidden");
-        inputDistance.focus();
-      });
-    },
-    //Error function
-    function () {
-      alert(
-        "Could not load the map! Please check your privacy settings and reload the page!"
+  //Method to determine current position
+  _getPosition() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        //Success case
+        this._loadMap.bind(this),
+        //Fail case
+        function () {
+          alert(
+            "Could not load the map! Please check your privacy settings and reload the page!"
+          );
+        }
       );
     }
-  );
+  }
+
+  //Method to invoke the form and wait for click on the map
+  _loadMap(position) {
+    const latitude = position.coords.latitude;
+    const longitude = position.coords.longitude;
+    const coordinates = [latitude, longitude];
+    this.#map = L.map("map").setView(coordinates, 16);
+
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      attribution:
+        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    }).addTo(this.#map);
+
+    this.#map.on("click", this._showForm.bind(this));
+  }
+
+  //Method to display form
+  _showForm(mapE) {
+    //mapE contains the coordinates of the pressed location
+    this.#mapEvent = mapE;
+
+    form.classList.remove("hidden");
+    inputDistance.focus();
+  }
+
+  //Method to switch between elevation and cadence
+  _toggleElevationField() {
+    inputElevation.closest(".form__row").classList.toggle("form__row--hidden");
+    inputCadence.closest(".form__row").classList.toggle("form__row--hidden");
+  }
+
+  //Method to create the new workout and add marker on the map
+  _newWorkout(e) {
+    e.preventDefault();
+
+    //Coords of the current pressed location
+    const { lat, lng } = this.#mapEvent.latlng;
+
+    //Add marker
+    L.marker([lat, lng])
+      .addTo(this.#map)
+      .bindPopup(
+        L.popup({
+          maxWidth: 250,
+          minWidth: 100,
+          autoClose: false,
+          closeOnClick: false,
+          className: "leaflet-popup",
+        })
+      )
+      .setPopupContent("You are here")
+      .openPopup();
+
+    //Reset input fields
+    inputDistance.value = inputCadence.value = inputDuration.value = inputElevation.value = inputCadence.value =
+      "";
+    inputElevation.blur();
+    inputCadence.blur();
+  }
 }
 
-//=============================
-//Handler for the workout form
-form.addEventListener("submit", function (e) {
-  e.preventDefault();
-
-  //Clear inour fields
-  inputDistance.value = inputCadence.value = inputDuration.value = inputElevation.value =
-    "";
-
-  //Display the workout marker
-  const { lat, lng } = mapEvent.latlng;
-
-  L.marker([lat, lng])
-    .addTo(map)
-    .bindPopup(
-      L.popup({
-        maxWidth: 250,
-        minWidth: 100,
-        autoClose: false,
-        closeOnClick: false,
-        className: "leaflet-popup",
-      })
-    )
-    .setPopupContent("You are here")
-    .openPopup();
-});
-
-//=====================================
-//Switch between Cadence and Elevation
-inputType.addEventListener("change", function (e) {
-  inputElevation.closest(".form__row").classList.toggle("form__row--hidden");
-  inputCadence.closest(".form__row").classList.toggle("form__row--hidden");
-});
+const app = new App();
