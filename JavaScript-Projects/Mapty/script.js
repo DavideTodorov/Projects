@@ -13,6 +13,48 @@ const inputCadence = document.querySelector(".form__input--cadence");
 const inputElevation = document.querySelector(".form__input--elevation");
 let map, mapEvent;
 
+//Parent Workout class
+class Workout {
+  date = new Date();
+  id = Date.now().toString().slice(-10);
+
+  constructor(coords, distance, duration) {
+    this.coords = coords;
+    this.distance = distance;
+    this.duration = duration;
+  }
+}
+
+//Child classes of the Workout class
+class Running extends Workout {
+  constructor(coords, distance, duration, cadence) {
+    super(coords, distance, duration);
+    this.cadence = cadence;
+    this._calcPace();
+  }
+
+  _calcPace() {
+    // min/km
+    this.pace = this.duration / this.distance;
+    return this.pace;
+  }
+}
+
+class Cycling extends Workout {
+  constructor(coords, distance, duration, elevationGain) {
+    super(coords, distance, duration);
+    this.elevationGain = elevationGain;
+    this._calcSpeed();
+  }
+
+  _calcSpeed() {
+    // min/km
+    this.speed = this.distance / (this.duration / 60);
+    return this.speed;
+  }
+}
+
+//Class containing the main app logic
 class App {
   #map;
   #mapEvent;
@@ -51,6 +93,7 @@ class App {
         '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
     }).addTo(this.#map);
 
+    //Event handler for click on the map
     this.#map.on("click", this._showForm.bind(this));
   }
 
