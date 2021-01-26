@@ -11,6 +11,7 @@ const inputDistance = document.querySelector(".form__input--distance");
 const inputDuration = document.querySelector(".form__input--duration");
 const inputCadence = document.querySelector(".form__input--cadence");
 const inputElevation = document.querySelector(".form__input--elevation");
+let map, mapEvent;
 
 //======================================================
 //Display the map using Leaflet library and Geolocation
@@ -22,7 +23,7 @@ if (navigator.geolocation) {
       const latitude = position.coords.latitude;
       const longitude = position.coords.longitude;
       const coordinates = [latitude, longitude];
-      const map = L.map("map").setView(coordinates, 16);
+      map = L.map("map").setView(coordinates, 16);
 
       //The map
       L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
@@ -45,23 +46,12 @@ if (navigator.geolocation) {
         .setPopupContent("You are here")
         .openPopup();
 
-      //Display a marker on the map when you click a certain position
-      map.on("click", function (mapEvent) {
-        const { lat, lng } = mapEvent.latlng;
-
-        L.marker([lat, lng])
-          .addTo(map)
-          .bindPopup(
-            L.popup({
-              maxWidth: 250,
-              minWidth: 100,
-              autoClose: false,
-              closeOnClick: false,
-              className: "leaflet-popup",
-            })
-          )
-          .setPopupContent("You are here")
-          .openPopup();
+      //Event listener for click on the map
+      map.on("click", function (mapE) {
+        mapEvent = mapE;
+        //Display workout form
+        form.classList.remove("hidden");
+        inputDistance.focus();
       });
     },
     //Error function
@@ -72,3 +62,37 @@ if (navigator.geolocation) {
     }
   );
 }
+
+//=============================
+//Handler for the workout form
+form.addEventListener("submit", function (e) {
+  e.preventDefault();
+
+  //Clear inour fields
+  inputDistance.value = inputCadence.value = inputDuration.value = inputElevation.value =
+    "";
+
+  //Display the workout marker
+  const { lat, lng } = mapEvent.latlng;
+
+  L.marker([lat, lng])
+    .addTo(map)
+    .bindPopup(
+      L.popup({
+        maxWidth: 250,
+        minWidth: 100,
+        autoClose: false,
+        closeOnClick: false,
+        className: "leaflet-popup",
+      })
+    )
+    .setPopupContent("You are here")
+    .openPopup();
+});
+
+//=====================================
+//Switch between Cadence and Elevation
+inputType.addEventListener("change", function (e) {
+  inputElevation.closest(".form__row").classList.toggle("form__row--hidden");
+  inputCadence.closest(".form__row").classList.toggle("form__row--hidden");
+});
