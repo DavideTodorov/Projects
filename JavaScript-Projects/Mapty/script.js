@@ -58,6 +58,7 @@ class Cycling extends Workout {
 class App {
   #map;
   #mapEvent;
+  #workouts = [];
 
   constructor() {
     this._getPosition();
@@ -115,12 +116,69 @@ class App {
   //Method to create the new workout and add marker on the map
   _newWorkout(e) {
     e.preventDefault();
+    //Helper methods to validate input
+    const validateNumbers = (...numbers) =>
+      numbers.every((n) => Number.isFinite(n));
+    const validatePositive = (...numbers) => numbers.every((n) => n > 0);
 
-    //Coords of the current pressed location
+    //Get user input from the form
+    const type = inputType.value;
+    const distance = Number(inputDistance.value);
+    const duration = Number(inputDuration.value);
+
     const { lat, lng } = this.#mapEvent.latlng;
+    const coords = [lat, lng];
+    let workout;
 
-    //Add marker
-    L.marker([lat, lng])
+    //Running workout case
+    if (type === "running") {
+      const cadence = Number(inputCadence.value);
+
+      //Validate data
+      if (
+        !validateNumbers(distance, duration, cadence) ||
+        !validatePositive(distance, duration, cadence)
+      ) {
+        this._resetInputFields();
+        return alert(
+          "All fields must be filled and all inputs must be positive!"
+        );
+      }
+
+      workout = new Running(coords, distance, duration, cadence);
+    }
+
+    //Cycling workout case
+    if (type === "cycling") {
+      const elevationGain = Number(inputElevation.value);
+
+      //Validate data
+      if (
+        !validateNumbers(distance, duration, elevationGain) ||
+        !validatePositive(distance, duration)
+      ) {
+        this._resetInputFields();
+        return alert(
+          "All fields must be filled and all inputs must be positive!"
+        );
+      }
+
+      workout = new Cycling(coords, distance, duration, elevationGain);
+    }
+
+    //Add new object to workouts array
+    this.#workouts.push(workout);
+
+    //Render workout on the map as a marker
+    this._renderWorkoutMarker(workout);
+
+    //Reset input fields
+    this._resetInputFields();
+  }
+
+  //Method to display workout marker on the map
+  _renderWorkoutMarker(workout) {
+    L.marker(workout.coords)
       .addTo(this.#map)
       .bindPopup(
         L.popup({
@@ -128,17 +186,20 @@ class App {
           minWidth: 100,
           autoClose: false,
           closeOnClick: false,
-          className: "leaflet-popup",
+          className: `${workout.constructor.name.toLowerCase()}-popup`,
         })
       )
       .setPopupContent("You are here")
       .openPopup();
+  }
 
-    //Reset input fields
+  //Method to reset all input fields
+  _resetInputFields() {
     inputDistance.value = inputCadence.value = inputDuration.value = inputElevation.value = inputCadence.value =
       "";
     inputElevation.blur();
     inputCadence.blur();
+    form.classList.add("hidden");
   }
 }
 
