@@ -23,14 +23,13 @@ const inputDistance = document.querySelector(".form__input--distance");
 const inputDuration = document.querySelector(".form__input--duration");
 const inputCadence = document.querySelector(".form__input--cadence");
 const inputElevation = document.querySelector(".form__input--elevation");
-const mapZoomLevel = 16;
+const mapZoomLevel = 15;
 let map, mapEvent;
 
 //Parent Workout class
 class Workout {
   date = new Date();
   id = Date.now().toString().slice(-10);
-  clicks = 0;
 
   constructor(coords, distance, duration) {
     this.coords = coords;
@@ -42,10 +41,6 @@ class Workout {
     this.description = `${this.type[0].toUpperCase()}${this.type.slice(1)} on ${
       months[this.date.getMonth()]
     } ${this.date.getDate()}`;
-  }
-
-  click() {
-    this.clicks++;
   }
 }
 
@@ -91,7 +86,11 @@ class App {
   #workouts = [];
 
   constructor() {
+    //Initial methods to call
     this._getPosition();
+    this._loadLocalStorageData();
+
+    //Event handlers
     form.addEventListener("submit", this._newWorkout.bind(this));
     inputType.addEventListener("change", this._toggleElevationField);
     containerWorkouts.addEventListener(
@@ -130,6 +129,9 @@ class App {
 
     //Event handler for click on the map
     this.#map.on("click", this._showForm.bind(this));
+
+    //Load workouts markers from local storage on the map
+    this.#workouts.forEach((w) => this._renderWorkoutMarker(w));
   }
 
   //Method to display form
@@ -211,6 +213,9 @@ class App {
 
     //Reset input fields
     this._resetInputFields();
+
+    //Set local storage for all workouts
+    this._setLocalStorage();
   }
 
   //Method to display workout marker on the map
@@ -245,8 +250,6 @@ class App {
     this.#map.setView(currWorkout.coords, mapZoomLevel, {
       pan: { duration: 1, animate: true },
     });
-
-    currWorkout.click();
   }
 
   //Method to add workouts to the workout list
@@ -318,6 +321,28 @@ class App {
     setTimeout(function () {
       form.style.display = "grid";
     }, 1000);
+  }
+
+  _setLocalStorage() {
+    localStorage.setItem("workouts", JSON.stringify(this.#workouts));
+  }
+
+  _loadLocalStorageData() {
+    const data = JSON.parse(localStorage.getItem("workouts"));
+
+    if (!data) return;
+
+    this.#workouts = data;
+
+    //Add stored workouts to the workout's list
+    this.#workouts.forEach((w) => {
+      this._addWorkoutToTheList(w);
+    });
+  }
+
+  reset() {
+    localStorage.removeItem("workouts");
+    location.reload();
   }
 }
 
