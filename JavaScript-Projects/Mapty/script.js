@@ -23,12 +23,14 @@ const inputDistance = document.querySelector(".form__input--distance");
 const inputDuration = document.querySelector(".form__input--duration");
 const inputCadence = document.querySelector(".form__input--cadence");
 const inputElevation = document.querySelector(".form__input--elevation");
+const mapZoomLevel = 16;
 let map, mapEvent;
 
 //Parent Workout class
 class Workout {
   date = new Date();
   id = Date.now().toString().slice(-10);
+  clicks = 0;
 
   constructor(coords, distance, duration) {
     this.coords = coords;
@@ -40,6 +42,10 @@ class Workout {
     this.description = `${this.type[0].toUpperCase()}${this.type.slice(1)} on ${
       months[this.date.getMonth()]
     } ${this.date.getDate()}`;
+  }
+
+  click() {
+    this.clicks++;
   }
 }
 
@@ -88,6 +94,10 @@ class App {
     this._getPosition();
     form.addEventListener("submit", this._newWorkout.bind(this));
     inputType.addEventListener("change", this._toggleElevationField);
+    containerWorkouts.addEventListener(
+      "click",
+      this._moveToWorkoutMarker.bind(this)
+    );
   }
 
   //Method to determine current position
@@ -111,7 +121,7 @@ class App {
     const latitude = position.coords.latitude;
     const longitude = position.coords.longitude;
     const coordinates = [latitude, longitude];
-    this.#map = L.map("map").setView(coordinates, 16);
+    this.#map = L.map("map").setView(coordinates, mapZoomLevel);
 
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
       attribution:
@@ -222,6 +232,24 @@ class App {
       .openPopup();
   }
 
+  //Method to move your view to the marker of the clicked workout on the map
+  _moveToWorkoutMarker(e) {
+    const workoutEl = e.target.closest(".workout");
+
+    if (!workoutEl) return;
+
+    const currWorkout = this.#workouts.find(
+      (w) => w.id === workoutEl.dataset.id
+    );
+
+    this.#map.setView(currWorkout.coords, mapZoomLevel, {
+      pan: { duration: 1, animate: true },
+    });
+
+    currWorkout.click();
+  }
+
+  //Method to add workouts to the workout list
   _addWorkoutToTheList(workout) {
     let elementHtml = `
     <li class="workout workout--${workout.type}" data-id=${workout.id}>
