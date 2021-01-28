@@ -15,6 +15,11 @@ const months = [
   "December",
 ];
 
+/*
+//TODO: 1) delete a workout function
+        2) sort workouts by distance
+*/
+
 //Elements
 const form = document.querySelector(".form");
 const containerWorkouts = document.querySelector(".workouts");
