@@ -619,7 +619,7 @@ const loadAndRenderRecipe = async function () {
     alert(err);
   }
 }; //=========================================
-//Add events listener for the window load and hash change
+//Add events listener for the window load
 
 
 ["hashchange", "load"].forEach(ev => window.addEventListener(ev, loadAndRenderRecipe));
