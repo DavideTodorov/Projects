@@ -6,7 +6,6 @@ import recipeView from "./views/recipeView.js";
 //Elements
 const recipeContainer = document.querySelector(".recipe");
 
-
 //Search API
 // https://forkify-api.herokuapp.com/v2
 
@@ -28,7 +27,8 @@ const controlRecipes = async function () {
   }
 };
 
-//Add events listener for the window load and hash change
-["hashchange", "load"].forEach((ev) =>
-  window.addEventListener(ev, controlRecipes)
-);
+//Add evenet listeners to certain events
+const init = function () {
+  recipeView.addHandlerRender(controlRecipes);
+};
+init();

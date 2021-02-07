@@ -8,7 +8,7 @@ class RecipeView {
   //Method to render recipe
   render(recipeData) {
     this.#data = recipeData;
-    const markup = this._generateMarkup();
+    const markup = this.#generateMarkup();
     this.#parentElement.innerHTML = "";
     this.#parentElement.insertAdjacentHTML("afterbegin", markup);
   }
@@ -27,7 +27,7 @@ class RecipeView {
   }
 
   //Method to generate markup for the recipe
-  _generateMarkup() {
+  #generateMarkup() {
     return `
       <figure class="recipe__fig">
     <img src="${this.#data.image}" alt="${
@@ -131,6 +131,13 @@ class RecipeView {
         </div>
       </li>
       `;
+  }
+
+  //Method to attach event listeners for given events
+  addHandlerRender(handlerFunction) {
+    ["hashchange", "load"].forEach((ev) =>
+      window.addEventListener(ev, handlerFunction)
+    );
   }
 }
 
