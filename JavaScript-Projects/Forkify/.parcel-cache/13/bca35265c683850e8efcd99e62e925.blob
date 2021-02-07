@@ -5834,11 +5834,11 @@ try {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.TIMEOUT_SEC = exports.API_URL = void 0;
+exports.TIMEOUT = exports.API_URL = void 0;
 const API_URL = "https://forkify-api.herokuapp.com/api/v2/recipes";
 exports.API_URL = API_URL;
-const TIMEOUT_SEC = 10;
-exports.TIMEOUT_SEC = TIMEOUT_SEC;
+const TIMEOUT = 10;
+exports.TIMEOUT = TIMEOUT;
 },{}],"0e8dcd8a4e1c61cf18f78e1c2563655d":[function(require,module,exports) {
 "use strict";
 
@@ -5863,7 +5863,7 @@ const timeout = function (s) {
 
 const getJSON = async function (url) {
   try {
-    const res = await Promise.race([fetch(url), timeout(_configuration.TIMEOUT_SEC)]);
+    const res = await Promise.race([fetch(url), timeout(_configuration.TIMEOUT)]);
     const data = await res.json();
     if (!res.ok) throw new Error(`${data.message} (${res.status})`);
     return data;

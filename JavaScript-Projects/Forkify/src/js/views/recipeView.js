@@ -8,7 +8,6 @@ class RecipeView {
   //Method to render recipe
   render(recipeData) {
     this.#data = recipeData;
-    console.log(this.#data);
     const markup = this._generateMarkup();
     this.#parentElement.innerHTML = "";
     this.#parentElement.insertAdjacentHTML("afterbegin", markup);
@@ -29,7 +28,6 @@ class RecipeView {
 
   //Method to generate markup for the recipe
   _generateMarkup() {
-    console.log(this.#data);
     return `
       <figure class="recipe__fig">
     <img src="${this.#data.image}" alt="${

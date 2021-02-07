@@ -5834,11 +5834,11 @@ try {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.TIMEOUT_SEC = exports.API_URL = void 0;
+exports.TIMEOUT = exports.API_URL = void 0;
 const API_URL = "https://forkify-api.herokuapp.com/api/v2/recipes";
 exports.API_URL = API_URL;
-const TIMEOUT_SEC = 10;
-exports.TIMEOUT_SEC = TIMEOUT_SEC;
+const TIMEOUT = 10;
+exports.TIMEOUT = TIMEOUT;
 },{}],"0e8dcd8a4e1c61cf18f78e1c2563655d":[function(require,module,exports) {
 "use strict";
 
@@ -5849,8 +5849,6 @@ exports.getJSON = void 0;
 
 var _regeneratorRuntime = require("regenerator-runtime");
 
-var _configuration = require("./configuration.js");
-
 //Timeout method to reject promise after some time
 const timeout = function (s) {
   return new Promise(function (_, reject) {
@@ -5858,12 +5856,12 @@ const timeout = function (s) {
       reject(new Error(`Request took too long! Timeout after ${s} second`));
     }, s * 1000);
   });
-}; //Get JSON data from a given url
+}; //Get 
 
 
 const getJSON = async function (url) {
   try {
-    const res = await Promise.race([fetch(url), timeout(_configuration.TIMEOUT_SEC)]);
+    const res = await Promise.race([fetch(url), timeout(10)]);
     const data = await res.json();
     if (!res.ok) throw new Error(`${data.message} (${res.status})`);
     return data;
@@ -5873,7 +5871,7 @@ const getJSON = async function (url) {
 };
 
 exports.getJSON = getJSON;
-},{"regenerator-runtime":"e155e0d3930b156f86c48e8d05522b16","./configuration.js":"daf7c8a757d353e15e0a117645e2ad37"}],"bcae1aced0301b01ccacb3e6f7dfede8":[function(require,module,exports) {
+},{"regenerator-runtime":"e155e0d3930b156f86c48e8d05522b16"}],"bcae1aced0301b01ccacb3e6f7dfede8":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
