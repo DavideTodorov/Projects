@@ -4,13 +4,20 @@ import { Fraction } from "fractional";
 class RecipeView {
   #parentElement = document.querySelector(".recipe");
   #data;
+  #errorMessage = "The recipe you searched for could not be found. Please try another one!";
+  #defaultMessage = "Start by searching for a recipe or an ingredient. Have fun!";
 
   //Method to render recipe
   render(recipeData) {
     this.#data = recipeData;
     const markup = this.#generateMarkup();
-    this.#parentElement.innerHTML = "";
+    this.#clear();
     this.#parentElement.insertAdjacentHTML("afterbegin", markup);
+  }
+
+  //Method to clear the parent element
+  #clear() {
+    this.#parentElement.innerHTML = "";
   }
 
   //Method to render the spinner
@@ -131,6 +138,40 @@ class RecipeView {
         </div>
       </li>
       `;
+  }
+
+  //Method to render errors on the UI
+  renderError(message = this.#errorMessage) {
+    const markup = `
+          <div class="error">
+            <div>
+              <svg>
+                <use href="${icons}#icon-alert-triangle"></use>
+              </svg>
+            </div>
+            <p>${message}</p>
+          </div>
+    `;
+
+    this.#clear();
+    this.#parentElement.insertAdjacentHTML("afterbegin", markup);
+  }
+
+  //Method to render a message on the UI
+  renderMessage(message = this.#defaultMessage) {
+    const markup = `
+        <div class="message">
+          <div>
+            <svg>
+              <use href="${icons}#icon-smile"></use>
+           </svg>
+         </div>
+            <p>${message}</p>
+        </div>
+    `;
+
+    this.#clear();
+    this.#parentElement.insertAdjacentHTML("afterbegin", markup);
   }
 
   //Method to attach event listeners for given events

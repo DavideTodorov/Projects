@@ -2,6 +2,7 @@ import "core-js/stable";
 import "regenerator-runtime/runtime";
 import * as model from "./model.js";
 import recipeView from "./views/recipeView.js";
+
 //=========================================================
 //Elements
 const recipeContainer = document.querySelector(".recipe");
@@ -23,7 +24,7 @@ const controlRecipes = async function () {
     //Render recipe
     recipeView.render(model.state.recipe);
   } catch (err) {
-    alert(err);
+    recipeView.renderError();
   }
 };
 
