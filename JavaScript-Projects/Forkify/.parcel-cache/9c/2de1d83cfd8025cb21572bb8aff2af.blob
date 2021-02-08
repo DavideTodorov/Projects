@@ -1,0 +1,41 @@
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+class View {
+  //Method to render recipe
+  render(recipeData) {
+    this._data = recipeData;
+
+    const markup = this._generateMarkup();
+
+    this._clear();
+
+    this._parentElement.insertAdjacentHTML("afterbegin", markup);
+  } //Method to clear the parent element
+
+
+  _clear() {
+    this._parentElement.innerHTML = "";
+  } //Method to render the spinner
+
+
+  renderSpinner() {
+    const markup = `
+              <div class="spinner">
+                <svg>
+                  <use href="${icons}#icon-loader"></use>
+                </svg>
+              </div>
+        `;
+    this._parentElement.innerHTMl = "";
+
+    this._parentElement.insertAdjacentHTML("afterbegin", markup);
+  }
+
+}
+
+exports.default = View;
