@@ -175,7 +175,7 @@ class RecipeView {
   }
 
   //Method to attach event listeners for given events
-  addHandlerRender(handlerFunction) {
+  addRenderHandler(handlerFunction) {
     ["hashchange", "load"].forEach((ev) =>
       window.addEventListener(ev, handlerFunction)
     );

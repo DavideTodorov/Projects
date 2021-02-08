@@ -1,7 +1,10 @@
 import "core-js/stable";
 import "regenerator-runtime/runtime";
+import { values } from "regenerator-runtime/runtime";
+
 import * as model from "./model.js";
 import recipeView from "./views/recipeView.js";
+import searchView from "./views/searchView.js";
 
 //=========================================================
 //Elements
@@ -28,8 +31,24 @@ const controlRecipes = async function () {
   }
 };
 
+//Method to control searching for recepes
+const controlSearchResults = async function () {
+  try {
+    //Get search query
+    const query = searchView.getQuery();
+    if (!query) return;
+
+    //Load search results
+    await model.loadAndSearchResults(query);
+    console.log(model.state.search.results);
+  } catch (err) {
+    console.error(err);
+  }
+};
+
 //Add evenet listeners to certain events
 const init = function () {
-  recipeView.addHandlerRender(controlRecipes);
+  recipeView.addRenderHandler(controlRecipes);
+  searchView.addSearchHandler(controlSearchResults);
 };
 init();
