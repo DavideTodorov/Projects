@@ -522,7 +522,7 @@ const controlSearchResults = async function () {
 
     await model.loadAndSearchResults(query); //Render search results
 
-    _resultsView.default.render(model.getSearchResultsPage());
+    _resultsView.default.render(model.state.search.results);
   } catch (err) {
     console.error(err);
   }
@@ -5089,7 +5089,6 @@ const state = {
   search: {
     query: "",
     results: [],
-    page: 1,
     resultsPerPage: _configuration.RESULTS_PER_PAGE
   }
 }; //Method to load a recipe by given id
@@ -5137,15 +5136,14 @@ const loadAndSearchResults = async function (query) {
     console.error(err);
     throw err;
   }
-}; //Method to return only the results for the current page
-
+};
 
 exports.loadAndSearchResults = loadAndSearchResults;
 
-const getSearchResultsPage = function (page = state.search.page) {
-  state.search.page = page;
+const getSearchResultsPage = function (page) {
   const start = (page - 1) * state.search.resultsPerPage;
   const end = page * state.search.resultsPerPage;
+  console.log(start, end);
   return state.search.results.slice(start, end);
 };
 

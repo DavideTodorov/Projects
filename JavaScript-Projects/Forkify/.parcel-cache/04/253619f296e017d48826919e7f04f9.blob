@@ -5137,8 +5137,7 @@ const loadAndSearchResults = async function (query) {
     console.error(err);
     throw err;
   }
-}; //Method to return only the results for the current page
-
+};
 
 exports.loadAndSearchResults = loadAndSearchResults;
 

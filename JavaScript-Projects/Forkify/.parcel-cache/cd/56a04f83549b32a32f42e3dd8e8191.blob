@@ -483,12 +483,11 @@ function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return 
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
-if (module.hot) {
-  module.hot.accept();
-} //=========================================================
+// if (module.hot) {
+//   module.hot.accept();
+// }
+//=========================================================
 //Elements
-
-
 const recipeContainer = document.querySelector(".recipe"); //Search API
 // https://forkify-api.herokuapp.com/v2
 //Async function to load recipe
@@ -522,7 +521,7 @@ const controlSearchResults = async function () {
 
     await model.loadAndSearchResults(query); //Render search results
 
-    _resultsView.default.render(model.getSearchResultsPage());
+    _resultsView.default.render(model.getSearchResultsPage(1));
   } catch (err) {
     console.error(err);
   }
@@ -5089,7 +5088,6 @@ const state = {
   search: {
     query: "",
     results: [],
-    page: 1,
     resultsPerPage: _configuration.RESULTS_PER_PAGE
   }
 }; //Method to load a recipe by given id
@@ -5137,15 +5135,14 @@ const loadAndSearchResults = async function (query) {
     console.error(err);
     throw err;
   }
-}; //Method to return only the results for the current page
-
+};
 
 exports.loadAndSearchResults = loadAndSearchResults;
 
-const getSearchResultsPage = function (page = state.search.page) {
-  state.search.page = page;
+const getSearchResultsPage = function (page) {
   const start = (page - 1) * state.search.resultsPerPage;
   const end = page * state.search.resultsPerPage;
+  console.log(start, end);
   return state.search.results.slice(start, end);
 };
 
