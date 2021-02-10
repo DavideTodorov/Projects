@@ -6,6 +6,7 @@ import * as model from "./model.js";
 import recipeView from "./views/recipeView.js";
 import searchView from "./views/searchView.js";
 import resultsView from "./views/resultsView.js";
+import paginationView from "./views/paginationView.js";
 
 if (module.hot) {
   module.hot.accept();
@@ -49,14 +50,27 @@ const controlSearchResults = async function () {
 
     //Render search results
     resultsView.render(model.getSearchResultsPage());
+
+    //Render pagination buttons
+    paginationView.render(model.state.search);
   } catch (err) {
     console.error(err);
   }
+};
+
+const controlPagination = function (pageToGoTo) {
+  console.log(model.state.search.page);
+  //Render New search results
+  resultsView.render(model.getSearchResultsPage(pageToGoTo));
+
+  //Render New pagination buttons
+  paginationView.render(model.state.search);
 };
 
 //Add evenet listeners to certain events
 const init = function () {
   recipeView.addRenderHandler(controlRecipes);
   searchView.addSearchHandler(controlSearchResults);
+  paginationView.addClickHandler(controlPagination);
 };
 init();
