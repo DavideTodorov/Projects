@@ -2,12 +2,13 @@ import icons from "url:../../img/icons.svg";
 import { Fraction } from "fractional";
 import View from "./view.js";
 
-class RecipeView extends View{
+class RecipeView extends View {
   _parentElement = document.querySelector(".recipe");
-  _errorMessage = "The recipe you searched for could not be found. Please try another one!";
-  _defaultMessage = "Start by searching for a recipe or an ingredient. Have fun!";
+  _errorMessage =
+    "The recipe you searched for could not be found. Please try another one!";
+  _defaultMessage =
+    "Start by searching for a recipe or an ingredient. Have fun!";
 
-  
   //Method to generate markup for the recipe
   _generateMarkup() {
     return `
@@ -40,12 +41,16 @@ class RecipeView extends View{
       <span class="recipe__info-text">servings</span>
   
       <div class="recipe__info-buttons">
-        <button class="btn--tiny btn--increase-servings">
+        <button class="btn--tiny btn--update-servings" data-update-to="${
+          this._data.servings - 1
+        }">
           <svg>
             <use href="${icons}#icon-minus-circle"></use>
           </svg>
         </button>
-        <button class="btn--tiny btn--increase-servings">
+        <button class="btn--tiny btn--update-servings" data-update-to="${
+          this._data.servings + 1
+        }">
           <svg>
             <use href="${icons}#icon-plus-circle"></use>
           </svg>
@@ -112,13 +117,23 @@ class RecipeView extends View{
       `;
   }
 
-  
-
   //Method to attach event listeners for given events
   addRenderHandler(handlerFunction) {
     ["hashchange", "load"].forEach((ev) =>
       window.addEventListener(ev, handlerFunction)
     );
+  }
+
+  //Method to attach event listeners to the servings buttons
+  addServingsUpdateHandler(handler) {
+    this._parentElement.addEventListener("click", function (e) {
+      const btnClicked = e.target.closest(".btn--update-servings");
+
+      if (!btnClicked) return;
+
+      const updateTo = +btnClicked.dataset.updateTo;
+      if (updateTo > 0) handler(updateTo);
+    });
   }
 }
 

@@ -58,6 +58,7 @@ const controlSearchResults = async function () {
   }
 };
 
+//Method to handle the pagination of the results
 const controlPagination = function (pageToGoTo) {
   console.log(model.state.search.page);
   //Render New search results
@@ -67,9 +68,19 @@ const controlPagination = function (pageToGoTo) {
   paginationView.render(model.state.search);
 };
 
+//Method to handle the change of recipe servings
+const cotrolServings = function (newServices) {
+  //Update the recipe servings
+  model.updateServings(newServices);
+
+  //Update the recipe view
+  recipeView.render(model.state.recipe);
+};
+
 //Add evenet listeners to certain events
 const init = function () {
   recipeView.addRenderHandler(controlRecipes);
+  recipeView.addServingsUpdateHandler(cotrolServings);
   searchView.addSearchHandler(controlSearchResults);
   paginationView.addClickHandler(controlPagination);
 };
