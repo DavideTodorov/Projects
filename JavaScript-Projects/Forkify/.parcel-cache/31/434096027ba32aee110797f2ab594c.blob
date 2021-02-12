@@ -6641,8 +6641,7 @@ class View {
     this._clear();
 
     this._parentElement.insertAdjacentHTML("afterbegin", markup);
-  } //Method to partly change the existing markup
-
+  }
 
   update(data) {
     //Return if the recipeData is empty

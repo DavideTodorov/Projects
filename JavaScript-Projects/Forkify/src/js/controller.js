@@ -74,7 +74,7 @@ const cotrolServings = function (newServices) {
   model.updateServings(newServices);
 
   //Update the recipe view
-  recipeView.render(model.state.recipe);
+  recipeView.update(model.state.recipe);
 };
 
 //Add evenet listeners to certain events

@@ -548,7 +548,7 @@ const cotrolServings = function (newServices) {
   //Update the recipe servings
   model.updateServings(newServices); //Update the recipe view
 
-  _recipeView.default.update(model.state.recipe);
+  _recipeView.default.render(model.state.recipe);
 }; //Add evenet listeners to certain events
 
 
@@ -6641,12 +6641,11 @@ class View {
     this._clear();
 
     this._parentElement.insertAdjacentHTML("afterbegin", markup);
-  } //Method to partly change the existing markup
-
+  }
 
   update(data) {
     //Return if the recipeData is empty
-    if (!data || Array.isArray(data) && data.length === 0) {
+    if (!recipeData || Array.isArray(recipeData) && recipeData.length === 0) {
       console.log("Error  ");
       return this.renderError();
     }
@@ -6656,16 +6655,14 @@ class View {
     const newMarkup = this._generateMarkup();
 
     const newDOM = document.createRange().createContextualFragment(newMarkup);
-    const newElements = Array.from(newDOM.querySelectorAll("*"));
+    const newElemets = Array.from(newDOM.querySelectorAll("*"));
     const curElements = Array.from(this._parentElement.querySelectorAll("*"));
 
-    for (let i = 0; i < newElements.length; i++) {
+    for (let i = 0; i < newElemets.length; i++) {
       const curEl = curElements[i];
       const newEl = newElements[i];
 
-      if (!newEl.isEqualNode(curEl) && newEl.firstChild?.nodeValue.trim() !== "") {
-        curEl.textContent = newEl.textContent;
-      }
+      if (!newEl.isEqualNode(curEl) && newEl.firstChild?.nodeValue.trim() !== "") {}
     }
   } //Method to clear the parent element
 

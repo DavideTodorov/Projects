@@ -7,7 +7,6 @@ class ResultView extends View {
   _defaultMessage = "";
 
   _generateMarkup() {
-    console.log(this._data);
     return this._data.map((r) => {
       return `
           <li class="preview">
