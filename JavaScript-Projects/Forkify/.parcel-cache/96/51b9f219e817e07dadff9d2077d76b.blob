@@ -501,10 +501,7 @@ const controlRecipes = async function () {
     const id = window.location.hash.slice(1);
     if (!id) return;
 
-    _recipeView.default.renderSpinner(recipeContainer); //Update UI to mark selected result
-
-
-    _resultsView.default.update(model.getSearchResultsPage()); //Load recipe
+    _recipeView.default.renderSpinner(recipeContainer); //Load recipe
 
 
     await model.loadRecipe(id); //Render recipe
@@ -6811,7 +6808,7 @@ class ResultView extends _view.default {
     return this._data.map(r => {
       return `
           <li class="preview">
-              <a class="preview__link ${r.id === curId ? "preview__link--active" : ""}" href="#${r.id}">
+              <a class="preview__link" href="#${r.id}">
                 <figure class="preview__fig">
                   <img src="${r.image}" alt="${r.title}" />
                 </figure>

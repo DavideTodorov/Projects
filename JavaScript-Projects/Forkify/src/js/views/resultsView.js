@@ -7,10 +7,14 @@ class ResultView extends View {
   _defaultMessage = "";
 
   _generateMarkup() {
+    const curId = window.location.hash.slice(1);
+
     return this._data.map((r) => {
       return `
           <li class="preview">
-              <a class="preview__link" href="#${r.id}">
+              <a class="preview__link ${
+                r.id === curId ? "preview__link--active" : ""
+              }" href="#${r.id}">
                 <figure class="preview__fig">
                   <img src="${r.image}" alt="${r.title}" />
                 </figure>
