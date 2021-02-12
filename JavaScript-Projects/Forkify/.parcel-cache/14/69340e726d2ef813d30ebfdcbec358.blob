@@ -6669,7 +6669,7 @@ class View {
 
 
       if (!newEl.isEqualNode(curEl)) {
-        Array.from(newEl.attributes).forEach(attr => curEl.setAttribute(attr.name, attr.value));
+        Array.from(newEl.attributes).forEach(attr => curEl.setA);
       }
     }
   } //Method to clear the parent element

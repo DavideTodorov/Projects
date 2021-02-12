@@ -6668,9 +6668,7 @@ class View {
       } //Update changed attributes
 
 
-      if (!newEl.isEqualNode(curEl)) {
-        Array.from(newEl.attributes).forEach(attr => curEl.setAttribute(attr.name, attr.value));
-      }
+      if (!newEl.isEqualNode(curEl)) {}
     }
   } //Method to clear the parent element
 

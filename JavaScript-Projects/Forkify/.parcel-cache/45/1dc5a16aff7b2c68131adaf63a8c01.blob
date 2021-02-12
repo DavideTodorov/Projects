@@ -1,82 +1,95 @@
-import icons from "url:../../img/icons.svg";
+"use strict";
 
-export default class View {
-  _data;
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _icons = _interopRequireDefault(require("url:../../img/icons.svg"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+class View {
+  constructor() {
+    _defineProperty(this, "_data", void 0);
+  }
 
   //Method to render recipe
   render(recipeData) {
     //Return if the recipeData is empty
-    if (!recipeData || (Array.isArray(recipeData) && recipeData.length === 0)) {
+    if (!recipeData || Array.isArray(recipeData) && recipeData.length === 0) {
       console.log("Error  ");
       return this.renderError();
     }
 
     this._data = recipeData;
-    const markup = this._generateMarkup();
-    this._clear();
-    this._parentElement.insertAdjacentHTML("afterbegin", markup);
-  }
 
-  //Method to partly change the existing markup
+    const markup = this._generateMarkup();
+
+    this._clear();
+
+    this._parentElement.insertAdjacentHTML("afterbegin", markup);
+  } //Method to partly change the existing markup
+
+
   update(data) {
     //Return if the recipeData is empty
-    if (!data || (Array.isArray(data) && data.length === 0)) {
+    if (!data || Array.isArray(data) && data.length === 0) {
       console.log("Error  ");
       return this.renderError();
     }
 
     this._data = data;
+
     const newMarkup = this._generateMarkup();
+
     const newDOM = document.createRange().createContextualFragment(newMarkup);
     const newElements = Array.from(newDOM.querySelectorAll("*"));
     const curElements = Array.from(this._parentElement.querySelectorAll("*"));
 
     for (let i = 0; i < newElements.length; i++) {
       const curEl = curElements[i];
-      const newEl = newElements[i];
+      const newEl = newElements[i]; //Update changed text
 
-      //Update changed text
-      if (
-        !newEl.isEqualNode(curEl) &&
-        newEl.firstChild?.nodeValue.trim() !== ""
-      ) {
+      if (!newEl.isEqualNode(curEl) && newEl.firstChild?.nodeValue.trim() !== "") {
         curEl.textContent = newEl.textContent;
-      }
+      } //Update changed attributes
 
-      //Update changed attributes
+
       if (!newEl.isEqualNode(curEl)) {
-        Array.from(newEl.attributes).forEach((attr) =>
-          curEl.setAttribute(attr.name, attr.value)
-        );
+        Array.from(newEl.attributes).forEach(attr => curEl.setAttribute(attr.name, attr.value));
       }
     }
-  }
+  } //Method to clear the parent element
 
-  //Method to clear the parent element
+
   _clear() {
     this._parentElement.innerHTML = "";
-  }
+  } //Method to render the spinner
 
-  //Method to render the spinner
+
   renderSpinner() {
     const markup = `
               <div class="spinner">
                 <svg>
-                  <use href="${icons}#icon-loader"></use>
+                  <use href="${_icons.default}#icon-loader"></use>
                 </svg>
               </div>
         `;
     this._parentElement.innerHTMl = "";
-    this._parentElement.insertAdjacentHTML("afterbegin", markup);
-  }
 
-  //Method to render errors on the UI
+    this._parentElement.insertAdjacentHTML("afterbegin", markup);
+  } //Method to render errors on the UI
+
+
   renderError(message = this._errorMessage) {
     const markup = `
           <div class="error">
             <div>
               <svg>
-                <use href="${icons}#icon-alert-triangle"></use>
+                <use href="${_icons.default}#icon-alert-triangle"></use>
               </svg>
             </div>
             <p>${message}</p>
@@ -84,16 +97,17 @@ export default class View {
     `;
 
     this._clear();
-    this._parentElement.insertAdjacentHTML("afterbegin", markup);
-  }
 
-  //Method to render a message on the UI
+    this._parentElement.insertAdjacentHTML("afterbegin", markup);
+  } //Method to render a message on the UI
+
+
   renderMessage(message = this._defaultMessage) {
     const markup = `
         <div class="message">
           <div>
             <svg>
-              <use href="${icons}#icon-smile"></use>
+              <use href="${_icons.default}#icon-smile"></use>
            </svg>
          </div>
             <p>${message}</p>
@@ -101,6 +115,10 @@ export default class View {
     `;
 
     this._clear();
+
     this._parentElement.insertAdjacentHTML("afterbegin", markup);
   }
+
 }
+
+exports.default = View;
