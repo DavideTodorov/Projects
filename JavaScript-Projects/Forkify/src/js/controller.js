@@ -7,6 +7,7 @@ import recipeView from "./views/recipeView.js";
 import searchView from "./views/searchView.js";
 import resultsView from "./views/resultsView.js";
 import paginationView from "./views/paginationView.js";
+import bookmarksView from "./views/bookmarksView.js";
 
 // if (module.hot) {
 //   module.hot.accept();
@@ -29,6 +30,7 @@ const controlRecipes = async function () {
 
     //Update UI to mark selected result
     resultsView.update(model.getSearchResultsPage());
+    bookmarksView.update(model.state.bookmarks);
 
     //Load recipe
     await model.loadRecipe(id);
@@ -90,8 +92,11 @@ const controlBookmark = function () {
     model.removeBookmark(model.state.recipe.id);
   }
 
-  //Update the markup
+  //Update the recipe view
   recipeView.update(model.state.recipe);
+
+  //Render the bookmarks in the bookmarks view
+  bookmarksView.render(model.state.bookmarks);
 };
 
 //Add evenet listeners to certain events

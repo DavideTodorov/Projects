@@ -1,5 +1,6 @@
 import View from "./view.js";
 import icons from "url:../../img/icons.svg";
+import previewView from "./previewView.js";
 
 class ResultView extends View {
   _parentElement = document.querySelector(".results");
@@ -7,25 +8,9 @@ class ResultView extends View {
   _defaultMessage = "";
 
   _generateMarkup() {
-    const curId = window.location.hash.slice(1);
-
-    return this._data.map((r) => {
-      return `
-          <li class="preview">
-              <a class="preview__link ${
-                r.id === curId ? "preview__link--active" : ""
-              }" href="#${r.id}">
-                <figure class="preview__fig">
-                  <img src="${r.image}" alt="${r.title}" />
-                </figure>
-                <div class="preview__data">
-                  <h4 class="preview__title">${r.title}</h4>
-                  <p class="preview__publisher">${r.publisher}</p>
-                </div>
-              </a>
-          </li>
-        `;
-    });
+    return this._data
+      .map((result) => previewView.render(result, false))
+      .join("");
   }
 }
 

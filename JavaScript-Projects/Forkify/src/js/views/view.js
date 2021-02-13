@@ -4,15 +4,18 @@ export default class View {
   _data;
 
   //Method to render recipe
-  render(recipeData) {
+  render(recipeData, render = true) {
     //Return if the recipeData is empty
     if (!recipeData || (Array.isArray(recipeData) && recipeData.length === 0)) {
       console.log("Error  ");
       return this.renderError();
     }
 
+    
     this._data = recipeData;
     const markup = this._generateMarkup();
+    if (!render) return markup;
+
     this._clear();
     this._parentElement.insertAdjacentHTML("afterbegin", markup);
   }
