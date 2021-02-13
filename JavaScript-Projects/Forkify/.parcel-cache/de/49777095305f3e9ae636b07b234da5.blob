@@ -572,17 +572,10 @@ const controlBookmark = function () {
 
 
   _bookmarksView.default.render(model.state.bookmarks);
-}; //Method to load bookmarks on page load
-
-
-const controlLoadBookmark = function () {
-  _bookmarksView.default.render(model.state.bookmarks);
 }; //Add evenet listeners to certain events
 
 
 const init = function () {
-  _bookmarksView.default.addRenderHandler(controlLoadBookmark);
-
   _recipeView.default.addRenderHandler(controlRecipes);
 
   _recipeView.default.addServingsUpdateHandler(cotrolServings);
@@ -5264,11 +5257,8 @@ exports.removeBookmark = removeBookmark;
 
 const init = function () {
   const storage = localStorage.getItem("bookmarks");
-  console.log(storage);
-  if (storage) state.bookmarks = JSON.parse(storage);
+  if (storage) ;
 };
-
-init();
 },{"regenerator-runtime":"e155e0d3930b156f86c48e8d05522b16","./configuration.js":"daf7c8a757d353e15e0a117645e2ad37","./helpers.js":"0e8dcd8a4e1c61cf18f78e1c2563655d"}],"e155e0d3930b156f86c48e8d05522b16":[function(require,module,exports) {
 /**
  * Copyright (c) 2014-present, Facebook, Inc.
@@ -7059,10 +7049,6 @@ class BookmarksView extends _view.default {
     _defineProperty(this, "_errorMessage", "No bookmarks yet. Start searching for recipes.");
 
     _defineProperty(this, "_defaultMessage", "");
-  }
-
-  addRenderHandler(handler) {
-    window.addEventListener("load", handler);
   }
 
   _generateMarkup() {

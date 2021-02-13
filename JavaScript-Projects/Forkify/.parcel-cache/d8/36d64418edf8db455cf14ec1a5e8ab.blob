@@ -572,8 +572,7 @@ const controlBookmark = function () {
 
 
   _bookmarksView.default.render(model.state.bookmarks);
-}; //Method to load bookmarks on page load
-
+};
 
 const controlLoadBookmark = function () {
   _bookmarksView.default.render(model.state.bookmarks);

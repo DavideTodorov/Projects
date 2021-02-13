@@ -99,8 +99,14 @@ const controlBookmark = function () {
   bookmarksView.render(model.state.bookmarks);
 };
 
+//Method to load bookmarks on page load
+const controlLoadBookmark = function () {
+  bookmarksView.render(model.state.bookmarks);
+};
+
 //Add evenet listeners to certain events
 const init = function () {
+  bookmarksView.addRenderHandler(controlLoadBookmark);
   recipeView.addRenderHandler(controlRecipes);
   recipeView.addServingsUpdateHandler(cotrolServings);
   recipeView.addBookmarkHandler(controlBookmark);

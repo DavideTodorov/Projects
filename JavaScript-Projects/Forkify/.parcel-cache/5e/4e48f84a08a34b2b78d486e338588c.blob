@@ -572,17 +572,10 @@ const controlBookmark = function () {
 
 
   _bookmarksView.default.render(model.state.bookmarks);
-}; //Method to load bookmarks on page load
-
-
-const controlLoadBookmark = function () {
-  _bookmarksView.default.render(model.state.bookmarks);
 }; //Add evenet listeners to certain events
 
 
 const init = function () {
-  _bookmarksView.default.addRenderHandler(controlLoadBookmark);
-
   _recipeView.default.addRenderHandler(controlRecipes);
 
   _recipeView.default.addServingsUpdateHandler(cotrolServings);
@@ -5264,7 +5257,6 @@ exports.removeBookmark = removeBookmark;
 
 const init = function () {
   const storage = localStorage.getItem("bookmarks");
-  console.log(storage);
   if (storage) state.bookmarks = JSON.parse(storage);
 };
 
@@ -7061,9 +7053,7 @@ class BookmarksView extends _view.default {
     _defineProperty(this, "_defaultMessage", "");
   }
 
-  addRenderHandler(handler) {
-    window.addEventListener("load", handler);
-  }
+  addRenderHandler(handler) {}
 
   _generateMarkup() {
     return this._data.map(bookmark => _previewView.default.render(bookmark, false)).join("");
