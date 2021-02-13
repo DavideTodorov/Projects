@@ -8,9 +8,9 @@ import searchView from "./views/searchView.js";
 import resultsView from "./views/resultsView.js";
 import paginationView from "./views/paginationView.js";
 
-if (module.hot) {
-  module.hot.accept();
-}
+// if (module.hot) {
+//   module.hot.accept();
+// }
 
 //=========================================================
 //Elements
@@ -80,10 +80,25 @@ const cotrolServings = function (newServices) {
   recipeView.update(model.state.recipe);
 };
 
+//Method to handle bookmark button click
+const controlBookmark = function () {
+  if (!model.state.recipe.bookmarked) {
+    //Add bookmark
+    model.addBookmark(model.state.recipe);
+  } else {
+    //Remove bookmark
+    model.removeBookmark(model.state.recipe.id);
+  }
+
+  //Update the markup
+  recipeView.update(model.state.recipe);
+};
+
 //Add evenet listeners to certain events
 const init = function () {
   recipeView.addRenderHandler(controlRecipes);
   recipeView.addServingsUpdateHandler(cotrolServings);
+  recipeView.addBookmarkHandler(controlBookmark);
   searchView.addSearchHandler(controlSearchResults);
   paginationView.addClickHandler(controlPagination);
 };
