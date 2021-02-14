@@ -8,6 +8,7 @@ import searchView from "./views/searchView.js";
 import resultsView from "./views/resultsView.js";
 import paginationView from "./views/paginationView.js";
 import bookmarksView from "./views/bookmarksView.js";
+import addRecipeView from "./views/addRecipeView.js";
 
 // if (module.hot) {
 //   module.hot.accept();
@@ -104,6 +105,13 @@ const controlLoadBookmark = function () {
   bookmarksView.render(model.state.bookmarks);
 };
 
+//Method to add our own recipe
+const controllAddRecipe = function (newRecipe) {
+  console.log(newRecipe);
+
+  //Upload the recipe data
+};
+
 //Add evenet listeners to certain events
 const init = function () {
   bookmarksView.addRenderHandler(controlLoadBookmark);
@@ -112,5 +120,6 @@ const init = function () {
   recipeView.addBookmarkHandler(controlBookmark);
   searchView.addSearchHandler(controlSearchResults);
   paginationView.addClickHandler(controlPagination);
+  addRecipeView.addUploadHandler(controllAddRecipe);
 };
 init();
