@@ -1,0 +1,169 @@
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.uploadRecipe = exports.removeBookmark = exports.addBookmark = exports.updateServings = exports.getSearchResultsPage = exports.loadAndSearchResults = exports.loadRecipe = exports.state = void 0;
+
+var _regeneratorRuntime = require("regenerator-runtime");
+
+var _configuration = require("./configuration.js");
+
+var _helpers = require("./helpers.js");
+
+//Model state
+const state = {
+  recipe: {},
+  search: {
+    query: "",
+    results: [],
+    page: 1,
+    resultsPerPage: _configuration.RESULTS_PER_PAGE
+  },
+  bookmarks: []
+}; //Method to load a recipe by given id
+
+exports.state = state;
+
+const loadRecipe = async function (id) {
+  try {
+    const data = await (0, _helpers.getJSON)(`${_configuration.API_URL}${id}`);
+    const {
+      recipe
+    } = data.data;
+    state.recipe = {
+      id: recipe.id,
+      title: recipe.title,
+      publisher: recipe.publisher,
+      sourceUrl: recipe.source_url,
+      image: recipe.image_url,
+      servings: recipe.servings,
+      cookingTime: recipe.cooking_time,
+      ingredients: recipe.ingredients
+    };
+
+    if (state.bookmarks.some(bookmark => bookmark.id === id)) {
+      state.recipe.bookmarked = true;
+    } else {
+      state.recipe.bookmarked = false;
+    }
+  } catch (err) {
+    console.error(err);
+    throw err;
+  }
+}; //Method to search and display recipes you have searched for
+
+
+exports.loadRecipe = loadRecipe;
+
+const loadAndSearchResults = async function (query) {
+  try {
+    state.search.query = query;
+    const data = await (0, _helpers.getJSON)(`${_configuration.API_URL}?search=${query}`);
+    state.search.results = data.data.recipes.map(rec => {
+      return {
+        id: rec.id,
+        title: rec.title,
+        publisher: rec.publisher,
+        image: rec.image_url
+      };
+    });
+    state.search.page = 1;
+  } catch (err) {
+    console.error(err);
+    throw err;
+  }
+}; //Method to return only the results for the current page
+
+
+exports.loadAndSearchResults = loadAndSearchResults;
+
+const getSearchResultsPage = function (page = state.search.page) {
+  state.search.page = page;
+  const start = (page - 1) * state.search.resultsPerPage;
+  const end = page * state.search.resultsPerPage;
+  return state.search.results.slice(start, end);
+}; //Method to update recipe servings
+
+
+exports.getSearchResultsPage = getSearchResultsPage;
+
+const updateServings = function (newServings) {
+  state.recipe.ingredients.forEach(ing => {
+    ing.quantity = ing.quantity * (newServings / state.recipe.servings);
+  });
+  state.recipe.servings = newServings;
+}; //Method to store bookmarks in the local storage
+
+
+exports.updateServings = updateServings;
+
+const saveBookmarks = function () {
+  localStorage.setItem("bookmarks", JSON.stringify(state.bookmarks));
+}; //Method to bookmark recipes
+
+
+const addBookmark = function (recipe) {
+  //Bookmark the current recipe
+  state.bookmarks.push(recipe); //Mark current recipe as bookmarked
+
+  if (recipe.id === state.recipe.id) {
+    state.recipe.bookmarked = true;
+  }
+
+  saveBookmarks();
+}; //Method to remove bookmark
+
+
+exports.addBookmark = addBookmark;
+
+const removeBookmark = function (id) {
+  //Remove bookmark from current recipe
+  const index = state.bookmarks.findIndex(el => el.id === id);
+  state.bookmarks.splice(index, 1); //Mark current recipe as not bookmarked
+
+  if (id === state.recipe.id) {
+    state.recipe.bookmarked = false;
+  }
+
+  saveBookmarks();
+}; //Method to add the new recipe to the API
+
+
+exports.removeBookmark = removeBookmark;
+
+const uploadRecipe = async function (newRecipe) {
+  try {
+    const ingredients = Object.entries(newRecipe).filter(e => e[0].startsWith("ingredient") && e[1] !== "").map(ing => {
+      const ingredientsArray = ing[1].replaceAll(" ", "").split(",");
+      if (ingredientsArray.length !== 3) throw new Error("Wrong ingredient format! Please use the correct format!");
+      const [quantity, unit, description] = ingredientsArray;
+      return {
+        quantity: quantity ? +quantity : null,
+        unit,
+        description
+      };
+    });
+    const recipe = {
+      title: newRecipe.title,
+      source_url: newRecipe.sourceUrl,
+      image_url: newRecipe.image,
+      publisher: newRecipe.publisher,
+      cooking_time: +newRecipe.cookingTime,
+      servings: +newRecipe.servings,
+      ingredients
+    };
+    (0, _helpers.sendJSON)(`${_configuration.API_URL}`);
+  } catch (err) {
+    throw err;
+  }
+};
+
+exports.uploadRecipe = uploadRecipe;
+
+const init = function () {
+  const storage = localStorage.getItem("bookmarks");
+  if (storage) state.bookmarks = JSON.parse(storage);
+};
+
+init();

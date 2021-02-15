@@ -1,0 +1,179 @@
+"use strict";
+
+require("core-js/modules/es.typed-array.float32-array.js");
+
+require("core-js/modules/es.typed-array.float64-array.js");
+
+require("core-js/modules/es.typed-array.int8-array.js");
+
+require("core-js/modules/es.typed-array.int16-array.js");
+
+require("core-js/modules/es.typed-array.int32-array.js");
+
+require("core-js/modules/es.typed-array.uint8-array.js");
+
+require("core-js/modules/es.typed-array.uint8-clamped-array.js");
+
+require("core-js/modules/es.typed-array.uint16-array.js");
+
+require("core-js/modules/es.typed-array.uint32-array.js");
+
+require("core-js/modules/es.typed-array.from.js");
+
+require("core-js/modules/es.typed-array.of.js");
+
+require("core-js/modules/web.immediate.js");
+
+require("core-js/modules/web.url.js");
+
+require("core-js/modules/web.url.to-json.js");
+
+require("core-js/modules/web.url-search-params.js");
+
+var _runtime = require("regenerator-runtime/runtime");
+
+var model = _interopRequireWildcard(require("./model.js"));
+
+var _recipeView = _interopRequireDefault(require("./views/recipeView.js"));
+
+var _searchView = _interopRequireDefault(require("./views/searchView.js"));
+
+var _resultsView = _interopRequireDefault(require("./views/resultsView.js"));
+
+var _paginationView = _interopRequireDefault(require("./views/paginationView.js"));
+
+var _bookmarksView = _interopRequireDefault(require("./views/bookmarksView.js"));
+
+var _addRecipeView = _interopRequireDefault(require("./views/addRecipeView.js"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+// if (module.hot) {
+//   module.hot.accept();
+// }
+//=========================================================
+//Elements
+const recipeContainer = document.querySelector(".recipe"); //Search API
+// https://forkify-api.herokuapp.com/v2
+//Async function to load recipe
+
+const controlRecipes = async function () {
+  try {
+    //Get current hash from url
+    const id = window.location.hash.slice(1);
+    if (!id) return;
+
+    _recipeView.default.renderSpinner(recipeContainer); //Update UI to mark selected result
+
+
+    _resultsView.default.update(model.getSearchResultsPage());
+
+    _bookmarksView.default.update(model.state.bookmarks); //Load recipe
+
+
+    await model.loadRecipe(id); //Render recipe
+
+    _recipeView.default.render(model.state.recipe);
+  } catch (err) {
+    _recipeView.default.renderError();
+  }
+}; //Method to control searching for recepes
+
+
+const controlSearchResults = async function () {
+  try {
+    _resultsView.default.renderSpinner(); //Get search query
+
+
+    const query = _searchView.default.getQuery();
+
+    if (!query) return; //Load search results
+
+    await model.loadAndSearchResults(query); //Render search results
+
+    _resultsView.default.render(model.getSearchResultsPage()); //Render pagination buttons
+
+
+    _paginationView.default.render(model.state.search);
+  } catch (err) {
+    console.error(err);
+  }
+}; //Method to handle the pagination of the results
+
+
+const controlPagination = function (pageToGoTo) {
+  console.log(model.state.search.page); //Render New search results
+
+  _resultsView.default.render(model.getSearchResultsPage(pageToGoTo)); //Render New pagination buttons
+
+
+  _paginationView.default.render(model.state.search);
+}; //Method to handle the change of recipe servings
+
+
+const cotrolServings = function (newServices) {
+  //Update the recipe servings
+  model.updateServings(newServices); //Update the recipe view
+
+  _recipeView.default.update(model.state.recipe);
+}; //Method to handle bookmark button click
+
+
+const controlBookmark = function () {
+  if (!model.state.recipe.bookmarked) {
+    //Add bookmark
+    model.addBookmark(model.state.recipe);
+  } else {
+    //Remove bookmark
+    model.removeBookmark(model.state.recipe.id);
+  } //Update the recipe view
+
+
+  _recipeView.default.update(model.state.recipe); //Render the bookmarks in the bookmarks view
+
+
+  _bookmarksView.default.render(model.state.bookmarks);
+}; //Method to load bookmarks on page load
+
+
+const controlLoadBookmark = function () {
+  _bookmarksView.default.render(model.state.bookmarks);
+}; //Method to add our own recipe
+
+
+const controllAddRecipe = async function (newRecipe) {
+  try {
+    //Upload the recipe data
+    await model.uploadRecipe(newRecipe); //Render recipe
+
+    _recipeView.default.render(model.state.recipe); //Close upload recipe window
+
+  } catch (err) {
+    console.error(err);
+
+    _addRecipeView.default.renderError(err.message);
+  }
+}; //Add evenet listeners to certain events
+
+
+const init = function () {
+  _bookmarksView.default.addRenderHandler(controlLoadBookmark);
+
+  _recipeView.default.addRenderHandler(controlRecipes);
+
+  _recipeView.default.addServingsUpdateHandler(cotrolServings);
+
+  _recipeView.default.addBookmarkHandler(controlBookmark);
+
+  _searchView.default.addSearchHandler(controlSearchResults);
+
+  _paginationView.default.addClickHandler(controlPagination);
+
+  _addRecipeView.default.addUploadHandler(controllAddRecipe);
+};
+
+init();

@@ -3,6 +3,7 @@ import icons from "url:../../img/icons.svg";
 
 class AddRecipeView extends View {
   _parentElement = document.querySelector(".upload");
+  _defaultMessage = "The recipe was added successfully";
   _window = document.querySelector(".add-recipe-window");
   _overlay = document.querySelector(".overlay");
   _buttonOpen = document.querySelector(".nav__btn--add-recipe");
@@ -16,7 +17,7 @@ class AddRecipeView extends View {
   }
 
   //Method to show or hide the add recipe window
-  _toggleUIDisplay() {
+  toggleUIDisplay() {
     this._window.classList.toggle("hidden");
     this._overlay.classList.toggle("hidden");
   }
@@ -25,7 +26,7 @@ class AddRecipeView extends View {
   _addButtonOpenHandler() {
     this._buttonOpen.addEventListener(
       "click",
-      this._toggleUIDisplay.bind(this)
+      this.toggleUIDisplay.bind(this)
     );
   }
 
@@ -33,9 +34,9 @@ class AddRecipeView extends View {
   _addCloseHandler() {
     this._buttonClose.addEventListener(
       "click",
-      this._toggleUIDisplay.bind(this)
+      this.toggleUIDisplay.bind(this)
     );
-    this._overlay.addEventListener("click", this._toggleUIDisplay.bind(this));
+    this._overlay.addEventListener("click", this.toggleUIDisplay.bind(this));
   }
 
   //Handler for uploading the new recipe

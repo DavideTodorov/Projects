@@ -1,0 +1,55 @@
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.sendJSON = exports.getJSON = void 0;
+
+var _regeneratorRuntime = require("regenerator-runtime");
+
+var _configuration = require("./configuration.js");
+
+//Timeout method to reject promise after some time
+const timeout = function (s) {
+  return new Promise(function (_, reject) {
+    setTimeout(function () {
+      reject(new Error(`Request took too long! Timeout after ${s} second`));
+    }, s * 1000);
+  });
+}; //Get JSON data from a given url
+
+
+const getJSON = async function (url) {
+  try {
+    const fetchPromise = fetch(url);
+    const res = await Promise.race([fetchPromise, timeout(_configuration.TIMEOUT_SEC)]);
+    const data = await res.json();
+    if (!res.ok) throw new Error(`Error: ${data.message} (${res.status})`);
+    return data;
+  } catch (err) {
+    throw err;
+  }
+}; //Send JSON data
+
+
+exports.getJSON = getJSON;
+
+const sendJSON = async function (url, data) {
+  try {
+    const fetchPromise = fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(data)
+    });
+    const res = await Promise.race([fetchPromise, timeout(_configuration.TIMEOUT_SEC)]);
+    const data = await res.json();
+    if (!res.ok) throw new Error(`Error: ${data.message} (${res.status})`);
+    return data;
+  } catch (err) {
+    throw err;
+  }
+};
+
+exports.sendJSON = sendJSON;

@@ -9,6 +9,7 @@ import resultsView from "./views/resultsView.js";
 import paginationView from "./views/paginationView.js";
 import bookmarksView from "./views/bookmarksView.js";
 import addRecipeView from "./views/addRecipeView.js";
+import { MODEL_CLOSE_SECONDS } from "./configuration.js";
 
 // if (module.hot) {
 //   module.hot.accept();
@@ -106,10 +107,28 @@ const controlLoadBookmark = function () {
 };
 
 //Method to add our own recipe
-const controllAddRecipe = function (newRecipe) {
-  console.log(newRecipe);
+const controllAddRecipe = async function (newRecipe) {
+  try {
+    //Render loading spinner
+    addRecipeView.renderSpinner();
 
-  //Upload the recipe data
+    //Upload the recipe data
+    await model.uploadRecipe(newRecipe);
+
+    //Render recipe
+    recipeView.render(model.state.recipe);
+
+    //Render success message
+    addRecipeView.renderMessage();
+
+    //Close upload recipe window
+    setTimeout(function () {
+      addRecipeView.toggleUIDisplay();
+    }, MODEL_CLOSE_SECONDS * 1000);
+  } catch (err) {
+    console.error(err);
+    addRecipeView.renderError(err.message);
+  }
 };
 
 //Add evenet listeners to certain events
