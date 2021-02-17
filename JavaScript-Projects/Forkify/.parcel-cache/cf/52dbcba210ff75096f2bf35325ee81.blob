@@ -595,13 +595,8 @@ const controllAddRecipe = async function (newRecipe) {
     _recipeView.default.render(model.state.recipe); //Render success message
 
 
-    _addRecipeView.default.renderMessage(); //Render bookmark view
+    _addRecipeView.default.renderMessage(); //Close upload recipe window
 
-
-    _bookmarksView.default.render(model.state.bookmarks); //Change ID in URL
-
-
-    window.history.pushState(null, "", `#${model.state.recipe.id}`); //Close upload recipe window
 
     setTimeout(function () {
       _addRecipeView.default.toggleUIDisplay();
@@ -5233,7 +5228,7 @@ exports.loadRecipe = loadRecipe;
 const loadAndSearchResults = async function (query) {
   try {
     state.search.query = query;
-    const data = await (0, _helpers.getJSON)(`${_configuration.API_URL}?search=${query}&key=${_configuration.KEY}`);
+    const data = await (0, _helpers.getJSON)(`${_configuration.API_URL}?search=${query}$key=${_configuration.KEY}`);
     state.search.results = data.data.recipes.map(rec => {
       return {
         id: rec.id,
@@ -5312,7 +5307,7 @@ exports.removeBookmark = removeBookmark;
 const uploadRecipe = async function (newRecipe) {
   try {
     const ingredients = Object.entries(newRecipe).filter(e => e[0].startsWith("ingredient") && e[1] !== "").map(ing => {
-      const ingredientsArray = ing[1].split(",").map(e => el.trim);
+      const ingredientsArray = ing[1].replaceAll(" ", "").split(",");
       if (ingredientsArray.length !== 3) throw new Error("Wrong ingredient format! Please use the correct format!");
       const [quantity, unit, description] = ingredientsArray;
       return {
@@ -5339,12 +5334,6 @@ const uploadRecipe = async function (newRecipe) {
 };
 
 exports.uploadRecipe = uploadRecipe;
-
-const clearLocalHistory = function () {
-  localStorage.clear("bookmarks");
-};
-
-clearLocalHistory();
 
 const init = function () {
   const storage = localStorage.getItem("bookmarks");
@@ -6244,10 +6233,10 @@ class RecipeView extends _view.default {
     </div>
   
       <div class="preview__user-generated ${this._data.key ? "" : "hidden"}">
-          <svg>
-            <use href="${_icons.default}#icon-user"></use>
-          </svg>
-        </div>
+        <svg>
+          <use href="${_icons.default}#icon-user"></use>
+        </svg>
+      </div>
     <button class="btn--round btn--bookmark">
       <svg class="">
         <use href="${_icons.default}#icon-bookmark${this._data.bookmarked ? "-fill" : ""}"></use>
@@ -7049,7 +7038,7 @@ class PreviewView extends _view.default {
                   <p class="preview__publisher">${this._data.publisher}</p>
                   <div class="preview__user-generated ${this._data.key ? "" : "hidden"}">
                     <svg>
-                      <use href="${_icons.default}#icon-user"></use>
+                    <use href="${_icons.default}#icon-user"></use>
                     </svg>
                   </div>
                 </div>
