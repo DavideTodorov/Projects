@@ -158,7 +158,7 @@ export const uploadRecipe = async function (newRecipe) {
 const clearLocalHistory = function () {
   localStorage.clear("bookmarks");
 };
-clearLocalHistory();
+// clearLocalHistory();
 
 const init = function () {
   const storage = localStorage.getItem("bookmarks");
