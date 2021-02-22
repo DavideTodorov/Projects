@@ -5,8 +5,13 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.flappybird.game.FlappyBird;
 
 public class DesktopLauncher {
-	public static void main (String[] arg) {
-		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-		new LwjglApplication(new FlappyBird(), config);
-	}
+    public static void main(String[] arg) {
+        LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
+
+        config.width = FlappyBird.WIDTH;
+        config.height = FlappyBird.HEIGHT;
+        config.title = FlappyBird.TITLE;
+
+        new LwjglApplication(new FlappyBird(), config);
+    }
 }
