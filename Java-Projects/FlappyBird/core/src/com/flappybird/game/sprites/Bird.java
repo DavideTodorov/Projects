@@ -18,9 +18,16 @@ public class Bird {
 
     //Method to update the bird's velocity and position
     public void update(float deltaTime) {
-        velocity.add(0, GRAVITY, 0);
+        if (position.y > 0) {
+            velocity.add(0, GRAVITY, 0);
+        }
+
         velocity.scl(deltaTime);
         position.add(0, velocity.y, 0);
+
+        if (position.y < 0) {
+            position.y = 0;
+        }
 
         velocity.scl(1 / deltaTime);
     }
@@ -32,5 +39,9 @@ public class Bird {
 
     public Texture getTexture() {
         return bird;
+    }
+
+    public void jump() {
+        velocity.y = 250;
     }
 }
