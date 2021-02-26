@@ -10,6 +10,8 @@ public class Tube {
     private static final int TUBE_GAP = 100;
     private static final int LOWEST_OPENING = 120;
 
+    public static final int TUBE_WIDTH = 52;
+
 
     private Texture topTube;
     private Texture bottomTube;
@@ -46,5 +48,10 @@ public class Tube {
         return posBottomTube;
     }
 
-
+    public void repositionTube(float x) {
+        posTopTube.set(x,
+                random.nextInt(FLUCTUATION) + TUBE_GAP + LOWEST_OPENING);
+        posBottomTube.set(x,
+                posTopTube.y - TUBE_GAP - bottomTube.getHeight());
+    }
 }
