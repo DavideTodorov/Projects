@@ -18,20 +18,20 @@ public class GameStateManager {
 
     //Method to remove the state on the top
     public void pop() {
-        states.pop();
+        this.states.pop().dispose();
     }
 
     //Method to first remove the top state and then add a new one
     public void set(State state) {
-        this.pop();
-        this.push(state);
+        this.states.pop().dispose();
+        this.states.push(state);
     }
 
     public void update(float deltaTime) {
-        states.peek().update(deltaTime);
+        this.states.peek().update(deltaTime);
     }
 
     public void render(SpriteBatch spriteBatch) {
-        states.peek().render(spriteBatch);
+        this.states.peek().render(spriteBatch);
     }
 }

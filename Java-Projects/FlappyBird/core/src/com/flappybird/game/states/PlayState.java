@@ -51,7 +51,9 @@ public class PlayState extends State {
         bird.update(deltaTime);
         camera.position.x = bird.getPosition().x + 80;
 
-        for (Tube tube : tubes) {
+        for (int i = 0; i < TUBE_COUNT; i++) {
+            Tube tube = tubes.get(i);
+            
             if (camera.position.x - (camera.viewportWidth / 2) >
                     tube.getPosTopTube().x + tube.getTopTube().getWidth()) {
 
@@ -59,7 +61,7 @@ public class PlayState extends State {
                         ((Tube.TUBE_WIDTH + TUBE_SPACING) * TUBE_COUNT));
             }
 
-            if (tube.collides(bird.getBounds())){
+            if (tube.collides(bird.getBounds())) {
                 gameStateManager.set(new PlayState(gameStateManager));
             }
         }
@@ -94,6 +96,12 @@ public class PlayState extends State {
 
     @Override
     public void dispose() {
+        background.dispose();
+        bird.dispose();
+        for (Tube tube : tubes) {
+            tube.dispose();
+        }
 
+        System.out.println("Play State disposed!");
     }
 }
