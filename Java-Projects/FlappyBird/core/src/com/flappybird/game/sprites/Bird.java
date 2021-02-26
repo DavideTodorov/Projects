@@ -1,7 +1,9 @@
 package com.flappybird.game.sprites;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
+import org.w3c.dom.css.Rect;
 
 public class Bird {
     private static final int GRAVITY = -15;
@@ -10,12 +12,14 @@ public class Bird {
     private Vector3 position;
     private Vector3 velocity;
     private Texture bird;
+    private Rectangle birdBounds;
 
     //Constructor
     public Bird(int x, int y) {
         this.position = new Vector3(x, y, 0);
         this.velocity = new Vector3(0, 0, 0);
         this.bird = new Texture("bird.png");
+        this.birdBounds = new Rectangle(x, y, bird.getWidth(), bird.getHeight());
     }
 
     //Method to update the bird's velocity and position
@@ -32,6 +36,7 @@ public class Bird {
         }
 
         velocity.scl(1 / deltaTime);
+        birdBounds.setPosition(position.x, position.y);
     }
 
     //Getters
@@ -43,6 +48,11 @@ public class Bird {
         return bird;
     }
 
+    public Rectangle getBounds() {
+        return birdBounds;
+    }
+
+    //Method to make the bird jump
     public void jump() {
         velocity.y = 250;
     }

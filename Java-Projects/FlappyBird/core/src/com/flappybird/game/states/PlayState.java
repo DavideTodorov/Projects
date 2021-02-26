@@ -58,6 +58,10 @@ public class PlayState extends State {
                 tube.repositionTube(tube.getPosTopTube().x +
                         ((Tube.TUBE_WIDTH + TUBE_SPACING) * TUBE_COUNT));
             }
+
+            if (tube.collides(bird.getBounds())){
+                gameStateManager.set(new PlayState(gameStateManager));
+            }
         }
 
         camera.update();
