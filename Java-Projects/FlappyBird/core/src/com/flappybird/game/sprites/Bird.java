@@ -1,8 +1,10 @@
 package com.flappybird.game.sprites;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
+import org.w3c.dom.Text;
 import org.w3c.dom.css.Rect;
 
 public class Bird {
@@ -11,19 +13,25 @@ public class Bird {
 
     private Vector3 position;
     private Vector3 velocity;
-    private Texture bird;
     private Rectangle birdBounds;
+    private Texture texture;
+    private Animation birdAnimation;
 
     //Constructor
     public Bird(int x, int y) {
         this.position = new Vector3(x, y, 0);
         this.velocity = new Vector3(0, 0, 0);
-        this.bird = new Texture("bird.png");
-        this.birdBounds = new Rectangle(x, y, bird.getWidth(), bird.getHeight());
+
+        this.texture = new Texture("birdanimation.png");
+        this.birdAnimation = new Animation(new TextureRegion(texture), 3, 0.5f);
+
+        this.birdBounds = new Rectangle(x, y, texture.getWidth() / 3, texture.getHeight());
     }
 
     //Method to update the bird's velocity and position
     public void update(float deltaTime) {
+        birdAnimation.update(deltaTime);
+
         if (position.y > 0) {
             velocity.add(0, GRAVITY, 0);
         }
@@ -44,8 +52,8 @@ public class Bird {
         return position;
     }
 
-    public Texture getTexture() {
-        return bird;
+    public TextureRegion getTexture() {
+        return birdAnimation.getFrame();
     }
 
     public Rectangle getBounds() {
@@ -57,7 +65,7 @@ public class Bird {
         velocity.y = 250;
     }
 
-    public void dispose(){
-        bird.dispose();
+    public void dispose() {
+        texture.dispose();
     }
 }
