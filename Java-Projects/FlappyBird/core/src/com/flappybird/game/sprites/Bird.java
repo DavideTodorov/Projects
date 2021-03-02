@@ -1,11 +1,11 @@
 package com.flappybird.game.sprites;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
-import org.w3c.dom.Text;
-import org.w3c.dom.css.Rect;
 
 public class Bird {
     private static final int GRAVITY = -15;
@@ -16,6 +16,7 @@ public class Bird {
     private Rectangle birdBounds;
     private Texture texture;
     private Animation birdAnimation;
+    private Sound flapSound;
 
     //Constructor
     public Bird(int x, int y) {
@@ -26,6 +27,7 @@ public class Bird {
         this.birdAnimation = new Animation(new TextureRegion(texture), 3, 0.5f);
 
         this.birdBounds = new Rectangle(x, y, texture.getWidth() / 3, texture.getHeight());
+        this.flapSound = Gdx.audio.newSound(Gdx.files.internal("sfx_wing.ogg"));
     }
 
     //Method to update the bird's velocity and position
@@ -63,9 +65,11 @@ public class Bird {
     //Method to make the bird jump
     public void jump() {
         velocity.y = 250;
+        flapSound.play(0.2f);
     }
 
     public void dispose() {
         texture.dispose();
+        flapSound.dispose();
     }
 }
