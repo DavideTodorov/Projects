@@ -19,38 +19,65 @@ public class GameScreen implements Screen {
 
     //Graphics
     private SpriteBatch spriteBatch;
-    private Texture background;
+    private Texture[] backgrounds;
 
     //Timing
-    private int backgroundOffset;
+    private float[] backgroundOffsets;
+    private float backgroundMaxScrollingSpeed;
 
     //Constructor
     public GameScreen() {
         camera = new OrthographicCamera();
         viewport = new StretchViewport(WORLD_WIDTH, WORLD_HEIGHT, camera);
+
+        setBackGrounds();
+        backgroundMaxScrollingSpeed = (float) (WORLD_HEIGHT / 4);
+        backgroundOffsets = new float[4];
+
         spriteBatch = new SpriteBatch();
-        background = new Texture("darkPurpleStarscape.png");
-        backgroundOffset = 0;
     }
 
-    //Render objects to the UI
+    //Initialise background
+    private void setBackGrounds() {
+        backgrounds = new Texture[4];
+        backgrounds[0] = new Texture("Starscape00.png");
+        backgrounds[1] = new Texture("Starscape01.png");
+        backgrounds[2] = new Texture("Starscape02.png");
+        backgrounds[3] = new Texture("Starscape03.png");
+    }
+
+    //Render the UI
     @Override
     public void render(float deltaTime) {
         spriteBatch.begin();
 
         //Scrolling background
-        backgroundOffset++;
-        if (backgroundOffset == WORLD_WIDTH) {
-            backgroundOffset = 0;
-        }
-
-
-        spriteBatch.draw(background, 0, -backgroundOffset,
-                WORLD_WIDTH, WORLD_HEIGHT);
-        spriteBatch.draw(background, 0, -backgroundOffset + WORLD_HEIGHT,
-                WORLD_WIDTH, WORLD_HEIGHT);
+        renderBackground(deltaTime);
 
         spriteBatch.end();
+    }
+
+    //Method to render the background
+    private void renderBackground(float deltaTime) {
+        backgroundOffsets[0] += deltaTime * backgroundMaxScrollingSpeed / 8;
+        backgroundOffsets[1] += deltaTime * backgroundMaxScrollingSpeed / 4;
+        backgroundOffsets[2] += deltaTime * backgroundMaxScrollingSpeed / 2;
+        backgroundOffsets[3] += deltaTime * backgroundMaxScrollingSpeed;
+
+        for (int i = 0; i < backgroundOffsets.length; i++) {
+            if (backgroundOffsets[i] > WORLD_HEIGHT) {
+                backgroundOffsets[i] = 0;
+            }
+            spriteBatch.draw(backgrounds[i],
+                    0,
+                    -backgroundOffsets[i],
+                    WORLD_WIDTH, WORLD_HEIGHT);
+
+            spriteBatch.draw(backgrounds[i],
+                    0,
+                    -backgroundOffsets[i] + WORLD_HEIGHT,
+                    WORLD_WIDTH, WORLD_HEIGHT);
+        }
     }
 
     //Method to resize our game UI
