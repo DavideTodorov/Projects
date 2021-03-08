@@ -3,13 +3,12 @@ package com.game.spaceshooter;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import org.w3c.dom.Text;
+import com.game.spaceshooter.ships.Ship;
 
 public class GameScreen implements Screen {
     //Constants
@@ -42,12 +41,16 @@ public class GameScreen implements Screen {
     private float backgroundMaxScrollingSpeed;
 
     //Game objects
+    private Ship playerShip;
+    private Ship enemyShip;
 
     //Constructor
     public GameScreen() {
         camera = new OrthographicCamera();
         viewport = new StretchViewport(WORLD_WIDTH, WORLD_HEIGHT, camera);
         backgroundHeight = WORLD_HEIGHT * 2;
+        backgroundMaxScrollingSpeed = (float) (WORLD_HEIGHT / 4);
+        backgroundOffsets = new float[4];
 
         //Set up TextureAtlas
         textureAtlas = new TextureAtlas("images.atlas");
@@ -55,8 +58,11 @@ public class GameScreen implements Screen {
         //Set up background
         setBackGrounds();
 
-        backgroundMaxScrollingSpeed = (float) (WORLD_HEIGHT / 4);
-        backgroundOffsets = new float[4];
+        //Set up Texture regions
+        setTextureRegions();
+
+        //Set up game objects
+        setShips();
 
         spriteBatch = new SpriteBatch();
     }
@@ -70,6 +76,31 @@ public class GameScreen implements Screen {
         backgrounds[3] = textureAtlas.findRegion("Starscape03");
     }
 
+    //Initialise ships
+    private void setShips() {
+        playerShip = new Ship(2, 3, WORLD_WIDTH / 2, WORLD_HEIGHT / 4,
+                10, 10,
+                playerShipTextureRegion, playerShieldTextureRegion);
+
+        enemyShip = new Ship(2, 3, WORLD_WIDTH / 2, WORLD_HEIGHT * 3 / 4,
+                10, 10,
+                enemyShipTextureRegion, enemyShieldTextureRegion);
+    }
+
+    //Initialise Texture regions
+    private void setTextureRegions() {
+        playerShipTextureRegion = textureAtlas.findRegion("playerShip");
+        playerShieldTextureRegion = textureAtlas.findRegion("shield1");
+        playerLaserTextureRegion = textureAtlas.findRegion("laserPlayer");
+
+        enemyShipTextureRegion = textureAtlas.findRegion("enemyShip");
+        enemyShipTextureRegion.flip(false,true);
+        enemyShieldTextureRegion = textureAtlas.findRegion("shield2");
+        enemyShieldTextureRegion.flip(false,true);
+        enemyLaserTextureRegion = textureAtlas.findRegion("laserEnemy");
+    }
+
+
     //Render the UI
     @Override
     public void render(float deltaTime) {
@@ -77,6 +108,16 @@ public class GameScreen implements Screen {
 
         //Scrolling background
         renderBackground(deltaTime);
+
+        //Display enemy ship
+        enemyShip.draw(spriteBatch);
+
+        //Display player ship
+        playerShip.draw(spriteBatch);
+
+        //Display lasers
+
+        //Display explosions
 
         spriteBatch.end();
     }
