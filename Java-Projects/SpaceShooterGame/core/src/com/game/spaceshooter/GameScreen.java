@@ -5,8 +5,11 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import org.w3c.dom.Text;
 
 public class GameScreen implements Screen {
     //Constants
@@ -19,18 +22,39 @@ public class GameScreen implements Screen {
 
     //Graphics
     private SpriteBatch spriteBatch;
-    private Texture[] backgrounds;
+    private TextureAtlas textureAtlas;
+
+    private TextureRegion[] backgrounds;
+    private float backgroundHeight;
+
+    //Player texture regions
+    private TextureRegion playerShipTextureRegion;
+    private TextureRegion playerShieldTextureRegion;
+    private TextureRegion playerLaserTextureRegion;
+
+    //Enemy texture regions
+    private TextureRegion enemyShipTextureRegion;
+    private TextureRegion enemyShieldTextureRegion;
+    private TextureRegion enemyLaserTextureRegion;
 
     //Timing
     private float[] backgroundOffsets;
     private float backgroundMaxScrollingSpeed;
 
+    //Game objects
+
     //Constructor
     public GameScreen() {
         camera = new OrthographicCamera();
         viewport = new StretchViewport(WORLD_WIDTH, WORLD_HEIGHT, camera);
+        backgroundHeight = WORLD_HEIGHT * 2;
 
+        //Set up TextureAtlas
+        textureAtlas = new TextureAtlas("images.atlas");
+
+        //Set up background
         setBackGrounds();
+
         backgroundMaxScrollingSpeed = (float) (WORLD_HEIGHT / 4);
         backgroundOffsets = new float[4];
 
@@ -39,11 +63,11 @@ public class GameScreen implements Screen {
 
     //Initialise background
     private void setBackGrounds() {
-        backgrounds = new Texture[4];
-        backgrounds[0] = new Texture("Starscape00.png");
-        backgrounds[1] = new Texture("Starscape01.png");
-        backgrounds[2] = new Texture("Starscape02.png");
-        backgrounds[3] = new Texture("Starscape03.png");
+        backgrounds = new TextureRegion[4];
+        backgrounds[0] = textureAtlas.findRegion("Starscape00");
+        backgrounds[1] = textureAtlas.findRegion("Starscape01");
+        backgrounds[2] = textureAtlas.findRegion("Starscape02");
+        backgrounds[3] = textureAtlas.findRegion("Starscape03");
     }
 
     //Render the UI
@@ -71,12 +95,8 @@ public class GameScreen implements Screen {
             spriteBatch.draw(backgrounds[i],
                     0,
                     -backgroundOffsets[i],
-                    WORLD_WIDTH, WORLD_HEIGHT);
-
-            spriteBatch.draw(backgrounds[i],
-                    0,
-                    -backgroundOffsets[i] + WORLD_HEIGHT,
-                    WORLD_WIDTH, WORLD_HEIGHT);
+                    WORLD_WIDTH,
+                    backgroundHeight);
         }
     }
 
