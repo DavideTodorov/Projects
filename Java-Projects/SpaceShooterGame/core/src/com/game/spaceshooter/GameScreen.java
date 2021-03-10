@@ -8,7 +8,10 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.game.spaceshooter.lasers.Laser;
 import com.game.spaceshooter.ships.Ship;
+
+import java.util.LinkedList;
 
 public class GameScreen implements Screen {
     //Constants
@@ -42,7 +45,10 @@ public class GameScreen implements Screen {
 
     //Game objects
     private Ship playerShip;
+    private LinkedList<Laser> playerLasers;
+
     private Ship enemyShip;
+    private LinkedList<Laser> enemyLasers;
 
     //Constructor
     public GameScreen() {
@@ -51,6 +57,8 @@ public class GameScreen implements Screen {
         backgroundHeight = WORLD_HEIGHT * 2;
         backgroundMaxScrollingSpeed = (float) (WORLD_HEIGHT / 4);
         backgroundOffsets = new float[4];
+        playerLasers = new LinkedList<>();
+        enemyLasers = new LinkedList<>();
 
         //Set up TextureAtlas
         textureAtlas = new TextureAtlas("images.atlas");
@@ -94,9 +102,9 @@ public class GameScreen implements Screen {
         playerLaserTextureRegion = textureAtlas.findRegion("laserPlayer");
 
         enemyShipTextureRegion = textureAtlas.findRegion("enemyShip");
-        enemyShipTextureRegion.flip(false,true);
+        enemyShipTextureRegion.flip(false, true);
         enemyShieldTextureRegion = textureAtlas.findRegion("shield2");
-        enemyShieldTextureRegion.flip(false,true);
+        enemyShieldTextureRegion.flip(false, true);
         enemyLaserTextureRegion = textureAtlas.findRegion("laserEnemy");
     }
 
