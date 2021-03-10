@@ -60,13 +60,5 @@ public abstract class Ship {
 
     public abstract Laser[] fireLaser();
 
-    public void draw(SpriteBatch spriteBatch) {
-        spriteBatch.draw(shipTextureRegion, xPosition, yPosition,
-                width, height);
-
-        if (shield > 0) {
-            spriteBatch.draw(shieldTextureRegion, xPosition, yPosition,
-                    width, height);
-        }
-    }
+    public abstract void draw(SpriteBatch spriteBatch);
 }

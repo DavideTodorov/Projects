@@ -1,5 +1,6 @@
 package com.game.spaceshooter.ships;
 
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.game.spaceshooter.lasers.Laser;
 
@@ -36,5 +37,16 @@ public class EnemyShip extends Ship {
         lastShotTimer = 0;
 
         return lasers;
+    }
+
+    @Override
+    public void draw(SpriteBatch spriteBatch) {
+        spriteBatch.draw(shipTextureRegion, xPosition, yPosition,
+                width, height);
+
+        if (shield > 0) {
+            spriteBatch.draw(shieldTextureRegion, xPosition, yPosition - 3,
+                    width, height);
+        }
     }
 }

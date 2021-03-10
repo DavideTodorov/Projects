@@ -31,4 +31,33 @@ public class Laser {
         spriteBatch.draw(textureRegion, xPosition - width / 2, yPosition,
                 width, height);
     }
+
+
+    public float getMovementSpeed() {
+        return movementSpeed;
+    }
+
+    public void setMovementSpeed(float movementSpeed) {
+        this.movementSpeed = movementSpeed;
+    }
+
+    public float getYPosition() {
+        return yPosition;
+    }
+
+    public void setYPosition(float yPosition) {
+        this.yPosition = yPosition;
+    }
+
+    public float getXPosition() {
+        return xPosition;
+    }
+
+    public void setXPosition(float xPosition) {
+        this.xPosition = xPosition;
+    }
+
+    public float getHeight() {
+        return height;
+    }
 }
