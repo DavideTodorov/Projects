@@ -23,6 +23,7 @@ public abstract class Ship {
     protected TextureRegion shipTextureRegion;
     protected TextureRegion shieldTextureRegion;
     protected TextureRegion laserTextureRegion;
+    protected Rectangle shipRectangle;
 
     //Laser
     protected float laserWidth;
@@ -52,9 +53,12 @@ public abstract class Ship {
         this.laserMovementSpeed = laserMovementSpeed;
         this.timeBetweenShots = timeBetweenShots;
         this.lastShotTimer = 0;
+        this.shipRectangle = new Rectangle(xPosition, yPosition,
+                width, height);
     }
 
     public void update(float deltaTime) {
+        shipRectangle.set(xPosition, yPosition, width, height);
         lastShotTimer += deltaTime;
     }
 
@@ -65,9 +69,6 @@ public abstract class Ship {
     public abstract Laser[] fireLaser();
 
     public boolean intersects(Rectangle laserRectangle) {
-        Rectangle shipRectangle = new Rectangle(xPosition, yPosition,
-                width, height);
-
         return shipRectangle.overlaps(laserRectangle);
     }
 
