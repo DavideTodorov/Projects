@@ -90,13 +90,13 @@ public class GameScreen implements Screen {
 
     //Initialise ships
     private void setShips() {
-        playerShip = new PlayerShip(2, 3, WORLD_WIDTH / 2, WORLD_HEIGHT / 4,
+        playerShip = new PlayerShip(2, 6, WORLD_WIDTH / 2, WORLD_HEIGHT / 4,
                 10, 10,
                 0.4f, 4, 45, 0.5f,
                 playerShipTextureRegion, playerShieldTextureRegion,
                 playerLaserTextureRegion);
 
-        enemyShip = new EnemyShip(2, 3, WORLD_WIDTH / 2, WORLD_HEIGHT * 3 / 4,
+        enemyShip = new EnemyShip(2, 7, WORLD_WIDTH / 2, WORLD_HEIGHT * 3 / 4,
                 10, 10,
                 0.3f, 5, 50, 0.8f,
                 enemyShipTextureRegion, enemyShieldTextureRegion,
@@ -154,6 +154,7 @@ public class GameScreen implements Screen {
             Laser laser = iterator.next();
             if (enemyShip.intersects(laser.getBoundingBox())) {
                 iterator.remove();
+                enemyShip.hit(laser);
                 //TODO:
             }
         }
@@ -165,6 +166,7 @@ public class GameScreen implements Screen {
             Laser laser = iterator.next();
             if (playerShip.intersects(laser.getBoundingBox())) {
                 iterator.remove();
+                playerShip.hit(laser);
                 //TODO:
             }
         }

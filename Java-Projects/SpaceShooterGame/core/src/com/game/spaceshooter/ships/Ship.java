@@ -71,5 +71,11 @@ public abstract class Ship {
         return shipRectangle.overlaps(laserRectangle);
     }
 
+    public void hit(Laser laser) {
+        if (shield > 0) {
+            shield--;
+        }
+    }
+
     public abstract void draw(SpriteBatch spriteBatch);
 }
