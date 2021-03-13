@@ -2,6 +2,9 @@ package com.game.spaceshooter.lasers;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Rectangle;
+
+import java.awt.*;
 
 public class Laser {
     //position and dimensions
@@ -59,5 +62,10 @@ public class Laser {
 
     public float getHeight() {
         return height;
+    }
+
+    public Rectangle getBoundingBox() {
+        return new Rectangle(xPosition, yPosition,
+                width, height);
     }
 }

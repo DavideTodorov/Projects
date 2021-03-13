@@ -3,6 +3,10 @@ package com.game.spaceshooter.ships;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.game.spaceshooter.lasers.Laser;
+import com.badlogic.gdx.math.Rectangle;
+
+
+import java.awt.*;
 
 public abstract class Ship {
     //Ship's characteristics
@@ -28,12 +32,12 @@ public abstract class Ship {
     protected float lastShotTimer;
 
     protected Ship(float movementSpeed, int shield,
-                float xCentre, float yCentre,
-                float width, float height,
-                float laserWidth, float laserHeight, float laserMovementSpeed,
-                float timeBetweenShots,
-                TextureRegion shipTextureRegion, TextureRegion shieldTextureRegion,
-                TextureRegion laserTextureRegion) {
+                   float xCentre, float yCentre,
+                   float width, float height,
+                   float laserWidth, float laserHeight, float laserMovementSpeed,
+                   float timeBetweenShots,
+                   TextureRegion shipTextureRegion, TextureRegion shieldTextureRegion,
+                   TextureRegion laserTextureRegion) {
         this.movementSpeed = movementSpeed;
         this.shield = shield;
         this.xPosition = xCentre - width / 2;
@@ -59,6 +63,13 @@ public abstract class Ship {
     }
 
     public abstract Laser[] fireLaser();
+
+    public boolean intersects(Rectangle laserRectangle) {
+        Rectangle shipRectangle = new Rectangle(xPosition, yPosition,
+                width, height);
+
+        return shipRectangle.overlaps(laserRectangle);
+    }
 
     public abstract void draw(SpriteBatch spriteBatch);
 }

@@ -135,7 +135,43 @@ public class GameScreen implements Screen {
         playerShip.draw(spriteBatch);
 
         //Display lasers
-        //Create new lasers
+        createLasers(deltaTime);
+
+        //Detect collisions between lasers and ships
+        detectCollisions();
+
+        //Display explosions
+
+        spriteBatch.end();
+    }
+
+    //Method to detect collisions between lasers and ships
+    private void detectCollisions() {
+        //Check for intersections between lasers and the enemy ship
+        ListIterator<Laser> iterator = playerLasers.listIterator();
+
+        while (iterator.hasNext()) {
+            Laser laser = iterator.next();
+            if (enemyShip.intersects(laser.getBoundingBox())) {
+                iterator.remove();
+                //TODO:
+            }
+        }
+
+        //Check for intersections between lasers and the player ship
+        iterator = enemyLasers.listIterator();
+
+        while (iterator.hasNext()) {
+            Laser laser = iterator.next();
+            if (playerShip.intersects(laser.getBoundingBox())) {
+                iterator.remove();
+                //TODO:
+            }
+        }
+    }
+
+    //Method to create new lasers
+    private void createLasers(float deltaTime) {
         //Player lasers
         if (playerShip.canFireLaser()) {
             Laser[] lasers = playerShip.fireLaser();
@@ -172,10 +208,6 @@ public class GameScreen implements Screen {
                 iterator.remove();
             }
         }
-
-        //Display explosions
-
-        spriteBatch.end();
     }
 
     //Method to render the background
