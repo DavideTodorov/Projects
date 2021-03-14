@@ -25,12 +25,14 @@ public class PlayerShip extends Ship {
         Laser[] lasers = new Laser[2];
 
         //Left laser
-        lasers[0] = new Laser(xPosition + width * 0.07f, yPosition + height * 0.45f,
+        lasers[0] = new Laser(shipRectangle.x + shipRectangle.width * 0.07f,
+                shipRectangle.y + shipRectangle.height * 0.45f,
                 laserWidth, laserHeight,
                 laserMovementSpeed, laserTextureRegion);
 
         //Right laser
-        lasers[1] = new Laser(xPosition + width * 0.93f, yPosition + height * 0.45f,
+        lasers[1] = new Laser(shipRectangle.x + shipRectangle.width * 0.93f,
+                shipRectangle.y + shipRectangle.height * 0.45f,
                 laserWidth, laserHeight,
                 laserMovementSpeed, laserTextureRegion);
 
@@ -41,12 +43,12 @@ public class PlayerShip extends Ship {
 
     @Override
     public void draw(SpriteBatch spriteBatch) {
-        spriteBatch.draw(shipTextureRegion, xPosition, yPosition,
-                width, height);
+        spriteBatch.draw(shipTextureRegion, shipRectangle.x, shipRectangle.y,
+                shipRectangle.width, shipRectangle.height);
 
         if (shield > 0) {
-            spriteBatch.draw(shieldTextureRegion, xPosition, yPosition + 2,
-                    width, height);
+            spriteBatch.draw(shieldTextureRegion, shipRectangle.x, shipRectangle.y + 2,
+                    shipRectangle.width, shipRectangle.height);
         }
     }
 }

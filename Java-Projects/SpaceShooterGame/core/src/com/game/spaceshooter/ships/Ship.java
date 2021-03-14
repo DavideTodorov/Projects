@@ -14,16 +14,12 @@ public abstract class Ship {
     protected int shield;
 
     //position and dimensions
-    protected float xPosition;    //Lower-left corner
-    protected float yPosition;    //Lower-left corner
-    protected float width;
-    protected float height;
+    protected Rectangle shipRectangle;
 
     //graphics
     protected TextureRegion shipTextureRegion;
     protected TextureRegion shieldTextureRegion;
     protected TextureRegion laserTextureRegion;
-    protected Rectangle shipRectangle;
 
     //Laser
     protected float laserWidth;
@@ -41,10 +37,8 @@ public abstract class Ship {
                    TextureRegion laserTextureRegion) {
         this.movementSpeed = movementSpeed;
         this.shield = shield;
-        this.xPosition = xCentre - width / 2;
-        this.yPosition = yCentre - height / 2;
-        this.width = width;
-        this.height = height;
+        this.shipRectangle = new Rectangle(xCentre - width / 2, yCentre - height / 2,
+                width, height);
         this.shipTextureRegion = shipTextureRegion;
         this.shieldTextureRegion = shieldTextureRegion;
         this.laserTextureRegion = laserTextureRegion;
@@ -53,12 +47,9 @@ public abstract class Ship {
         this.laserMovementSpeed = laserMovementSpeed;
         this.timeBetweenShots = timeBetweenShots;
         this.lastShotTimer = 0;
-        this.shipRectangle = new Rectangle(xPosition, yPosition,
-                width, height);
     }
 
     public void update(float deltaTime) {
-        shipRectangle.set(xPosition, yPosition, width, height);
         lastShotTimer += deltaTime;
     }
 
