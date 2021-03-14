@@ -8,10 +8,8 @@ import java.awt.*;
 
 public class Laser {
     //position and dimensions
-    private float xPosition;    //Bottom centre
-    private float yPosition;    //Bottom centre
-    private float width;
-    private float height;
+
+    private Rectangle laserRectangle;
 
     //Physical characteristics
     private float movementSpeed;
@@ -22,17 +20,16 @@ public class Laser {
     public Laser(float xPosition, float yPosition,
                  float width, float height,
                  float movementSpeed, TextureRegion textureRegion) {
-        this.xPosition = xPosition;
-        this.yPosition = yPosition;
-        this.width = width;
-        this.height = height;
+        this.laserRectangle = new Rectangle(xPosition, yPosition,
+                width, height);
+
         this.movementSpeed = movementSpeed;
         this.textureRegion = textureRegion;
     }
 
     public void draw(SpriteBatch spriteBatch) {
-        spriteBatch.draw(textureRegion, xPosition - width / 2, yPosition,
-                width, height);
+        spriteBatch.draw(textureRegion, laserRectangle.x - laserRectangle.width / 2, laserRectangle.y,
+                laserRectangle.width, laserRectangle.height);
     }
 
 
@@ -45,27 +42,26 @@ public class Laser {
     }
 
     public float getYPosition() {
-        return yPosition;
+        return laserRectangle.y;
     }
 
     public void setYPosition(float yPosition) {
-        this.yPosition = yPosition;
+        this.laserRectangle.y = yPosition;
     }
 
     public float getXPosition() {
-        return xPosition;
+        return laserRectangle.x;
     }
 
     public void setXPosition(float xPosition) {
-        this.xPosition = xPosition;
+        this.laserRectangle.x = xPosition;
     }
 
     public float getHeight() {
-        return height;
+        return laserRectangle.height;
     }
 
     public Rectangle getBoundingBox() {
-        return new Rectangle(xPosition, yPosition,
-                width, height);
+        return laserRectangle;
     }
 }
