@@ -63,10 +63,22 @@ public abstract class Ship {
         return shipRectangle.overlaps(laserRectangle);
     }
 
+    public Rectangle getShipRectangle() {
+        return shipRectangle;
+    }
+
+    public float getMovementSpeed() {
+        return movementSpeed;
+    }
+
     public void hit(Laser laser) {
         if (shield > 0) {
             shield--;
         }
+    }
+
+    public void moveTo(float xChange, float yChange) {
+        shipRectangle.setPosition(shipRectangle.x + xChange, shipRectangle.y + yChange);
     }
 
     public abstract void draw(SpriteBatch spriteBatch);

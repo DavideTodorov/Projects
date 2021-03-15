@@ -1,5 +1,7 @@
 package com.game.spaceshooter;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -90,13 +92,13 @@ public class GameScreen implements Screen {
 
     //Initialise ships
     private void setShips() {
-        playerShip = new PlayerShip(2, 6, WORLD_WIDTH / 2, WORLD_HEIGHT / 4,
+        playerShip = new PlayerShip(40, 6, WORLD_WIDTH / 2, WORLD_HEIGHT / 4,
                 10, 10,
                 0.4f, 4, 45, 0.5f,
                 playerShipTextureRegion, playerShieldTextureRegion,
                 playerLaserTextureRegion);
 
-        enemyShip = new EnemyShip(2, 7, WORLD_WIDTH / 2, WORLD_HEIGHT * 3 / 4,
+        enemyShip = new EnemyShip(40, 7, WORLD_WIDTH / 2, WORLD_HEIGHT * 3 / 4,
                 10, 10,
                 0.3f, 5, 50, 0.8f,
                 enemyShipTextureRegion, enemyShieldTextureRegion,
@@ -122,6 +124,9 @@ public class GameScreen implements Screen {
     public void render(float deltaTime) {
         spriteBatch.begin();
 
+        //Detect mouse and keyboard events
+        detectInput(deltaTime);
+
         playerShip.update(deltaTime);
         enemyShip.update(deltaTime);
 
@@ -143,6 +148,48 @@ public class GameScreen implements Screen {
         //Display explosions
 
         spriteBatch.end();
+    }
+
+    //Method to detect mouse and keyboard events
+    private void detectInput(float deltaTime) {
+        //Keyboard input
+        //Move positions limits
+        float leftLimit = -playerShip.getShipRectangle().x;
+        float downLimit = -playerShip.getShipRectangle().y;
+        float rightLimit = WORLD_WIDTH - playerShip.getShipRectangle().x - playerShip.getShipRectangle().width;
+        float upLimit = WORLD_HEIGHT / 2 - playerShip.getShipRectangle().y - playerShip.getShipRectangle().height;
+
+        //Right key press
+        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) &&
+                rightLimit > 0) {
+            playerShip.moveTo(
+                    Math.min(playerShip.getMovementSpeed() * deltaTime, rightLimit),
+                    0f);
+        }
+
+        //Up key press
+        if (Gdx.input.isKeyPressed(Input.Keys.UP) &&
+                upLimit > 0) {
+            playerShip.moveTo(
+                    0f,
+                    Math.min(playerShip.getMovementSpeed() * deltaTime, upLimit));
+        }
+
+        //Left key press
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT) &&
+                leftLimit < 0) {
+            playerShip.moveTo(
+                    Math.max(-playerShip.getMovementSpeed() * deltaTime, leftLimit),
+                    0f);
+        }
+
+        //Down key press
+        if (Gdx.input.isKeyPressed(Input.Keys.DOWN) &&
+                downLimit < 0) {
+            playerShip.moveTo(
+                    0f,
+                    Math.max(-playerShip.getMovementSpeed() * deltaTime, downLimit));
+        }
     }
 
     //Method to detect collisions between lasers and ships
