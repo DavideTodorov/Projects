@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.game.spaceshooter.lasers.Laser;
@@ -23,6 +24,7 @@ public class GameScreen implements Screen {
     //Constants
     private final int WORLD_WIDTH = 72;
     private final int WORLD_HEIGHT = 128;
+    private final float MOVEMENT_THRESHOLD = 0.5f;
 
     //Screen
     private Camera camera;
@@ -152,13 +154,13 @@ public class GameScreen implements Screen {
 
     //Method to detect mouse and keyboard events
     private void detectInput(float deltaTime) {
-        //Keyboard input
         //Move positions limits
         float leftLimit = -playerShip.getShipRectangle().x;
         float downLimit = -playerShip.getShipRectangle().y;
         float rightLimit = WORLD_WIDTH - playerShip.getShipRectangle().x - playerShip.getShipRectangle().width;
         float upLimit = WORLD_HEIGHT / 2 - playerShip.getShipRectangle().y - playerShip.getShipRectangle().height;
 
+        //Keyboard input
         //Right key press
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) &&
                 rightLimit > 0) {
@@ -189,6 +191,45 @@ public class GameScreen implements Screen {
             playerShip.moveTo(
                     0f,
                     Math.max(-playerShip.getMovementSpeed() * deltaTime, downLimit));
+        }
+
+        //Touch input and mouse input
+        if (Gdx.input.isTouched()) {
+            //Get screen position
+            float xTouchPixels = Gdx.input.getX();
+            float yTouchPixels = Gdx.input.getY();
+
+            //Convert to world units
+            Vector2 touchCoords = new Vector2(xTouchPixels, yTouchPixels);
+            touchCoords = viewport.unproject(touchCoords);
+
+            //Calculate X and Y difference
+            Vector2 playerShipCentre =
+                    new Vector2(playerShip.getShipRectangle().x + playerShip.getShipRectangle().width / 2,
+                            playerShip.getShipRectangle().y + playerShip.getShipRectangle().height / 2);
+
+            float touchDistance = touchCoords.dst(playerShipCentre);
+            if (touchDistance > MOVEMENT_THRESHOLD) {
+                float xTouchDifference = touchCoords.x - playerShipCentre.x;
+                float yTouchDifference = touchCoords.y - playerShipCentre.y;
+
+                float xMove = xTouchDifference / touchDistance * playerShip.getMovementSpeed() * deltaTime;
+                float yMove = yTouchDifference / touchDistance * playerShip.getMovementSpeed() * deltaTime;
+
+                if (xMove > 0) {
+                    xMove = Math.min(xMove, rightLimit);
+                } else {
+                    xMove = Math.max(xMove, leftLimit);
+                }
+
+                if (yMove > 0) {
+                    yMove = Math.min(yMove, upLimit);
+                } else {
+                    yMove = Math.max(yMove, downLimit);
+                }
+
+                playerShip.moveTo(xMove, yMove);
+            }
         }
     }
 
