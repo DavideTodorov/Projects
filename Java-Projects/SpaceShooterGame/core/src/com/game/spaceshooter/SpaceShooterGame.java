@@ -7,8 +7,11 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import java.util.Random;
+
 public class SpaceShooterGame extends Game {
     private GameScreen gameScreen;
+    private static Random random = new Random();
 
     @Override
     public void create() {
@@ -33,5 +36,13 @@ public class SpaceShooterGame extends Game {
     @Override
     public void dispose() {
         gameScreen.dispose();
+    }
+
+    public static Random getRandom() {
+        return random;
+    }
+
+    public static void setRandom(Random random) {
+        SpaceShooterGame.random = random;
     }
 }

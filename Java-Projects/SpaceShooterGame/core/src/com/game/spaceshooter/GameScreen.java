@@ -52,10 +52,10 @@ public class GameScreen implements Screen {
     private float backgroundMaxScrollingSpeed;
 
     //Game objects
-    private Ship playerShip;
+    private PlayerShip playerShip;
     private LinkedList<Laser> playerLasers;
 
-    private Ship enemyShip;
+    private EnemyShip enemyShip;
     private LinkedList<Laser> enemyLasers;
 
     //Constructor
@@ -129,6 +129,9 @@ public class GameScreen implements Screen {
         //Detect mouse and keyboard events
         detectInput(deltaTime);
 
+        //Move enemies
+        moveEnemies(deltaTime);
+
         playerShip.update(deltaTime);
         enemyShip.update(deltaTime);
 
@@ -152,13 +155,40 @@ public class GameScreen implements Screen {
         spriteBatch.end();
     }
 
+    //Method to move enemies
+    private void moveEnemies(float deltaTime) {
+        //Move positions limits
+        float leftLimit = -enemyShip.getShipRectangle().x;
+        float downLimit = (float) WORLD_HEIGHT / 2 - enemyShip.getShipRectangle().y;
+        float rightLimit = WORLD_WIDTH - enemyShip.getShipRectangle().x - enemyShip.getShipRectangle().width;
+        float upLimit = WORLD_HEIGHT - enemyShip.getShipRectangle().y - enemyShip.getShipRectangle().height;
+
+
+        float xMove = enemyShip.getDirectionsVector().x * enemyShip.getMovementSpeed() * deltaTime;
+        float yMove = enemyShip.getDirectionsVector().y * enemyShip.getMovementSpeed() * deltaTime;
+
+        if (xMove > 0) {
+            xMove = Math.min(xMove, rightLimit);
+        } else {
+            xMove = Math.max(xMove, leftLimit);
+        }
+
+        if (yMove > 0) {
+            yMove = Math.min(yMove, upLimit);
+        } else {
+            yMove = Math.max(yMove, downLimit);
+        }
+
+        enemyShip.moveTo(xMove, yMove);
+    }
+
     //Method to detect mouse and keyboard events
     private void detectInput(float deltaTime) {
         //Move positions limits
         float leftLimit = -playerShip.getShipRectangle().x;
         float downLimit = -playerShip.getShipRectangle().y;
         float rightLimit = WORLD_WIDTH - playerShip.getShipRectangle().x - playerShip.getShipRectangle().width;
-        float upLimit = WORLD_HEIGHT / 2 - playerShip.getShipRectangle().y - playerShip.getShipRectangle().height;
+        float upLimit = (float) WORLD_HEIGHT / 2 - playerShip.getShipRectangle().y - playerShip.getShipRectangle().height;
 
         //Keyboard input
         //Right key press
