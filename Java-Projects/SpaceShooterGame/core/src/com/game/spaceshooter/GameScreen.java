@@ -100,7 +100,9 @@ public class GameScreen implements Screen {
                 playerShipTextureRegion, playerShieldTextureRegion,
                 playerLaserTextureRegion);
 
-        enemyShip = new EnemyShip(40, 7, WORLD_WIDTH / 2, WORLD_HEIGHT * 3 / 4,
+        enemyShip = new EnemyShip(35, 7,
+                SpaceShooterGame.getRandom().nextFloat() * (WORLD_WIDTH - 10) + 5,
+                WORLD_HEIGHT - 5,
                 10, 10,
                 0.3f, 5, 50, 0.8f,
                 enemyShipTextureRegion, enemyShieldTextureRegion,
