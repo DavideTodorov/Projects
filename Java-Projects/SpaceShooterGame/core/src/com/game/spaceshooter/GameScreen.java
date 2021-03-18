@@ -14,7 +14,6 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.game.spaceshooter.lasers.Laser;
 import com.game.spaceshooter.ships.EnemyShip;
 import com.game.spaceshooter.ships.PlayerShip;
-import com.game.spaceshooter.ships.Ship;
 
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -50,12 +49,14 @@ public class GameScreen implements Screen {
     //Timing
     private float[] backgroundOffsets;
     private float backgroundMaxScrollingSpeed;
+    private float timeBetweenEnemySpawns = 4f;
+    private float enemySpawnTimer = 0f;
 
     //Game objects
     private PlayerShip playerShip;
     private LinkedList<Laser> playerLasers;
 
-    private EnemyShip enemyShip;
+    private LinkedList<EnemyShip> enemyShipsList;
     private LinkedList<Laser> enemyLasers;
 
     //Constructor
@@ -100,13 +101,8 @@ public class GameScreen implements Screen {
                 playerShipTextureRegion, playerShieldTextureRegion,
                 playerLaserTextureRegion);
 
-        enemyShip = new EnemyShip(35, 7,
-                SpaceShooterGame.getRandom().nextFloat() * (WORLD_WIDTH - 10) + 5,
-                WORLD_HEIGHT - 5,
-                10, 10,
-                0.3f, 5, 50, 0.8f,
-                enemyShipTextureRegion, enemyShieldTextureRegion,
-                enemyLaserTextureRegion);
+        enemyShipsList = new LinkedList<>();
+
     }
 
     //Initialise Texture regions
@@ -131,17 +127,27 @@ public class GameScreen implements Screen {
         //Detect mouse and keyboard events
         detectInput(deltaTime);
 
-        //Move enemies
-        moveEnemies(deltaTime);
-
+        //Update player ship
         playerShip.update(deltaTime);
-        enemyShip.update(deltaTime);
+
+        ListIterator<EnemyShip> enemyShipListIterator = enemyShipsList.listIterator();
+        while (enemyShipListIterator.hasNext()) {
+            EnemyShip enemyShip = enemyShipListIterator.next();
+
+            //Move enemies
+            moveEnemy(enemyShip, deltaTime);
+
+            //Update enemyShip
+            enemyShip.update(deltaTime);
+
+            //Display enemy ship
+            enemyShip.draw(spriteBatch);
+        }
+
 
         //Scrolling background
         renderBackground(deltaTime);
 
-        //Display enemy ship
-        enemyShip.draw(spriteBatch);
 
         //Display player ship
         playerShip.draw(spriteBatch);
@@ -157,8 +163,22 @@ public class GameScreen implements Screen {
         spriteBatch.end();
     }
 
+    private void spawnEnemyShip(float deltaTime) {
+        enemySpawnTimer += deltaTime;
+        if (enemySpawnTimer > timeBetweenEnemySpawns) {
+            enemyShipsList.add(new EnemyShip(35, 7,
+                    SpaceShooterGame.getRandom().nextFloat() * (WORLD_WIDTH - 10) + 5,
+                    WORLD_HEIGHT - 5,
+                    10, 10,
+                    0.3f, 5, 50, 0.8f,
+                    enemyShipTextureRegion, enemyShieldTextureRegion,
+                    enemyLaserTextureRegion));
+            enemySpawnTimer -= timeBetweenEnemySpawns;
+        }
+    }
+
     //Method to move enemies
-    private void moveEnemies(float deltaTime) {
+    private void moveEnemy(EnemyShip enemyShip, float deltaTime) {
         //Move positions limits
         float leftLimit = -enemyShip.getShipRectangle().x;
         float downLimit = (float) WORLD_HEIGHT / 2 - enemyShip.getShipRectangle().y;
