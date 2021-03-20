@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -17,6 +18,7 @@ import com.game.spaceshooter.lasers.Laser;
 import com.game.spaceshooter.ships.EnemyShip;
 import com.game.spaceshooter.ships.PlayerShip;
 
+import java.awt.*;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.ListIterator;
@@ -34,7 +36,7 @@ public class GameScreen implements Screen {
     //Graphics
     private SpriteBatch spriteBatch;
     private TextureAtlas textureAtlas;
-    private Texture explosion;
+    private Texture explosionTexture;
 
     private TextureRegion[] backgrounds;
     private float backgroundHeight;
@@ -52,7 +54,7 @@ public class GameScreen implements Screen {
     //Timing
     private float[] backgroundOffsets;
     private float backgroundMaxScrollingSpeed;
-    private float timeBetweenEnemySpawns = 10f;
+    private float timeBetweenEnemySpawns = 3f;
     private float enemySpawnTimer = 0f;
 
     //Game objects
@@ -73,7 +75,8 @@ public class GameScreen implements Screen {
         backgroundOffsets = new float[4];
         playerLasers = new LinkedList<>();
         enemyLasers = new LinkedList<>();
-        explosion = new Texture("explosion.png");
+        explosionTexture = new Texture("explosion.png");
+        explosionsList = new LinkedList<>();
 
         //Set up TextureAtlas
         textureAtlas = new TextureAtlas("images.atlas");
@@ -153,8 +156,8 @@ public class GameScreen implements Screen {
 
             //Display enemy ship
             enemyShip.draw(spriteBatch);
-        }
 
+        }
 
         //Display player ship
         playerShip.draw(spriteBatch);
@@ -166,9 +169,10 @@ public class GameScreen implements Screen {
         detectCollisions();
 
         //Display explosions
-
+        renderExplosions(deltaTime);
         spriteBatch.end();
     }
+
 
     private void spawnEnemyShip(float deltaTime) {
         enemySpawnTimer += deltaTime;
@@ -305,8 +309,14 @@ public class GameScreen implements Screen {
                 EnemyShip enemyShip = enemyShipListIterator.next();
 
                 if (enemyShip.intersects(laser.getBoundingBox())) {
+                    if (enemyShip.hitAndCheckIfDestroyed(laser)) {
+                        enemyShipListIterator.remove();
+                        explosionsList.add(new Explosion(explosionTexture,
+                                new Rectangle(enemyShip.getShipRectangle()),
+                                0.7f));
+                    }
+
                     laserListIterator.remove();
-                    enemyShip.hit(laser);
                     break;
                 }
             }
@@ -319,7 +329,7 @@ public class GameScreen implements Screen {
             Laser laser = laserListIterator.next();
             if (playerShip.intersects(laser.getBoundingBox())) {
                 laserListIterator.remove();
-                playerShip.hit(laser);
+                playerShip.hitAndCheckIfDestroyed(laser);
                 //TODO:
             }
         }
@@ -385,6 +395,21 @@ public class GameScreen implements Screen {
                     -backgroundOffsets[i],
                     WORLD_WIDTH,
                     backgroundHeight);
+        }
+    }
+
+    //Method to render explosions
+    private void renderExplosions(float deltaTime) {
+        ListIterator<Explosion> explosionListIterator = explosionsList.listIterator();
+        while (explosionListIterator.hasNext()) {
+            Explosion explosion = explosionListIterator.next();
+            explosion.update(deltaTime);
+
+            if (explosion.isFinished()) {
+                explosionListIterator.remove();
+            } else {
+                explosion.draw(spriteBatch);
+            }
         }
     }
 

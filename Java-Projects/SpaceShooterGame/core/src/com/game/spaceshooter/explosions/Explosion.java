@@ -4,8 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-
-import java.awt.*;
+import com.badlogic.gdx.math.Rectangle;
 
 public class Explosion {
     private Animation<TextureRegion> explosionAnimation;
