@@ -327,10 +327,17 @@ public class GameScreen implements Screen {
 
         while (laserListIterator.hasNext()) {
             Laser laser = laserListIterator.next();
+
             if (playerShip.intersects(laser.getBoundingBox())) {
+
+                if (playerShip.hitAndCheckIfDestroyed(laser)) {
+                    explosionsList.add(new Explosion(explosionTexture,
+                            new Rectangle(playerShip.getShipRectangle()),
+                            1.6f));
+                    playerShip.setShield(10);
+                }
+
                 laserListIterator.remove();
-                playerShip.hitAndCheckIfDestroyed(laser);
-                //TODO:
             }
         }
     }

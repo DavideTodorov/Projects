@@ -41,6 +41,10 @@ public class PlayerShip extends Ship {
         return lasers;
     }
 
+    public void setShield(int shield) {
+        this.shield = shield;
+    }
+
     @Override
     public void draw(SpriteBatch spriteBatch) {
         spriteBatch.draw(shipTextureRegion, shipRectangle.x, shipRectangle.y,
@@ -51,4 +55,6 @@ public class PlayerShip extends Ship {
                     shipRectangle.width, shipRectangle.height);
         }
     }
+
+
 }
