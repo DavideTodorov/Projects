@@ -12,10 +12,12 @@ public class SimpleDotComGame {
 
     public void run(Scanner scanner) {
         int countOfGuesses = 0;
+        int countOfMoves = 0;
         fillArray(numsToGuess);
 
         while (countOfGuesses < 3) {
-            System.out.println("Enter number:");
+            System.out.println("Enter number between 1 and 7:");
+            countOfMoves++;
             int currGuess = Integer.parseInt(scanner.nextLine());
             boolean isGuessed = false;
 
@@ -27,6 +29,7 @@ public class SimpleDotComGame {
 
                     if (countOfGuesses == 3) {
                         System.out.println("You win!");
+                        System.out.println("Moves made: " + countOfMoves);
                         return;
                     } else {
                         System.out.println("hit");
