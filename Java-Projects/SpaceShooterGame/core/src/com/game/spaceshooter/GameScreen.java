@@ -5,12 +5,14 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.game.spaceshooter.explosions.Explosion;
 import com.game.spaceshooter.lasers.Laser;
 import com.game.spaceshooter.ships.EnemyShip;
 import com.game.spaceshooter.ships.PlayerShip;
@@ -32,6 +34,7 @@ public class GameScreen implements Screen {
     //Graphics
     private SpriteBatch spriteBatch;
     private TextureAtlas textureAtlas;
+    private Texture explosion;
 
     private TextureRegion[] backgrounds;
     private float backgroundHeight;
@@ -59,6 +62,8 @@ public class GameScreen implements Screen {
     private LinkedList<EnemyShip> enemyShipsList;
     private LinkedList<Laser> enemyLasers;
 
+    private LinkedList<Explosion> explosionsList;
+
     //Constructor
     public GameScreen() {
         camera = new OrthographicCamera();
@@ -68,6 +73,7 @@ public class GameScreen implements Screen {
         backgroundOffsets = new float[4];
         playerLasers = new LinkedList<>();
         enemyLasers = new LinkedList<>();
+        explosion = new Texture("explosion.png");
 
         //Set up TextureAtlas
         textureAtlas = new TextureAtlas("images.atlas");
@@ -148,9 +154,6 @@ public class GameScreen implements Screen {
             //Display enemy ship
             enemyShip.draw(spriteBatch);
         }
-
-
-
 
 
         //Display player ship
