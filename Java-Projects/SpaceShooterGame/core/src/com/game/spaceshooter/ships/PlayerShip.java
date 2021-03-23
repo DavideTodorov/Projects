@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.game.spaceshooter.lasers.Laser;
 
 public class PlayerShip extends Ship {
+    private int lives;
 
     public PlayerShip(float movementSpeed, int shield,
                       float xCentre, float yCentre,
@@ -18,6 +19,15 @@ public class PlayerShip extends Ship {
                 laserMovementSpeed, timeBetweenShots,
                 shipTextureRegion, shieldTextureRegion,
                 laserTextureRegion);
+        lives = 3;
+    }
+
+    public int getLives() {
+        return lives;
+    }
+
+    public void setLives(int lives) {
+        this.lives = lives;
     }
 
     @Override

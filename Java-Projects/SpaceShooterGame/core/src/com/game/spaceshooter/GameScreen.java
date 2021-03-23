@@ -4,11 +4,14 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
@@ -25,8 +28,8 @@ import java.util.ListIterator;
 
 public class GameScreen implements Screen {
     //Constants
-    private final int WORLD_WIDTH = 72;
-    private final int WORLD_HEIGHT = 128;
+    private final float WORLD_WIDTH = 72;
+    private final float WORLD_HEIGHT = 128;
     private final float MOVEMENT_THRESHOLD = 0.5f;
 
     //Screen
@@ -66,6 +69,18 @@ public class GameScreen implements Screen {
 
     private LinkedList<Explosion> explosionsList;
 
+    private int score;
+
+    //Heads-Up Display
+    private BitmapFont font;
+    private float hudVerticalMargin;
+    private float hudLeftX;
+    private float hudRightX;
+    private float hudCentreX;
+    private float hudRow1Y;
+    private float hudRow2Y;
+    private float hudSectionWidth;
+
     //Constructor
     public GameScreen() {
         camera = new OrthographicCamera();
@@ -77,6 +92,7 @@ public class GameScreen implements Screen {
         enemyLasers = new LinkedList<>();
         explosionTexture = new Texture("explosion.png");
         explosionsList = new LinkedList<>();
+        score = 0;
 
         //Set up TextureAtlas
         textureAtlas = new TextureAtlas("images.atlas");
@@ -91,6 +107,37 @@ public class GameScreen implements Screen {
         setShips();
 
         spriteBatch = new SpriteBatch();
+
+        //Set up HUD
+        setUpHUD();
+    }
+
+    //Set up HUD
+    private void setUpHUD() {
+        //Create a BitmapFont
+        FreeTypeFontGenerator fontGenerator = new FreeTypeFontGenerator
+                (Gdx.files.internal("EdgeOfTheGalaxyRegular-OVEa6.otf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter fontParameter =
+                new FreeTypeFontGenerator.FreeTypeFontParameter();
+
+        fontParameter.size = 72;
+        fontParameter.borderWidth = 3.6f;
+        fontParameter.color = new Color(1, 1, 1, 0.3f);
+        fontParameter.borderColor = new Color(0, 0, 0, 0.3f);
+
+        font = fontGenerator.generateFont(fontParameter);
+
+        //Scale the font to fit the game screen
+        font.getData().setScale(0.08f);
+
+        //Calculate margins
+        hudVerticalMargin = font.getCapHeight() / 2;
+        hudLeftX = hudVerticalMargin;
+        hudRightX = WORLD_WIDTH * 2 / 3 - hudLeftX;
+        hudCentreX = WORLD_WIDTH / 3;
+        hudRow1Y = WORLD_HEIGHT - hudVerticalMargin;
+        hudRow2Y = hudRow1Y - hudVerticalMargin - font.getCapHeight();
+        hudSectionWidth = WORLD_WIDTH / 3;
     }
 
     //Initialise background
@@ -170,6 +217,10 @@ public class GameScreen implements Screen {
 
         //Display explosions
         renderExplosions(deltaTime);
+
+        //Display HUD
+        
+
         spriteBatch.end();
     }
 
