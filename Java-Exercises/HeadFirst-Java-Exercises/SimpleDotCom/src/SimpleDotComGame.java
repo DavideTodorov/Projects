@@ -18,7 +18,7 @@ public class SimpleDotComGame {
         while (countOfGuesses < 3) {
             System.out.println("Enter number between 1 and 7:");
             countOfMoves++;
-            int currGuess = Integer.parseInt(scanner.nextLine());
+            int currGuess = Integer.parseInt(scanner.nextLine()) - 1;
             boolean isGuessed = false;
 
             for (int i = 0; i < 3; i++) {
