@@ -27,8 +27,11 @@ public class PlayerShip extends Ship {
     }
 
     public void setLives(int lives) {
-        this.lives = lives;
+        if (lives > 0) {
+            this.lives = lives;
+        }
     }
+
 
     @Override
     public Laser[] fireLaser() {

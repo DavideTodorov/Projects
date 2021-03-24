@@ -71,6 +71,10 @@ public abstract class Ship {
         return movementSpeed;
     }
 
+    public int getShield() {
+        return shield;
+    }
+
     public boolean hitAndCheckIfDestroyed(Laser laser) {
         if (shield > 0) {
             shield--;

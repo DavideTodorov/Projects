@@ -14,6 +14,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.game.spaceshooter.explosions.Explosion;
@@ -25,6 +26,7 @@ import java.awt.*;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.ListIterator;
+import java.util.Locale;
 
 public class GameScreen implements Screen {
     //Constants
@@ -151,7 +153,7 @@ public class GameScreen implements Screen {
 
     //Initialise ships
     private void setShips() {
-        playerShip = new PlayerShip(40, 6, WORLD_WIDTH / 2, WORLD_HEIGHT / 4,
+        playerShip = new PlayerShip(40, 10, WORLD_WIDTH / 2, WORLD_HEIGHT / 4,
                 10, 10,
                 0.4f, 4, 45, 0.5f,
                 playerShipTextureRegion, playerShieldTextureRegion,
@@ -219,22 +221,40 @@ public class GameScreen implements Screen {
         renderExplosions(deltaTime);
 
         //Display HUD
-        
+        renderHUD();
 
         spriteBatch.end();
+    }
+
+    //Method to render the HUD
+    private void renderHUD() {
+        font.draw(spriteBatch, "Score", hudLeftX, hudRow1Y,
+                hudSectionWidth, Align.left, false);
+        font.draw(spriteBatch, "Shield", hudCentreX, hudRow1Y,
+                hudSectionWidth, Align.center, false);
+        font.draw(spriteBatch, "Lives", hudRightX, hudRow1Y,
+                hudSectionWidth, Align.right, false);
+
+        font.draw(spriteBatch, String.format(Locale.getDefault(), "%06d", score),
+                hudLeftX, hudRow2Y, hudSectionWidth, Align.left, false);
+        font.draw(spriteBatch, String.format(Locale.getDefault(), "%02d", playerShip.getShield()),
+                hudCentreX, hudRow2Y, hudSectionWidth, Align.center, false);
+        font.draw(spriteBatch, String.format(Locale.getDefault(), "%02d", playerShip.getLives()),
+                hudRightX, hudRow2Y, hudSectionWidth, Align.right, false);
     }
 
 
     private void spawnEnemyShip(float deltaTime) {
         enemySpawnTimer += deltaTime;
         if (enemySpawnTimer > timeBetweenEnemySpawns) {
-            enemyShipsList.add(new EnemyShip(35, 7,
-                    SpaceShooterGame.getRandom().nextFloat() * (WORLD_WIDTH - 10) + 5,
-                    WORLD_HEIGHT - 5,
-                    10, 10,
-                    0.3f, 5, 50, 0.8f,
-                    enemyShipTextureRegion, enemyShieldTextureRegion,
-                    enemyLaserTextureRegion));
+            enemyShipsList.add(new EnemyShip
+                    (35, 7,
+                            SpaceShooterGame.getRandom().nextFloat() * (WORLD_WIDTH - 10) + 5,
+                            WORLD_HEIGHT - 5,
+                            10, 10,
+                            0.3f, 5, 50, 0.8f,
+                            enemyShipTextureRegion, enemyShieldTextureRegion,
+                            enemyLaserTextureRegion));
             enemySpawnTimer -= timeBetweenEnemySpawns;
         }
     }
@@ -365,6 +385,7 @@ public class GameScreen implements Screen {
                         explosionsList.add(new Explosion(explosionTexture,
                                 new Rectangle(enemyShip.getShipRectangle()),
                                 0.7f));
+                        score += 100;
                     }
 
                     laserListIterator.remove();
@@ -386,6 +407,7 @@ public class GameScreen implements Screen {
                             new Rectangle(playerShip.getShipRectangle()),
                             1.6f));
                     playerShip.setShield(10);
+                    playerShip.setLives(playerShip.getLives() - 1);
                 }
 
                 laserListIterator.remove();
