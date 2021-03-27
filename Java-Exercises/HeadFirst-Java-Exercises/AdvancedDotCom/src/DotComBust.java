@@ -15,6 +15,7 @@ public class DotComBust {
     }
 
     public void startPlaying() {
+        setUpGame();
         while (!dotComList.isEmpty()) {
             String userGuess = scanner.nextLine();
             checkUserGuess(userGuess);
@@ -38,12 +39,31 @@ public class DotComBust {
         }
     }
 
-    private void finishGame() {
+    private void checkUserGuess(String userGuess) {
+        numOfGuesses++;
 
+        String result = "miss";
 
+        for (DotCom dotCom : dotComList) {
+            result = dotCom.checkLocation(userGuess);
+
+            if (result.equals("hit")) {
+                break;
+            } else if (result.equals("kill")) {
+                dotComList.remove(dotCom);
+                break;
+            }
+        }
+
+        System.out.println(result);
     }
 
-    private void checkUserGuess(String userGuess) {
-
+    private void finishGame() {
+        System.out.println("All Dot Coms are now dead!");
+        if (numOfGuesses <= 18) {
+            System.out.printf("It only took you %d guesses.%n", numOfGuesses);
+        } else {
+            System.out.printf("Took you long enough. %d guesses.%n", numOfGuesses);
+        }
     }
 }
