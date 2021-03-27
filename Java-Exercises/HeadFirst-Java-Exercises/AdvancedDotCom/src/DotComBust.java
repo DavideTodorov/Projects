@@ -17,7 +17,7 @@ public class DotComBust {
     public void startPlaying() {
         setUpGame();
         while (!dotComList.isEmpty()) {
-            String userGuess = scanner.nextLine();
+            String userGuess = gameHelper.getUserInput("Enter a guess:");
             checkUserGuess(userGuess);
         }
 
@@ -35,7 +35,7 @@ public class DotComBust {
         System.out.println("Try to sink them all in the fewest number of guesses");
 
         for (DotCom dotCom : dotComList) {
-            //create dotCom coords from GameHelper
+            dotCom.setLocation(gameHelper.placeDotCom(3));
         }
     }
 
