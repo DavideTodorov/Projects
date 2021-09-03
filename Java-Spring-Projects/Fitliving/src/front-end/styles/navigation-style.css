@@ -1,0 +1,45 @@
+.navigation {
+    background-color: #646368;
+    padding: 10px;
+    text-align: right;
+    margin: 10px;
+    border-radius: 10px;
+}
+
+
+.navigation img{
+    max-height: 55px;
+    max-width: 100px;
+    margin-right: 780px;
+}
+.navigation ul{
+    padding-top: 5px;
+    padding-bottom: 5px;
+    margin: 0px;
+}
+
+.normal-nav-button:hover{
+    color: #62b762;
+}
+
+.navigation a {
+    margin: 20px;
+    font-size: 30px;
+    color: #32ff0a;
+    text-decoration: none;
+}
+
+.login-button {
+    text-align: center;
+    padding-left: 3px;
+    padding-right: 3px;
+    padding-bottom: 3px;
+    background-color: black;
+    border: black;
+    border-radius: 8px;
+}
+
+.login-button:hover{
+    background-color: #32ff0a;
+    color: black;
+}
