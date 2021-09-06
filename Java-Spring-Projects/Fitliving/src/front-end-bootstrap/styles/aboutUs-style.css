@@ -1,0 +1,18 @@
+.carousel {
+    max-height:550px;
+}
+
+.carousel-item img {
+    object-fit:cover;
+    max-height:550px;
+}
+
+.carousel-item .active {
+    object-fit:cover;
+    max-height:550px;
+}
+
+.carousel-div p{
+    color: white;
+    font-size: 22px;
+}
