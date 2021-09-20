@@ -1,12 +1,6 @@
 .card{
     border: none;
-
     background-color: #cfccd4;
-}
-
-.img-container{
-    height: 300px;
-    width: 400px;
 }
 
 .btn-style:hover{

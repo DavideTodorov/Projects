@@ -16,3 +16,8 @@
     color: white;
     font-size: 22px;
 }
+
+.card{
+    border: none;
+    background-color: #cfccd4;
+}
