@@ -1,13 +1,13 @@
 def is_there_win_condition(board):
     result = False
-    result = is_there_win_condition_row1(board)
-    result = is_there_win_condition_row2(board)
-    result = is_there_win_condition_row3(board)
-    result = is_there_win_condition_col1(board)
-    result = is_there_win_condition_col2(board)
-    result = is_there_win_condition_col3(board)
-    result = is_there_win_condition_diagonal1(board)
-    result = is_there_win_condition_diagonal2(board)
+    result = True if result else is_there_win_condition_row1(board)
+    result = True if result else is_there_win_condition_row2(board)
+    result = True if result else is_there_win_condition_row3(board)
+    result = True if result else is_there_win_condition_col1(board)
+    result = True if result else is_there_win_condition_col2(board)
+    result = True if result else is_there_win_condition_col3(board)
+    result = True if result else is_there_win_condition_diagonal1(board)
+    result = True if result else is_there_win_condition_diagonal2(board)
     return result
 
 

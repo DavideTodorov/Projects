@@ -6,8 +6,8 @@ import utils
 # Global variables
 user1_symbol = ''
 user2_symbol = ''
-default_symbol_for_board = [' - ']
-board = default_symbol_for_board * 9
+index_range = list(range(1, 10))
+board = index_range
 
 
 def get_users_symbol_preference():
@@ -27,20 +27,18 @@ def get_users_symbol_preference():
 
 def get_user_choice(user_name):
     global board
-    row_chosen = ''
-    while row_chosen not in ['row1', 'row2', 'row3']:
-        row_chosen = input(f'{user_name}, please choose row (row1, row2, row3): ')
+    chosen_board_index = -1
+    while chosen_board_index not in index_range:
+        try:
+            chosen_board_index = int(input(f'{user_name}, please choose index in range (1,9): '))
+        except ValueError:
+            pass
 
-    col_chosen = ''
-    while col_chosen not in ['1', '2', '3']:
-        col_chosen = input(f'{user_name}, please choose column (1, 2, 3): ')
-
-    chosen_board_index = utils.get_index_from_row_and_col(row_chosen, col_chosen)
-
-    if board[chosen_board_index] == default_symbol_for_board:
+    board_index = int(chosen_board_index) - 1
+    if board[board_index] not in index_range:
         get_user_choice(user_name)
 
-    return chosen_board_index
+    return board_index
 
 
 def game_start():
@@ -49,7 +47,8 @@ def game_start():
     user_playing_on_next_turn = 'User1'
     board_index = -1
 
-    while not gameLogicManager.is_there_win_condition(board):
+    has_someone_won = False
+    while not has_someone_won:
         if user_playing_on_next_turn == 'User1':
             user_playing_on_current_turn = 'User1'
             user_playing_on_next_turn = 'User2'
@@ -62,11 +61,16 @@ def game_start():
         symbol = utils.get_symbol(user_playing_on_current_turn, user1_symbol, user2_symbol)
         board = boardManager.update_board(board, board_index, symbol)
         boardManager.print_board(board)
+        has_someone_won = gameLogicManager.is_there_win_condition(board)
+
+    if has_someone_won:
+        print(f'Congrats, {user_playing_on_current_turn}, you won the game!')
 
 
 def initialize_game():
     clear_output()
     get_users_symbol_preference()
+    boardManager.print_board(board)
     game_start()
 
 
