@@ -3,7 +3,7 @@ class Chip:
         self.total = total
         self.bet = 0
 
-    def win_ber(self):
+    def win_bet(self):
         self.total += self.bet
 
     def lose_bet(self):
