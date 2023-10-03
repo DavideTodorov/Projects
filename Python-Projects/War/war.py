@@ -2,10 +2,27 @@ import deck
 import player
 
 
-def add_cards_to_players(george, jessica, cards_deck):
+def deal_cards_to_players(george, jessica, cards_deck):
     for x in range(26):
         george.add_cards(cards_deck.deal_one())
         jessica.add_cards(cards_deck.deal_one())
+
+
+def add_cards_to_player(player_to_add_to, first_deck, second_deck):
+    player_to_add_to.add_cards(first_deck)
+    player_to_add_to.add_cards(second_deck)
+
+
+def players_have_enough_cards():
+    is_at_war = True
+    if player_one_current_card.value > player_two_current_card.value:
+        add_cards_to_player(player_one, player_one_cards, player_two_cards)
+        is_at_war = False
+    elif player_one_current_card.value < player_two_current_card.value:
+        add_cards_to_player(player_two, player_one_cards, player_two_cards)
+        is_at_war = False
+
+    return is_at_war
 
 
 if __name__ == '__main__':
@@ -14,7 +31,7 @@ if __name__ == '__main__':
 
     card_deck = deck.Deck()
 
-    add_cards_to_players(player_one, player_two, card_deck)
+    deal_cards_to_players(player_one, player_two, card_deck)
 
     round_number = 0
     game_on = True
@@ -43,15 +60,8 @@ if __name__ == '__main__':
             player_one_current_card = player_one_cards[-1]
             player_two_current_card = player_two_cards[-1]
 
-            if player_one_current_card.value > player_two_current_card.value:
-                player_one.add_cards(player_one_cards)
-                player_one.add_cards(player_two_cards)
-                at_war = False
-                break
-            elif player_one_current_card.value < player_two_current_card.value:
-                player_two.add_cards(player_one_cards)
-                player_two.add_cards(player_two_cards)
-                at_war = False
+            at_war = players_have_enough_cards()
+            if not at_war:
                 break
 
             print('WAR!')
